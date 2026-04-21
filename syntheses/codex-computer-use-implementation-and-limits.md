@@ -5,52 +5,61 @@ created: 2026-04-20
 updated: 2026-04-20
 ---
 
-# codex-computer-use-implementation-and-limits
+# Codex Computer Use 的实现形态与当前边界
 
-This synthesis is about the current shape of Codex computer use, not the entire Codex product. The direct public record supports a screenshot-driven GUI control loop with macOS permissions, app approvals, and a bounded action surface. The strongest extra implementation signal comes from the local Computer Use tool interface in this desktop session, which explicitly exposes `get_app_state` as screenshot plus accessibility tree and pairs it with element-index and coordinate-based actions.
+这页讨论的是 `Codex computer use` 当前公开可见的实现形态，不是整个 Codex 产品。就现有公开材料和本地工具界面来看，一个比较稳妥的判断是：它现在更像一个面向桌面 GUI 的感知-动作闭环，而不是任意 macOS app 的深层语义集成层。
 
-## Working Thesis
+## 工作判断
 
-Codex computer use currently looks like a perception-action loop over desktop GUIs, not a deep semantic integration with arbitrary Mac apps. It appears good enough for discrete, inspectable flows, but still early for continuous, timing-sensitive, or semantically opaque interaction.
+当前的 Codex computer use，核心上像是：
 
-## Direct Signals
+- 先看当前界面状态
+- 再决定一组 GUI 动作
+- 执行动作
+- 再看一张新的界面快照确认结果
 
-- Public Codex app docs confirm that computer use depends on Screen Recording so Codex can see the target app and Accessibility so Codex can click, type, and navigate.
-- Public Codex app docs also confirm that Codex may process screenshots and interact with windows, menus, keyboard input, and clipboard state in the target app.
-- Public OpenAI computer-use docs describe a screenshot loop: see the current UI, return structured actions, execute them, capture a new screenshot, and repeat.
-- The local desktop tool surface adds a stronger implementation clue than the public docs do: in this session, `get_app_state` returns both a screenshot and an accessibility tree, and the action set includes element-based operations plus coordinate clicks and drags.
+这套模式对“可离散分解、可逐步验证”的任务是成立的，但对“连续、低延迟、强依赖悬停和即时反馈”的交互仍然偏初级。
 
-## What That Likely Means
+## 直接信号
 
-- Codex does not need a bespoke app API in order to do useful work in a GUI.
-- At the same time, it also does not appear to have rich app-native semantics by default.
-- The practical control stack looks closer to:
-  - visual inspection of the current app state
-  - optional structure from the accessibility layer
-  - synthetic mouse and keyboard actions
-  - another screenshot to verify what changed
-- This is a strong fit for GUI QA, bug reproduction, settings changes, browser tasks, and multi-app knowledge workflows.
-- It is a weaker fit for interfaces where the accessibility layer is poor, the UI state changes quickly, or success depends on continuous cursor control rather than discrete steps.
+- 官方 Codex app 文档明确要求 `Screen Recording` 和 `Accessibility` 权限。前者让 Codex 看见目标 app，后者让 Codex 点击、输入和导航。
+- 同一份官方文档明确写到，computer use 会处理截图，并且会与窗口、菜单、键盘输入、剪贴板状态发生交互。
+- 官方 computer-use guide 明确描述了一个截图驱动的循环：看当前 UI，返回结构化动作，执行这些动作，再回传新的截图，然后继续。
+- 本地桌面会话里暴露出来的 Computer Use 工具界面，比公开文档给出了更直接的实现信号：`get_app_state` 明确返回 `screenshot + accessibility tree`，动作层同时支持按元素索引操作和按像素坐标点击、拖拽。
 
-## Reading The STS2 Failure
+## 这意味着什么
 
-The user's Slay the Spire 2 test is a good stress case. Codex failed at dragging an attack card onto the intended target. That outcome is consistent with the current architecture for three reasons.
+- 它不需要目标 app 提供专门的 API，也能在很多 GUI 里完成任务。
+- 但它看起来也没有默认获得“这个 app 里每个对象到底是什么”的深层语义理解。
+- 更贴近现实的控制栈大概是：
+  - 用截图理解当前视觉状态
+  - 在能拿到时，借助 accessibility 结构补充界面信息
+  - 用合成的鼠标和键盘动作去操作界面
+  - 再用新的截图验证动作是否生效
+- 这套架构很适合 GUI QA、图形界面 bug 复现、设置页操作、浏览器任务、跨多个 app 的知识工作流。
+- 它不太适合 accessibility 很差、界面变化很快、或者成功高度依赖连续光标控制的交互。
 
-- First, many game interfaces expose little useful accessibility structure. Even if Codex has access to an accessibility tree, the important game objects may still be custom-rendered surfaces with weak or meaningless semantics.
-- Second, the documented computer-use loop is screenshot, act, screenshot, act. That is well matched to buttons, menus, text fields, and stepwise flows, but worse for a live drag interaction that depends on continuous feedback and precise hover state.
-- Third, dragging a card onto a target in a game is not just a path-planning problem. It often requires low-latency correction against transient visual feedback, which a generic desktop agent surface does not obviously expose.
+## 如何理解 STS2 失败案例
 
-## Practical Conclusion
+你拿 `Slay the Spire 2` 做测试，其实很有代表性。Codex 没法稳定把一张攻击牌拖到正确目标上，这个结果和上面的实现判断是相符的。
 
-- Today, Codex computer use looks mature enough for scoped GUI workflows and exploratory app QA.
-- It still looks early for games, drawing tools, highly dynamic canvases, and any task that depends on fast closed-loop cursor control.
-- When an app has a dedicated plugin, MCP server, CLI, or stable API, those integrations should usually be preferred over computer use.
+- 第一，游戏 UI 往往几乎不给可用的 accessibility 语义。就算底层能拿到 accessibility tree，真正关键的交互对象也可能只是自绘画布里的视觉元素，而不是可稳定引用的语义节点。
+- 第二，官方文档描述的主循环本质上还是“截图一次，动作一轮，再截图一次”。这种节奏适合按钮、菜单、输入框和分步骤流程，但不擅长需要持续观察拖拽过程的实时交互。
+- 第三，把牌拖到目标上不是单纯的路径规划问题。它往往要求代理根据瞬时视觉反馈不断校正拖拽路径、停留位置和释放时机，而当前这层通用桌面代理接口并没有公开暴露出这种高频闭环能力。
 
-## Open Questions
+所以，`STS2` 这个失败案例不是一个偶然 bug，它更像是在暴露当前 computer use 的能力边界：它能做“看一眼再动一下”的事，但还不擅长“边看边连续控制”的事。
 
-- Public OpenAI docs do not explicitly state the exact native macOS APIs used under the hood.
-- Public docs also do not explain the full OCR or vision stack, event injection path, or fallback behavior when accessibility structure is weak.
-- The accessibility-tree signal is direct in this local session's tool interface, but that is still different from an official public implementation note from OpenAI.
+## 实用结论
+
+- 今天的 Codex computer use，已经足够用于范围明确的 GUI 工作流和探索式 app QA。
+- 但它在游戏、绘图工具、高动态 canvas，以及任何依赖快速闭环光标控制的任务上，仍然显得偏早期。
+- 当目标系统已经有专门的 plugin、MCP server、CLI 或稳定 API 时，通常仍然应该优先使用这些结构化接口，而不是退回 computer use。
+
+## 还没被公开确认的部分
+
+- 公开 OpenAI 文档并没有直接写明底层到底调用了哪些 macOS 原生 API。
+- 公开材料也没有完整解释 OCR 或视觉栈、事件注入路径、以及 accessibility 结构不足时的回退策略。
+- 当前桌面会话里的 `accessibility tree` 信号很直接，但它仍然只是本地工具界面快照，不等于 OpenAI 官方公开写过一份完整实现说明。
 
 ## Sources
 
