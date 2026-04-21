@@ -13,6 +13,7 @@ updated: 2026-04-21
 - [[syntheses/multica-shared-project-state-vs-ai-scientist|multica-shared-project-state-vs-ai-scientist]]: synthesis comparing Multica's platform-state sharing model with AiScientist's File-as-Bus artifact layer
 - [[sources/fire-pdf-2026-04/summary|fire-pdf-2026-04]]: source collection for Fire-PDF architecture, parser modes, and the role of pdf-inspector
 - [[entities/fire-pdf|fire-pdf]]: entity page for Fire-PDF as a PDF parsing subsystem with mixed extraction architecture and credit-based pricing
+- [[concepts/web-agent|web-agent]]: concept page for agents that treat the browser as an execution environment rather than only a reading surface
 - [[sources/weak-to-strong-supervision-2026-04/summary|weak-to-strong-supervision-2026-04]]: source collection for the motivation, formal setup, and current alignment-research framing of weak-to-strong supervision
 - [[sources/windsurf-position-2026-04/summary|windsurf-position-2026-04]]: source collection for Windsurf scale claims and public usage signals
 - [[entities/windsurf|windsurf]]: entity page for Windsurf as a multi-agent IDE product with current public positioning and market signals
