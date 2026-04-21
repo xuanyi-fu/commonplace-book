@@ -7,6 +7,7 @@ updated: 2026-04-21
 
 # index
 
+- [[sources/ai-scientist-2026-04/summary|ai-scientist-2026-04]]: source collection for AiScientist architecture, File-as-Bus coordination, and the public runtime/module layout
 - [[sources/fire-pdf-2026-04/summary|fire-pdf-2026-04]]: source collection for Fire-PDF architecture, parser modes, and the role of pdf-inspector
 - [[entities/fire-pdf|fire-pdf]]: entity page for Fire-PDF as a PDF parsing subsystem with mixed extraction architecture and credit-based pricing
 - [[sources/windsurf-position-2026-04/summary|windsurf-position-2026-04]]: source collection for Windsurf scale claims and public usage signals
