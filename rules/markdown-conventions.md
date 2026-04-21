@@ -239,6 +239,9 @@ Git history is the only change history. Do not use `log.md`.
 
 规则：
 
+- `scripts/lint.py` 实现了当前 deterministic 规则子集
+- 每次逻辑更新在 commit 之前都必须先运行 `uv run python scripts/lint.py`
+- 只有 lint 通过后，才能创建 commit
 - 每次逻辑更新都必须以一个 git commit 结束
 - commit 格式固定为 `<type>(<scope>): <subject>`
 - `type` 只允许 `docs`、`chore`、`refactor`

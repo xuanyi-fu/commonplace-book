@@ -112,6 +112,9 @@ Examples:
 ## Git History
 
 - Git history is the only change history. Do not use `log.md`.
+- The deterministic subset of these rules is enforced by `scripts/lint.py`.
+- Every logical update must run `uv run python scripts/lint.py` before commit.
+- Commits must only be created from a passing `uv run python scripts/lint.py` run.
 - Every logical update must end with one git commit.
 - Commit format is:
 

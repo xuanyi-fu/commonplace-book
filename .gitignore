@@ -2,3 +2,6 @@
 .DS_Store
 Thumbs.db
 *.swp
+.venv/
+__pycache__/
+*.pyc
