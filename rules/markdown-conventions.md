@@ -26,6 +26,7 @@
   - `## How To Use`
   - `## Summary`
   - `## Sources`
+- 如果 source 文件是从其他格式清洗或整理而来，应尽量保留原文中的 inline citation、脚注标记和文内链接，方便后续跳转回被引用的材料
 - 每个 `sources/<collection>/summary.md` 都必须明确说明：
   - 这个 source 主要包含什么
   - 这个 source 的结构是什么

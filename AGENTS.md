@@ -30,6 +30,7 @@ Raw source files under `sources/*/source/**` should remain read-only.
   - `## How To Use`
   - `## Summary`
   - `## Sources`
+- When a source file is cleaned or normalized from another format, preserve inline citations, footnote markers, and inline links from the original whenever practical so readers can jump back to referenced material.
 - That page must clearly cover:
   - what the source collection mainly contains
   - how the collection is structured
