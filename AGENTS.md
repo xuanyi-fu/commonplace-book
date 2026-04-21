@@ -79,6 +79,7 @@ Allowed `status` values:
 - Tags are written directly in the body, not in frontmatter.
 - A source collection summary page is `sources/<collection>/summary.md`.
 - Use the same language as the discussion when recording wiki content, unless the user explicitly asks for a different language.
+- When discussing implementations in Chinese, keep core implementation terms like `thread`, `raw memory`, `context`, `prompt`, and `agent` in their original form when translating them would blur the structure of the system; translate the surrounding explanation instead.
 
 ## Links
 

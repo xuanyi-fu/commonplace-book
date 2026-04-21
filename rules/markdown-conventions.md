@@ -104,6 +104,7 @@ updated: 2026-04-20
 - source collection 的总结页固定是 `sources/<collection>/summary.md`
 - source collection 的原始资料固定放在 `sources/<collection>/source/**`
 - 记录语言默认跟随当前讨论语言，除非用户明确要求使用其他语言
+- 讨论实现细节时，如果像 `thread`、`raw memory`、`context`、`prompt`、`agent` 这类核心实现术语翻译后会模糊系统结构，应保留原术语，只翻译周围解释
 
 ## 2. 内部链接
 
