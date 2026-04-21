@@ -77,6 +77,7 @@ Allowed `status` values:
 - Sources are listed in a `## Sources` section.
 - Tags are written directly in the body, not in frontmatter.
 - A source collection summary page is `sources/<collection>/summary.md`.
+- Use the same language as the discussion when recording wiki content, unless the user explicitly asks for a different language.
 
 ## Links
 

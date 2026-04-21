@@ -102,6 +102,7 @@ updated: 2026-04-20
 - 标签直接写在正文中，不放进 frontmatter
 - source collection 的总结页固定是 `sources/<collection>/summary.md`
 - source collection 的原始资料固定放在 `sources/<collection>/source/**`
+- 记录语言默认跟随当前讨论语言，除非用户明确要求使用其他语言
 
 ## 2. 内部链接
 
