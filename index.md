@@ -8,6 +8,7 @@ updated: 2026-04-21
 # index
 
 - [[sources/ai-scientist-2026-04/summary|ai-scientist-2026-04]]: source collection for AiScientist architecture, File-as-Bus coordination, and the public runtime/module layout
+- [[syntheses/ai-scientist-file-as-bus-state-and-context-flow|ai-scientist-file-as-bus-state-and-context-flow]]: synthesis of how AiScientist turns research state into files and routes those artifacts back into later agent context
 - [[sources/fire-pdf-2026-04/summary|fire-pdf-2026-04]]: source collection for Fire-PDF architecture, parser modes, and the role of pdf-inspector
 - [[entities/fire-pdf|fire-pdf]]: entity page for Fire-PDF as a PDF parsing subsystem with mixed extraction architecture and credit-based pricing
 - [[sources/weak-to-strong-supervision-2026-04/summary|weak-to-strong-supervision-2026-04]]: source collection for the motivation, formal setup, and current alignment-research framing of weak-to-strong supervision
