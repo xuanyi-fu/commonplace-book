@@ -22,6 +22,43 @@ updated: 2026-04-20
 - memory 有明确的本地存储位置。主 memory 文件默认放在 `~/.codex/memories/` 下，包含 summaries、durable entries、recent inputs 和 prior threads 的 supporting evidence。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
 - app 的当前 UI 还暴露了几个文档里不够显眼、但非常关键的控制项：`Skip tool-assisted chats` 和 `Reset memories`。这说明 memory 不只是“开/关”两档，还有“是否从用了 MCP / web search 的聊天中生成记忆”以及“一键全部清空”的控制面。[[sources/codex-memory-2026-04/source/user-screenshot-codex-memory-settings-2026-04-20|用户设置截图]]
 
+## 触发时机目前能确认到哪里
+
+关于“什么时候开始把线程沉淀成 memory files”，官方文档给的信息已经比产品发布细很多，但还没有细到公开完整状态机。今天能稳妥确认的点有这些。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
+
+- 前提是 memory 已经开启，否则不会进入这条链路。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]] [[sources/codex-memory-2026-04/source/user-screenshot-codex-memory-settings-2026-04-20|用户设置截图]]
+- 不是每个线程都会立刻生成 memory。官方明确写到，Codex 会跳过 `active` 和 `short-lived sessions`。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
+- 它也不是在线程结束瞬间同步落盘。官方明确写到，memory 更新发生在后台，而且线程结束后不一定马上更新；Codex 会等线程空闲足够久，以避免去总结仍在进行中的工作。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
+- Chronicle 这条分支更进一步说明，至少对屏幕上下文增强 memory 来说，Codex 会在后台运行 sandboxed agents 去生成 memories。[[sources/codex-memory-2026-04/source/official-doc-codex-chronicle|官方 Chronicle 文档]]
+
+把这些合在一起，一个比较稳妥的工作判断是：普通 memory 的触发更像“线程满足条件并 idle 一段时间后，由后台流程异步提取”，而不是“每轮结束立即写入”。这里“后台异步提取”是直接由文档支持的；至于完整状态机，目前公开材料还不够细。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
+
+## 沉淀过程现在能看到什么
+
+今天能看到的“沉淀过程”主要分成官方确认和基于配置命名的谨慎推断两层。
+
+- 官方确认层：
+  - Codex 会把符合条件的历史线程转换成 local memory files。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
+  - 它会对生成出来的 memory fields 做 secret redaction。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
+  - 这些 memory 之后会在未来线程里被注入使用。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
+- 谨慎推断层：
+  - 配置项里同时出现 `memories.extract_model` 和 `memories.consolidation_model`，这很像两阶段流程：先做单线程提取，再做全局整合。这个推断和命名高度一致，但官方页面没有逐步把流程写死，所以仍然只能当推断。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
+
+## 落盘格式目前能确认到哪里
+
+这里需要把 ordinary memories 和 Chronicle memories 分开。
+
+- 对普通 memory，官方明确确认的是：
+  - 它们是 `local memory files`
+  - 主目录在 `~/.codex/memories/`
+  - 内容类别包括 `summaries`、`durable entries`、`recent inputs` 和 `supporting evidence`
+  - 但官方页面没有把普通 memory 的精确 on-disk schema 或文件扩展名公开写出来。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
+- 对 Chronicle，官方写得更具体：
+  - Chronicle 生成的是未加密 markdown 文件
+  - 存在 `$CODEX_HOME/memories_extensions/chronicle/` 下。[[sources/codex-memory-2026-04/source/official-doc-codex-chronicle|官方 Chronicle 文档]]
+
+本地观察也补了一条很重要的边界信息：当前机器上的 `~/.codex/memories/` 目录虽然已经存在，但此时是空的；而且当前 `config.toml` 里没有显式的 `memories` 或 `chronicle` 键。这说明“目录已经初始化”和“ordinary memory 文件已经实际生成”是两件不同的事。[[sources/codex-memory-2026-04/source/local-observation-codex-memory-storage-2026-04-20|本地状态观察]]
+
 ## Chronicle 是什么
 
 `Chronicle` 不是普通 memory 本身，而是一个给 memory 增强输入来源的研究预览层。它通过屏幕上下文来帮助 Codex 建 memory，从而减少用户重复解释自己刚刚在看什么、刚刚在做什么。[[sources/codex-memory-2026-04/source/official-doc-codex-chronicle|官方 Chronicle 文档]]
@@ -46,6 +83,7 @@ updated: 2026-04-20
 - 官方产品发布虽然把 memory 描述成可以记住偏好、纠正和耗时收集的信息，但这仍然是 `preview` 语境，不应该把它理解成“稳定、全面、总是命中”的长期个人知识库。[[sources/codex-memory-2026-04/source/blog-2026-04-16-codex-for-almost-everything-memory|官方发布文章]] 
 - 官方文档明确提醒：必须长期生效的团队规范仍然应该写进 `AGENTS.md` 或版本库文档，而不是只依赖 memories。这个提醒很关键，它实际上是在承认 memory 目前更像 recall layer，而不是 policy layer。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]]
 - Chronicle 虽然能让 Codex 用最近屏幕上下文来辅助建记忆，但它同时引入了更高的 prompt injection 风险，也会处理截图帧、OCR 文本、时间信息和本地路径。这意味着它不是一个“开了就更聪明”的纯增益功能，而是带来明显安全和隐私权衡的实验能力。[[sources/codex-memory-2026-04/source/official-doc-codex-chronicle|官方 Chronicle 文档]]
+- 对普通 memory 的精确文件 schema，今天仍然不能假装已经知道。官方只确认了目录和内容类别，还没有公开写出普通 memory 的具体文件扩展名或字段结构；而本地这台机器当前也还没有现成样本可供直接解剖。[[sources/codex-memory-2026-04/source/official-doc-codex-memories|官方 Memories 文档]] [[sources/codex-memory-2026-04/source/local-observation-codex-memory-storage-2026-04-20|本地状态观察]]
 
 ## 一个更准确的结论
 
@@ -60,3 +98,4 @@ updated: 2026-04-20
 - [[sources/codex-memory-2026-04/source/official-doc-codex-chronicle|official-doc-codex-chronicle]]
 - [[sources/codex-memory-2026-04/source/official-doc-codex-app-settings-memory|official-doc-codex-app-settings-memory]]
 - [[sources/codex-memory-2026-04/source/user-screenshot-codex-memory-settings-2026-04-20|user-screenshot-codex-memory-settings-2026-04-20]]
+- [[sources/codex-memory-2026-04/source/local-observation-codex-memory-storage-2026-04-20|local-observation-codex-memory-storage-2026-04-20]]
