@@ -11,6 +11,7 @@ updated: 2026-04-21
 
 ## Structure
 
+- `source/paper-auto-diagnose-google-icse-2026.pdf`: 原始论文 PDF，保留原始版式、图表和表格
 - `source/arxiv-abstract-auto-diagnose-google.md`: arXiv 摘要页整理，适合快速抓 headline 和官方对外摘要口径
 - `source/paper-auto-diagnose-google-icse-2026.md`: 论文正文整理，覆盖系统流程、提示设计、模型选择、部署方式和评估数字
 - `source/icse-2026-session-page-auto-diagnose.md`: ICSE 2026 session page 整理，补 publication status 和公开会务摘要
@@ -19,6 +20,7 @@ updated: 2026-04-21
 ## How To Use
 
 - 先读 `source/paper-auto-diagnose-google-icse-2026.md`，它最直接回答 Auto-Diagnose 的方法问题
+- 需要看图表、原始排版、表格和论文上下文时，回到 `source/paper-auto-diagnose-google-icse-2026.pdf`
 - 再读 `source/arxiv-abstract-auto-diagnose-google.md`，快速回看对外摘要里的定位和 headline 数字
 - 用 `source/icse-2026-session-page-auto-diagnose.md` 确认这项工作已经被 ICSE 2026 SEIP 接收，而不只是 arXiv 预印本
 - 讨论时要区分三层：
@@ -32,6 +34,7 @@ updated: 2026-04-21
 
 ## Sources
 
+- [[source/paper-auto-diagnose-google-icse-2026.pdf]]
 - [[source/arxiv-abstract-auto-diagnose-google|arxiv-abstract-auto-diagnose-google.md]]
 - [[source/paper-auto-diagnose-google-icse-2026|paper-auto-diagnose-google-icse-2026.md]]
 - [[source/icse-2026-session-page-auto-diagnose|icse-2026-session-page-auto-diagnose.md]]
