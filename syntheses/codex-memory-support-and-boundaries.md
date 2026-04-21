@@ -9,6 +9,20 @@ updated: 2026-04-20
 
 截至 `2026-04-20`，如果只从实现上看，Codex memory 不是一个“模型自动记住一切”的黑盒能力，而是一条相当明确的本地 pipeline：先挑选合适的旧线程，再做单线程抽取，再把抽取结果落到 sqlite，随后同步成 memory 工作区文件，最后再由一个专门的 consolidation subagent 维护真正给未来线程使用的 `MEMORY.md` 和 `memory_summary.md`。[[sources/codex-memory-implementation-2026-04/source/local-code-reading-codex-memory-pipeline-2026-04-20|实现笔记]] [[sources/codex-memory-implementation-2026-04/source/local-followup-clarifications-codex-memory-pipeline-2026-04-20|补充澄清]]
 
+## 高层摘要
+
+如果从更高的视角压缩，Codex 的 memory 可以概括成这样：
+
+- 先用规则判断哪些旧线程值得进入 memory 流程，以及现在能不能处理
+- 再用规则把这些线程的历史清洗成更适合让模型阅读的输入
+- 然后让模型对每个线程做一次单轮提炼，产出这个线程自己的原始 memory
+- 再把这些原始 memory 写到本地工作区里
+- 最后在后台让另一个模型整理这些原始 memory，更新长期可用的分层知识文件 [[sources/codex-memory-implementation-2026-04/source/local-code-reading-codex-memory-pipeline-2026-04-20|实现笔记]] [[sources/codex-memory-implementation-2026-04/source/local-followup-clarifications-codex-memory-pipeline-2026-04-20|补充澄清]]
+
+所以更准确的一句话是：
+
+`Codex 的 memory 是“规则筛选 + LLM 提炼 + 规则落盘 + LLM 整理”的两阶段本地记忆系统。` [[sources/codex-memory-implementation-2026-04/source/local-code-reading-codex-memory-pipeline-2026-04-20|实现笔记]] [[sources/codex-memory-implementation-2026-04/source/local-followup-clarifications-codex-memory-pipeline-2026-04-20|补充澄清]]
+
 ## 工作判断
 
 今天这套实现最重要的判断不是“Codex 支不支持 memory”，而是：
@@ -44,6 +58,40 @@ memory 不是在线程结束时立刻写盘。它是在一个新的 root session
 - 已有的 stage-1 输出或 job watermark 不能已经覆盖这个线程的最新状态 [[sources/codex-memory-implementation-2026-04/source/local-code-reading-codex-memory-pipeline-2026-04-20|实现笔记]]
 
 所以更准确的理解不是“thread 结束后被记住”，而是“thread 在后续某次会话启动时，如果已经冷却且仍然 eligible，才会被后台抽取成 memory 源”。
+
+## 规则过滤和 LLM 提炼的分工
+
+这里最容易说错的地方是：什么是规则做的，什么是模型做的。
+
+- 规则负责决定：
+  - 哪些线程进入 memory 流程
+  - 什么时候可以开始处理这些线程
+  - rollout 里哪些 item 类型值得送去做 memory 提炼
+  - 哪些上下文注入片段应该在送给模型前先删掉 [[sources/codex-memory-implementation-2026-04/source/local-code-reading-codex-memory-pipeline-2026-04-20|实现笔记]]
+- 模型负责决定：
+  - 这个线程里哪些经验以后还值得复用
+  - 哪些用户偏好已经足够稳定
+  - 哪些修复过程只是一次性尝试，哪些已经值得保留为长期知识
+  - 哪些失败模式应该升级成以后的避坑经验 [[sources/codex-memory-implementation-2026-04/source/openai-codex-d62421d-memory-stage-one-system|stage_one_system prompt]]
+
+换句话说，规则负责把 rollout 清洗成“适合让模型读”的版本，模型再从这个版本里判断“什么值得记住”。
+
+### 规则过滤到底做什么
+
+在单线程提炼之前，系统会先做一层机械过滤，但这层过滤不是在理解 thread 的长期价值，而是在做输入清洗。[[sources/codex-memory-implementation-2026-04/source/local-code-reading-codex-memory-pipeline-2026-04-20|实现笔记]]
+
+- 它会保留真正描述 thread 过程的内容，例如：
+  - 普通消息
+  - shell 调用
+  - 工具调用和工具输出
+  - 搜索调用和搜索结果
+- 它会直接丢掉一些明显不适合 memory 提炼的内容，例如：
+  - developer message
+  - reasoning trace
+  - 一些内部整理或中间态 item
+- 对 user message，它还会进一步删掉某些“提示脚手架”片段，例如注入进去的用户指令片段和 skill payload；这些内容属于 prompt scaffolding，不属于真正应该被记住的对话内容 [[sources/codex-memory-implementation-2026-04/source/local-code-reading-codex-memory-pipeline-2026-04-20|实现笔记]]
+
+因此，像“重复工作流”“重要约定”“典型报错与修复过程”“用户反复强调的偏好”这些内容，不是规则直接从 rollout 里识别出来的，而是规则先把明显噪音和脚手架剥掉，再由模型去做语义提炼。
 
 ## Phase 1：单线程抽取，而不是 agent
 
