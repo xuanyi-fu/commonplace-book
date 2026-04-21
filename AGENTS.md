@@ -31,6 +31,8 @@ Raw source files under `sources/*/source/**` should remain read-only.
   - `## Summary`
   - `## Sources`
 - When a source file is cleaned or normalized from another format, preserve inline citations, footnote markers, and inline links from the original whenever practical so readers can jump back to referenced material.
+- When an original raw source is available, preserve that raw source in `sources/<collection>/source/**` whenever practical, preferably in its native format such as PDF, HTML, exported email, or image capture.
+- A cleaned markdown source note may accompany a raw source, but should not replace the raw source when the raw source can be preserved.
 - That page must clearly cover:
   - what the source collection mainly contains
   - how the collection is structured

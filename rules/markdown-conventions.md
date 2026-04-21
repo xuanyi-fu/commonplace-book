@@ -27,6 +27,8 @@
   - `## Summary`
   - `## Sources`
 - 如果 source 文件是从其他格式清洗或整理而来，应尽量保留原文中的 inline citation、脚注标记和文内链接，方便后续跳转回被引用的材料
+- 如果原始 raw source 本身可获得，应尽量把 raw source 也保存在 `sources/<collection>/source/**` 中，并优先保留其原生格式，例如 PDF、HTML、导出的邮件或截图
+- cleaned markdown source note 可以作为补充，但在 raw source 可保存时，不应拿 cleaned note 替代 raw source
 - 每个 `sources/<collection>/summary.md` 都必须明确说明：
   - 这个 source 主要包含什么
   - 这个 source 的结构是什么
