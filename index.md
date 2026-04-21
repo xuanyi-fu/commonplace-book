@@ -7,6 +7,9 @@ updated: 2026-04-20
 
 # index
 
+- [[sources/windsurf-position-2026-04/summary|windsurf-position-2026-04]]: source collection for Windsurf scale claims and public usage signals
+- [[entities/windsurf|windsurf]]: entity page for Windsurf as a multi-agent IDE product with current public positioning and market signals
+- [[entities/qwen3-6-35b-a3b|qwen3-6-35b-a3b]]: entity page for the open-weight sparse multimodal model positioned for agentic coding
 - [[sources/codex-memory-2026-04/summary|codex-memory-2026-04]]: source collection for current official docs and observed UI around Codex memory support
 - [[sources/codex-memory-implementation-2026-04/summary|codex-memory-implementation-2026-04]]: source collection，收录 Codex memory 在 app-server、core、state 三层的实现笔记与 prompt 快照
 - [[syntheses/codex-memory-support-and-boundaries|codex-memory-support-and-boundaries]]: synthesis of Codex memory's implementation pipeline, file layering, and control surfaces
