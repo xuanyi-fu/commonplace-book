@@ -1,15 +1,15 @@
 ---
 name: ingest-source
-description: Use this skill when adding a new source collection to this knowledge-base wiki. It explains how to normalize the collection name, place raw files under sources/<collection>/source/, write sources/<collection>/summary.md, update index.md, run uv run python scripts/lint.py, and commit the ingest in the repository's required format.
+description: Use this skill when adding a new source collection to this knowledge-base wiki. It explains the shared ingest contract, how to route different source types to type-specific guidance, how to write sources/<collection>/summary.md, how to update index.md, and how to validate and commit the ingest in the repository's required format.
 ---
 
 # Ingest Source
 
 Use this skill when the task is to add a new source collection to this repository.
 
-This skill is specific to the current repo layout and must follow [AGENTS.md](/Users/bytedance/Documents/knowledge-base/AGENTS.md:1).
+This skill is repo-specific and must follow [AGENTS.md](/Users/bytedance/Documents/knowledge-base/AGENTS.md:1).
 
-## Target Layout
+## Shared Contract
 
 Every ingested source collection must end up in this shape:
 
@@ -25,20 +25,22 @@ Rules:
 
 - The collection folder name must use `kebab-case`.
 - The collection root must contain exactly `summary.md` and `source/`.
-- All raw source files must live under `sources/<collection>/source/**`.
-- Never place raw files directly under `sources/<collection>/`.
+- Original source artifacts and faithful normalized derivatives must live under `sources/<collection>/source/**`.
+- Do not place source artifacts directly under `sources/<collection>/`.
+- Files under `source/` are for source material only. Do not use `source/` for summaries, rewrites, conclusions, or personal understanding.
+- `summary.md` is the only source-collection entry page.
 - Root `index.md` must link to `sources/<collection>/summary.md`, not to raw source files.
 
-## Ingest Workflow
+## Workflow
 
 1. Choose the collection name.
    Use a short `kebab-case` slug that names the source collection clearly.
 
-2. Create the collection layout.
-   Create `sources/<collection>/source/` and place all raw source files there.
+2. Route the material to the right source type.
+   Read the matching file under `types/` before ingesting the source.
 
-3. Preserve raw source as raw source.
-   Do not rewrite, summarize, or restructure files under `source/` unless the task is explicitly to clean an imported snapshot.
+3. Create the collection layout.
+   Create `sources/<collection>/source/` and place the source artifacts there.
 
 4. Create `sources/<collection>/summary.md`.
    This is the only source-collection entry page.
@@ -51,6 +53,18 @@ Rules:
 
 7. Commit the ingest.
    The repo requires a Conventional Commit after each logical update.
+
+## Type Routing
+
+- `webpage`: a webpage or browser-rendered page. Read `types/webpage.md`.
+- `short-text`: standalone pasted text with no stable webpage, PDF, or email original. Read `types/short-text.md`.
+- `paper-pdf`: a research paper, preprint, proceedings paper, or other paper-like academic PDF. Read `types/paper-pdf.md`.
+- `book-pdf`: a book, monograph, or other book-length PDF. Read `types/book-pdf.md`.
+- `pdf`: other PDF-first source material such as reports, manuals, or slide decks. Read `types/pdf.md`.
+- `ai-daily-news`: one issue from the Daily AI Newsletter mail workflow. Read `types/ai-daily-news.md`.
+- `ai-weekly-news`: one issue from the AI Agents Weekly mail workflow. Read `types/ai-weekly-news.md`.
+
+If the material is only an excerpt from a known webpage, PDF, or email, do not use `short-text`. Route it to the underlying source type instead.
 
 ## `summary.md` Requirements
 
@@ -106,14 +120,7 @@ A compact summary of the source collection's main content.
 - [[source/<file>|<display-name>]]
 ```
 
-## Source Links
-
-Inside `sources/<collection>/summary.md`, source links should point to files under the local `source/` subtree, for example:
-
-```md
-- [[source/gist|gist.md]]
-- [[source/official-help-cli|official-help-cli.md]]
-```
+Inside `sources/<collection>/summary.md`, source links should point to files under the local `source/` subtree.
 
 In root `index.md`, only link the collection summary page, for example:
 
@@ -154,7 +161,8 @@ If the change is mostly structural or repo-wide rather than content ingest, use 
 ## Do Not Do
 
 - Do not create `sources/<collection>/index.md`.
-- Do not put raw files at collection root.
+- Do not place source artifacts at the collection root.
+- Do not put interpretation into files under `source/`.
 - Do not skip `summary.md`.
 - Do not skip `index.md` when introducing a new collection.
 - Do not commit before `uv run python scripts/lint.py` passes.
