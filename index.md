@@ -8,6 +8,7 @@ updated: 2026-04-22
 # index
 
 - [[sources/ai-scientist-2026-04/summary|ai-scientist-2026-04]]: source collection for AiScientist architecture, File-as-Bus coordination, and the public runtime/module layout
+- [[sources/components-of-a-coding-agent-2026-04/summary|components-of-a-coding-agent-2026-04]]: source collection for Sebastian Raschka's coding-agent article covering repo context, prompt caching, tools, memory, and subagents
 - [[syntheses/ai-scientist-file-as-bus-state-and-context-flow|ai-scientist-file-as-bus-state-and-context-flow]]: synthesis of how AiScientist turns research state into files and routes those artifacts back into later agent context
 - [[sources/multica-shared-project-state-2026-04/summary|multica-shared-project-state-2026-04]]: source collection for how Multica stores shared task state in platform objects, session pointers, and daemon-rehydrated execution environments
 - [[syntheses/multica-shared-project-state-vs-ai-scientist|multica-shared-project-state-vs-ai-scientist]]: synthesis comparing Multica's platform-state sharing model with AiScientist's File-as-Bus artifact layer
