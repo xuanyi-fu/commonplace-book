@@ -21,6 +21,7 @@ updated: 2026-04-21
 - [[entities/windsurf|windsurf]]: entity page for Windsurf as a multi-agent IDE product with current public positioning and market signals
 - [[entities/qwen3-6-35b-a3b|qwen3-6-35b-a3b]]: entity page for the open-weight sparse multimodal model positioned for agentic coding
 - [[sources/transformer-moe-2026-04/summary|transformer-moe-2026-04]]: source collection for learning what a Transformer MoE layer is, how routing works, and how FFN-to-expert replacement changes capacity versus active compute
+- [[syntheses/left-multiply-token-right-multiply-channel|left-multiply-token-right-multiply-channel]]: 解释在“行 = token，列 = channel”的约定下，为什么左乘会 mix token、右乘会 mix channel
 - [[sources/codex-memory-2026-04/summary|codex-memory-2026-04]]: source collection for current official docs and observed UI around Codex memory support
 - [[sources/codex-memory-implementation-2026-04/summary|codex-memory-implementation-2026-04]]: source collection，收录 Codex memory 在 app-server、core、state 三层的实现笔记与 prompt 快照
 - [[syntheses/codex-memory-support-and-boundaries|codex-memory-support-and-boundaries]]: synthesis of Codex memory's implementation pipeline, file layering, and control surfaces
