@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `### Running the harness`, before the paragraph beginning `After evaluating the solo run`
-  - next unread source span: full harness run analysis showing how the planner expanded the prompt, how sprint contracts shaped implementation, and what quality differences appeared in the resulting app
-  - next boundary: the paragraph beginning `The biggest difference was in play mode`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis
+  - semantic position: under `### Running the harness`, before the paragraph beginning `Getting the evaluator to perform at this level took work`
+  - next unread source span: evaluator QA tuning, including why out-of-the-box Claude was a poor QA agent and how prompt/log iteration improved it
+  - next boundary: `### Iterating on the harness`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis; full harness run evidence
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -200,6 +200,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 准确。这段先建立同题对照：同一个 one-sentence retro game maker prompt，solo run 成本和时间更低，full harness 更贵更久；然后作者先打开 solo output，说明它的第一眼 impression 没有立刻失败，但真实使用暴露了 implementation wiring 与 product workflow 的问题。核心结论不是 solo run 完全不会生成 UI，而是它容易生成“看起来像 app、实际核心 loop broken”的结果。
 - Missing points: 这里的对比还只是 solo side；full harness 的质量差异要到下一段才展开。成本差异也很重要：作者在承认 full harness expensive 的前提下论证质量收益。
 - Open questions: 下一段会说明 full harness 的优势来自哪些具体机制：planner-expanded spec、visual design language、sprint contracts、以及更完整的 editor/AI features。
+
+### Full Harness Run Evidence
+
+- Source span label: paragraph beginning `After evaluating the solo run` through the evaluator findings table, before `Getting the evaluator to perform at this level took work`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^full-harness-expanded-spec]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^full-harness-play-mode-worked]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^evaluator-contract-playwright-findings]]
+- Guiding question: full harness run 相比 solo run 改善在哪里？这些改善分别来自 `planner`、`sprint contract`、`evaluator`，还是只是 UI polish？
+- User recitation: 用户理解为：这一段其实是在用一个实际例子证明前文的 `planner-generator-evaluator` 架构优于 single agent，证明 `harness` 确实有用。
+- Calibrated understanding: 准确。这是一个 case-study evidence，而不是严格 benchmark：同一个 prompt 下，full harness 通过 `planner` 扩成 16-feature spec / ten sprints，通过 frontend design skill 形成 visual design language，通过 per-sprint contract 让 `generator` 和 `evaluator` 对 testable behaviors 达成一致。结果上，它不只是 UI 更 polished，还真的让 play mode 跑起来；`evaluator` 又通过 Playwright 按 contract criteria 找到具体 bug，把 implementation 拉回 spec。
+- Missing points: 这段也保留了边界：full harness 仍然 expensive，workflow 仍有 product intuition gap，AI-generated level 也有 common-sense / edge-case 问题；所以作者证明的是 clear lift，不是完美解决。
+- Open questions: 下一段会把重点从“harness 有用”转到“evaluator 不是天然有用”：Claude out of the box 作为 QA agent 会偏宽松、测试浅，需要通过日志和 prompt iteration 调。
 
 ## Questions And Answers
 
