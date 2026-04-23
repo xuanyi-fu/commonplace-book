@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `### Running the harness`, before the paragraph beginning `For the first version of this harness`
-  - next unread source span: harness run setup for the retro game maker comparison, including model choice, prompt, duration/cost table, and headline quality difference
-  - next boundary: the paragraph beginning `I was expecting an interface`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication
+  - semantic position: under `### Running the harness`, before the paragraph beginning `After evaluating the solo run`
+  - next unread source span: full harness run analysis showing how the planner expanded the prompt, how sprint contracts shaped implementation, and what quality differences appeared in the resulting app
+  - next boundary: the paragraph beginning `The biggest difference was in play mode`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -190,6 +190,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 准确。源文说的是 agents 通过 files 进行 turn-by-turn communication：一个 `agent` 写文件，另一个 `agent` 读后在同一文件或新文件里回应。`generator` 随后按已协商的 contract 开发，再 hand off 给 QA。这里的重点是把 contract、reply、handoff 变成显式、可读、可复查的 artifact。
 - Missing points: 这不是让 `planner` 写更多实现细节，而是让 spec fidelity 通过 files 和 agreed contract 保持住；implementation 仍然留给 `generator` 在 sprint 内完成。
 - Open questions: 下一节 `### Running the harness` 会用 retro game maker 对比 solo run 和 full harness 的实际输出差异。
+
+### Retro Game Maker Setup And Solo Run Failure
+
+- Source span label: `### Running the harness` opening comparison through the solo run screenshots, before `After evaluating the solo run`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^retro-maker-cost-comparison]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^solo-run-surface-ok-broken-runtime]]
+- Guiding question: 这一段给了什么对比证据？这些证据先支持了什么结论？
+- User recitation: 用户理解为：solo run 表面上看着还行，好像符合 retro game maker 的基本期待；但一深入点击就经不起推敲，workflow 僵硬、空间浪费，最关键是 game runtime 根本玩不了。
+- Calibrated understanding: 准确。这段先建立同题对照：同一个 one-sentence retro game maker prompt，solo run 成本和时间更低，full harness 更贵更久；然后作者先打开 solo output，说明它的第一眼 impression 没有立刻失败，但真实使用暴露了 implementation wiring 与 product workflow 的问题。核心结论不是 solo run 完全不会生成 UI，而是它容易生成“看起来像 app、实际核心 loop broken”的结果。
+- Missing points: 这里的对比还只是 solo side；full harness 的质量差异要到下一段才展开。成本差异也很重要：作者在承认 full harness expensive 的前提下论证质量收益。
+- Open questions: 下一段会说明 full harness 的优势来自哪些具体机制：planner-expanded spec、visual design language、sprint contracts、以及更完整的 editor/AI features。
 
 ## Questions And Answers
 
