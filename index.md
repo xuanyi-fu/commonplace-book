@@ -46,5 +46,7 @@ updated: 2026-04-22
 - [[sources/cloudflare-mcp-2026-04/summary|cloudflare-mcp-2026-04]]: source collection for Cloudflare's official Cloudflare API MCP server materials, including the two-tool Code Mode design and Dynamic Worker sandbox execution model
 - [[sources/mcp-apps-2026-04/summary|mcp-apps-2026-04]]: source collection for official MCP Apps docs, stable spec text, and proposal-to-launch announcement material
 - [[entities/mcp-apps|mcp-apps]]: entity page for MCP Apps as the official MCP extension for interactive UI rendered inside compliant hosts
+- [[sources/mcp-elicitation-2026-04/summary|mcp-elicitation-2026-04]]: source collection for the official elicitation spec and official Inspector client docs showing concrete elicitation-related behavior
+- [[entities/mcp-elicitation|mcp-elicitation]]: entity page for MCP elicitation as the server-to-client user-input flow standardized separately from MCP Apps
 - [[sources/obsidian-cli/summary|obsidian-cli]]: summary page for the `sources/obsidian-cli/` collection
 - [[sources/andrej-llm-wiki-git-gist/summary|andrej-llm-wiki-git-gist]]: summary page for the `sources/andrej-llm-wiki-git-gist/` collection
