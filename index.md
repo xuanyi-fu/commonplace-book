@@ -7,6 +7,8 @@ updated: 2026-04-23
 
 # index
 
+- [[sources/ralph-wiggum-method/summary|ralph-wiggum-method]]: source collection for Geoffrey Huntley's Ralph Wiggum method article and its repeated AI-coding loop pattern
+- [[entities/ralph-wiggum-method|ralph-wiggum-method]]: entity page for Ralph Wiggum as a greenfield AI-coding loop method
 - [[sources/ai-scientist-2026-04/summary|ai-scientist-2026-04]]: source collection for AiScientist architecture, File-as-Bus coordination, and the public runtime/module layout
 - [[sources/components-of-a-coding-agent-2026-04/summary|components-of-a-coding-agent-2026-04]]: source collection for Sebastian Raschka's coding-agent article covering repo context, prompt caching, tools, memory, and subagents
 - [[sources/axi-agent-experience-interface-2026-04/summary|axi-agent-experience-interface-2026-04]]: source collection for AXI's agent-first CLI principles, TOON dependency, benchmark docs, and reference implementation readmes
