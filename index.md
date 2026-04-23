@@ -16,6 +16,7 @@ updated: 2026-04-22
 - [[sources/fire-pdf-2026-04/summary|fire-pdf-2026-04]]: source collection for Fire-PDF architecture, parser modes, and the role of pdf-inspector
 - [[entities/fire-pdf|fire-pdf]]: entity page for Fire-PDF as a PDF parsing subsystem with mixed extraction architecture and credit-based pricing
 - [[concepts/web-agent|web-agent]]: concept page for agents that treat the browser as an execution environment rather than only a reading surface
+- [[concepts/agent-harness|agent-harness]]: concept page defining the infrastructure layer that wraps a model and governs long-running agent execution
 - [[sources/browser-use-2026-04/summary|browser-use-2026-04]]: source collection for Browser Use's positioning, Python/CLI workflows, and one local logged-in-site trial
 - [[entities/browser-use|browser-use]]: entity page for Browser Use as a browser execution layer inside the web-agent stack
 - [[sources/weak-to-strong-supervision-2026-04/summary|weak-to-strong-supervision-2026-04]]: source collection for the motivation, formal setup, and current alignment-research framing of weak-to-strong supervision
