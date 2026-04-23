@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `## Scaling to full-stack coding`, before the opening paragraph beginning `With these findings in hand`
-  - next unread source span: transition from frontend generator/evaluator findings to full-stack development, where code review and QA play the evaluator role
-  - next boundary: `### The architecture`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example
+  - semantic position: under `### The architecture`, before the paragraph beginning `In our earlier long-running harness`
+  - next unread source span: architecture setup explaining how the earlier Sonnet 4.5 context-reset harness changed when Opus 4.5 removed context anxiety enough to use one continuous session with automatic compaction
+  - next boundary: the paragraph beginning `For this work I built on the foundation`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -140,6 +140,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 这几段的共同作用是收束 frontend experiment：evaluator assessments 会随 iteration 改善后 plateau；generation 可能 incremental refine，也可能 sharp aesthetic turn；criteria wording 本身会塑造输出分布；improvement 不总是线性，复杂度会随 feedback 上升，甚至第一轮 criteria prompt 就能把模型从 generic defaults 推开。Dutch art museum 例子只是把这个效果具体化：第十轮从普通 dark-themed landing page pivot 成 spatial 3D gallery experience。
 - Missing points: 这些段落主要是结果与例子，不再新增 harness 组件；对后文最重要的是 generator/evaluator loop 已经被证明能把 subjective design 从 generic baseline 推向更大胆方向。
 - Open questions: 下一节会说明同一 generator/evaluator pattern 如何迁移到 full-stack coding，以及 code review / QA 如何承担 design evaluator 的结构角色。
+
+### Scaling To Full-Stack Coding Transition
+
+- Source span label: opening paragraph under `## Scaling to full-stack coding`, before `### The architecture`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^full-stack-generator-evaluator-transition]]
+- Guiding question: 作者怎样把 frontend 的 `generator/evaluator` pattern 迁移到 full-stack development？
+- User recitation: 用户概括为：frontend design 里的 `evaluator` 到 full-stack coding 里变成了 QA 和 code review。
+- Calibrated understanding: 这个复述准确。这段只是迁移桥：frontend 里 evaluator 的结构角色是评价实现、给 feedback；full-stack development 里天然有 code review 和 QA 承担类似角色，所以 generator/evaluator loop 可以映射到软件开发生命周期。
+- Missing points: 这里还没有 architecture 细节；planner、generator、evaluator 角色会在下一段展开。
+- Open questions: 下一段会说明 context reset 是否还需要、三代理系统各自补什么 gap，以及 full-stack harness 怎样继承前面 frontend loop 的 evaluator 逻辑。
 
 ## Questions And Answers
 
