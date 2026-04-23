@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `## Frontend design: making subjective quality gradable`, before the paragraph beginning `Two insights shaped the harness`
-  - next unread source span: two insights behind the frontend harness: criteria can make aesthetics gradable, and generation/grading separation creates a feedback loop
-  - next boundary: the paragraph beginning `With this in mind, I wrote four grading criteria`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span
+  - semantic position: under `## Frontend design: making subjective quality gradable`, before the four grading criteria list introduced by `With this in mind`
+  - next unread source span: four grading criteria: design quality, originality, craft, and functionality
+  - next boundary: the paragraph beginning `I emphasized design quality and originality`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -80,6 +80,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 这个复述准确。这里 frontend design 的实验价值在于它把“technically functional”与“visually unremarkable”分开了：Claude baseline 不是完全不会做页面，而是容易产出 safe、predictable、能用但平庸的 layout。正因为没有简单 binary check，external evaluator 的价值更容易被看见。
 - Missing points: 这段还没进入 criteria 的具体设计；它只是在说明为什么 frontend design 是 self-evaluation issue 最明显的 testbed。
 - Open questions: 下一段会如何把 subjective taste 转成可评分 criteria，以及 generation/grading 分离如何形成反馈循环。
+
+### Frontend Harness Two Insights
+
+- Source span label: `Two insights shaped the harness` paragraph under `## Frontend design: making subjective quality gradable`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^frontend-harness-two-insights]]
+- Guiding question: frontend design harness 的两个关键机制是什么？它们分别解决什么问题？
+- User recitation: 用户理解为：这两个 insight 就是前面标记的文章主线 A 和 B。A 是把模糊的好坏变成详细评分标准；B 是把实现的 `agent` 和评分的 `agent` 分开，否则会有 `self-evaluation bias`。
+- Calibrated understanding: 这个复述准确。第一点把 aesthetics 从不可直接评分的 “is this beautiful?” 改写成 criteria-based judgment，也就是“是否符合我们定义的 good design principles”；第二点把 generation 和 grading 分开，让 generator 接收外部 feedback，而不是依赖自己的 self-evaluation。
+- Missing points: 这里还没有说四个 criteria 分别是什么，也没有说明各项权重；它只是在给 criteria list 和 generator/evaluator loop 做概念铺垫。
+- Open questions: 下一段的四个 criteria 会怎样覆盖 subjective quality、originality、technical craft 与 usability；哪些 criteria 会被作者强调，哪些只是 baseline competence check。
 
 ## Questions And Answers
 
