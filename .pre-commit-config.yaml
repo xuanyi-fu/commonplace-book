@@ -1,0 +1,19 @@
+default_install_hook_types: [pre-commit]
+repos:
+  - repo: local
+    hooks:
+      - id: knowledge-base-lint
+        name: knowledge-base lint
+        entry: python scripts/lint.py
+        language: python
+        additional_dependencies:
+          - PyYAML>=6.0,<7
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit, manual]
+      - id: knowledge-base-check-links
+        name: knowledge-base check links
+        entry: python scripts/check_links.py
+        language: python
+        files: ^(?:index\.md|(?:summaries|entities|concepts|syntheses)/.+\.md|sources/[^/]+/summary\.md)$
+        stages: [pre-commit, manual]

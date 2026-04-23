@@ -245,7 +245,11 @@ Git history is the only change history. Do not use `log.md`.
 规则：
 
 - `scripts/lint.py` 实现了当前 deterministic 规则子集
+- `scripts/check_links.py` 负责检查 wiki-layer 页面中的内部链接、heading anchor 和 block-id citation 是否可解析
+- 通过 `uv run pre-commit install` 安装 repo-managed commit hooks
+- 通过 `uv run pre-commit run --all-files` 手动运行完整 hook 套件
 - 每次逻辑更新在 commit 之前都必须先运行 `uv run python scripts/lint.py`
+- commit-time hook 会在每次 commit 时运行全库 `scripts/lint.py`，并对 staged wiki-layer markdown 页面运行 `scripts/check_links.py`
 - 只有 lint 通过后，才能创建 commit
 - 每次逻辑更新都必须以一个 git commit 结束
 - commit 格式固定为 `<type>(<scope>): <subject>`

@@ -130,7 +130,10 @@ Examples:
 - Git history is the only change history. Do not use `log.md`.
 - This repository has a configured GitHub remote at `origin`.
 - The deterministic subset of these rules is enforced by `scripts/lint.py`.
+- Install the repo-managed commit-time checks with `uv run pre-commit install`.
+- Run the full hook suite manually with `uv run pre-commit run --all-files`.
 - Every logical update must run `uv run python scripts/lint.py` before commit.
+- Commit-time checks run full-repo `scripts/lint.py` plus page-scoped `scripts/check_links.py` on staged wiki-layer markdown pages.
 - Commits must only be created from a passing `uv run python scripts/lint.py` run.
 - Every logical update must end with one git commit.
 - After each commit, push the current branch to `origin` unless the user explicitly asks you not to push.
