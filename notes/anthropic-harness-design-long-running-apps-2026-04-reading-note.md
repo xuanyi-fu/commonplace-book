@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `### The architecture`, before the three-agent personas introduction and list
-  - next unread source span: three-agent personas: planner expands prompts into specs, generator builds sprint by sprint, evaluator tests and grades with hard thresholds
-  - next boundary: the paragraph beginning `Before each sprint`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5
+  - semantic position: under `### The architecture`, before the paragraph beginning `Before each sprint`
+  - next unread source span: sprint contract negotiation between generator and evaluator before each sprint
+  - next boundary: the paragraph beginning `Communication was handled via files`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -160,6 +160,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 这个复述准确。早期 Sonnet 4.5 harness 需要 context resets 来处理 `context anxiety`，让模型保持在 task 上；但 Opus 4.5 基本移除了这种 behavior，所以作者把 resets 从这个 harness 里删掉，改成 agents 在整个 build 里作为 one continuous session 运行，由 Claude Agent SDK automatic compaction 处理 context growth。
 - Missing points: 这段不是否定 earlier reset 机制，而是在说明 harness component 是否 load-bearing 会随模型能力变化而移动。
 - Open questions: 下一段三代理 personas 会说明作者保留了哪些组件：planner、generator、evaluator 分别补哪个 prior-run gap。
+
+### Three-Agent Personas
+
+- Source span label: three-agent personas list under `### The architecture`, before sprint contract negotiation
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^three-agent-personas]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^hard-threshold-evaluator]]
+- Guiding question: `planner`、`generator`、`evaluator` 三个 personas 分别补的是 prior runs 里的什么 gap？
+- User recitation: 用户理解为：这一段用 full-stack 例子展开 `planner-generator-evaluator` 架构。`planner` 把三四句话扩成 spec，但不能把实现细节写太细，因为它的信息不足，错误实现判断会 cascade 到 `generator`；正确路线应让 `generator` 和 `evaluator` 在实践中发现。`generator` 一个 feature 一个 feature 地做，每个 sprint 结束先 self-evaluate，再交给 `evaluator`。`evaluator` 的新信息是每个标准都有 hard threshold，低于 threshold 就 fail，并给明确 feedback 让 `generator` 修改。
+- Calibrated understanding: 这个复述准确。三 personas 分别补三个 gap：`planner` 补 upfront spec gap，但通过限制 implementation detail 避免上游错误固化；`generator` 补 scoped implementation gap，用 sprint/feature 粒度控制复杂度；`evaluator` 补 QA/judgment gap，用 Playwright MCP 实测 UI/API/database state，并用 hard thresholds 把 vague review 变成 pass/fail 反馈。
+- Missing points: `planner` 还被要求把 AI features weave into specs；`generator` 使用具体 stack 并有 git；这些是实现细节，不改变三角色分工。
+- Open questions: 下一段 sprint contract 会说明 `generator` 与 `evaluator` 如何在写代码前先对 done / success criteria 达成一致。
 
 ## Questions And Answers
 
