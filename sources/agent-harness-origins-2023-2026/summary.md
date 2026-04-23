@@ -16,10 +16,13 @@ updated: 2026-04-22
 - `source/agent-harness-pypi-markdown.md`: 基于 PyPI 可读页面内容与 JSON metadata 整理的 best-effort markdown derivative
 - `source/context-engineering-for-ai-agents-lessons-from-building-manus.html`: Manus 2025-07-18 原始网页 HTML；这是“概念前驱”节点的 authoritative source
 - `source/context-engineering-for-ai-agents-lessons-from-building-manus-markdown.md`: Manus 文章正文的 best-effort markdown derivative
+- `source/assets/context-engineering-for-ai-agents-lessons-from-building-manus/`: 上一篇 markdown derivative 依赖的本地化正文图片
 - `source/context-engineering-for-ai-agents-part-2.html`: Philipp Schmid 2025-12-04 原始网页 HTML；这是显式定义 `Agent Harness` 的关键节点
 - `source/context-engineering-for-ai-agents-part-2-markdown.md`: 对应正文的 markdown derivative
+- `source/assets/context-engineering-for-ai-agents-part-2/`: 上一篇 markdown derivative 依赖的本地化正文图片
 - `source/importance-of-agent-harness-in-2026.html`: Philipp Schmid 2026-01-05 原始网页 HTML；这是把该概念单独系统化展开的关键节点
 - `source/importance-of-agent-harness-in-2026-markdown.md`: 对应正文的 markdown derivative
+- `source/assets/importance-of-agent-harness-in-2026/`: 上一篇 markdown derivative 依赖的本地化正文图片
 - `summary.md`: 这个 collection 的摘要和使用说明
 
 ## How To Use
@@ -28,6 +31,7 @@ updated: 2026-04-22
 - 如果你要回答“最早是谁提出来的”，先看 PyPI 节点；它更像是可验证的早期公开用词，而不是今天这套成熟定义的完整发明时刻
 - 如果你要回答“这个概念是怎么衍生出来的”，重点看 Manus 2025 那篇和 Philipp Schmid 2025-12 / 2026-01 两篇：前者提供实践问题和设计压力，后者把这些问题抽象成 `Agent Harness`
 - 需要核对原始页面结构、发布时间、链接、图片和 HTML 局限时，回到对应 `.html`；需要做顺序阅读、搜索和引用时，先读对应 `-markdown.md`
+- 这三个网页 derivative 的正文图片已经本地化到 `source/assets/**`，所以在 Obsidian 里直接打开 markdown 也能看到图，不必再依赖站外相对路径
 - `agent-harness-pypi.html` 由于 PyPI 的挑战页限制，没有稳定返回项目正文；这个节点应与 `agent-harness-pypi-metadata.json` 和 `agent-harness-pypi-markdown.md` 结合使用
 - 读完这个 collection 后，如果你要继续看 2026 年 spring 语境里 `coding harness` 被如何拆成具体组件，再接着读 [[sources/components-of-a-coding-agent-2026-04/summary|components-of-a-coding-agent-2026-04]]
 
