@@ -22,6 +22,8 @@ updated: 2026-04-23
 - [[concepts/web-agent|web-agent]]: concept page for agents that treat the browser as an execution environment rather than only a reading surface
 - [[concepts/agent-harness|agent-harness]]: concept page defining the infrastructure layer that wraps a model and governs long-running agent execution
 - [[concepts/context-anxiety|context-anxiety]]: concept page defining the long-task failure mode where an agent starts wrapping up as it approaches its perceived context limit
+- [[sources/gpt-5-context-anxiety-evidence-2026-04/summary|gpt-5-context-anxiety-evidence-2026-04]]: source collection for public evidence around GPT-5, context anxiety, long-context degradation, and open-weight reasoning shift
+- [[entities/gpt-5-series|gpt-5-series]]: entity page recording the current evidence boundary around GPT-5 series and context anxiety
 - [[sources/browser-use-2026-04/summary|browser-use-2026-04]]: source collection for Browser Use's positioning, Python/CLI workflows, and one local logged-in-site trial
 - [[entities/browser-use|browser-use]]: entity page for Browser Use as a browser execution layer inside the web-agent stack
 - [[sources/weak-to-strong-supervision-2026-04/summary|weak-to-strong-supervision-2026-04]]: source collection for the motivation, formal setup, and current alignment-research framing of weak-to-strong supervision
