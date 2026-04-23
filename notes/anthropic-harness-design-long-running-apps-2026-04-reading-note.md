@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `## Frontend design: making subjective quality gradable`, before the paragraph beginning `I calibrated the evaluator`
-  - next unread source span: evaluator calibration with few-shot examples and detailed score breakdowns
-  - next boundary: the paragraph beginning `I built the loop on the Claude Agent SDK`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots
+  - semantic position: under `## Frontend design: making subjective quality gradable`, before the paragraph beginning `I built the loop on the Claude Agent SDK`
+  - next unread source span: generator/evaluator loop implementation using Claude Agent SDK, Playwright MCP, iterative critique, and strategic refine-or-pivot decisions
+  - next boundary: the paragraph beginning `Across runs`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -111,6 +111,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Missing points: 这段说明了 criteria weighting，但还没说明 evaluator 怎样被校准得稳定。
 - Open questions: 下一段 few-shot calibration 怎样减少 score drift，并让 evaluator judgment 对齐作者偏好。
 
+### Evaluator Few-Shot Calibration
+
+- Source span label: paragraph beginning `I calibrated the evaluator`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^few-shot-evaluator-calibration]]
+- Guiding question: `few-shot examples` 和 `detailed score breakdowns` 在这里怎样让 evaluator 更可靠？
+- User recitation: 用户把这和之前给 Lynx 做 Oncall 总结 rubrics 的实践类比：对着 few-shot examples 一直修改 rubrics，直到结果不再总是漂移。
+- Calibrated understanding: 这个类比准确。这里的 few-shot calibration 不是抽象地告诉 evaluator “稳定一点”，而是用具体样例和 detailed score breakdowns 调整 evaluator 的判断边界，让它的输出更贴近作者偏好，并减少跨 iteration 的 score drift。和 Oncall rubrics 类似，rubric 的可靠性来自反复用样例校准，而不是只写一条原则。
+- Missing points: 源文没有展开 few-shot examples 的具体内容；这里只能记录校准机制和目标。
+- Open questions: 下一段会说明 calibrated evaluator 如何被接入实际 loop，以及 Playwright MCP 如何让 evaluator 从静态评分变成可交互 QA。
+
 ## Questions And Answers
 
 No questions recorded yet.
@@ -120,6 +130,7 @@ No questions recorded yet.
 - 用户提出后续阅读应跟踪四个实现锚点：A 明确评分系统，B 可靠不 flaky 的 evaluator，C 大任务拆成可治理小任务，D 通过 `structured artifacts` 在 `agent` 之间交换 `context`。支撑段落见 opening framing block 中关于 generator/evaluator、criteria、decomposition、structured artifacts 和 three-agent architecture 的说明。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^gan-generator-evaluator]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^three-agent-architecture]]
 - 用户提出一个模型架构层面的解释：`compaction` 和 `context reset + handoff` 的差别可以理解为是否让旧 thread 的 KV Cache hidden state 继续影响后续生成；这个解释有助于理解 clean slate 与 continuation 的 tradeoff，但需要标注为推断，因为源文只讨论 `context window`、`compaction`、`clean slate` 与 handoff artifact，没有直接说明 KV Cache 复用机制。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^context-reset-vs-compaction]]
 - 用户修正 reading prompt：self-evaluation bias 这一段不该追问根因，而应问作者观察到什么现象，以及 separate `evaluator` 为什么是更可调的 harness component。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^self-evaluation-bias]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^external-evaluator-skeptical-tuning]]
+- 用户把 evaluator few-shot calibration 类比到 Lynx Oncall 总结 rubrics：对着 few-shot examples 反复修改 rubric，直到输出不再总是漂移。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^few-shot-evaluator-calibration]]
 
 ## Candidate Concepts Entities
 
