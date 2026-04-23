@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `### Removing the sprint construct`, before the paragraph beginning `I started by removing the sprint construct entirely`
-  - next unread source span: removing the sprint construct and checking which pieces remain load-bearing, including planner value and evaluator cost boundary
-  - next boundary: the paragraph beginning `Alongside the structural simplification`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis; full harness run evidence; evaluator QA tuning; harness simplification assumptions
+  - semantic position: under `### Results from the updated harness`, before the paragraph beginning `To put the updated harness to the test`
+  - next unread source span: updated harness DAW results, including whether the no-sprint harness remained coherent, where QA still added value, and what the final app could actually do
+  - next boundary: `## What comes next`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis; full harness run evidence; evaluator QA tuning; harness simplification assumptions; removing the sprint construct
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -230,6 +230,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 准确。这段的工程原则是：`harness` 组件不是中性的，每个组件都把某一代模型的能力边界写进系统。模型能力变强后，这些边界可能移动，原来的 scaffold 就可能从 helpful structure 变成 overhead。作者因此先尝试激进简化，但发现复现不了原结果、也看不清 load-bearing 组件；随后转成更像 ablation 的方法，一次移除一个组件并观察最终结果。Opus 4.6 发布进一步强化了这个问题，因为它提升的 planning、long-running task、code review/debugging、long-context retrieval，正是原 harness 在补的能力。
 - Missing points: 这里不是说所有 harness 都应该删掉，而是说复杂度必须有当前模型能力边界上的理由；`find the simplest solution possible, and only increase complexity when needed` 是 maintenance principle，不是一次性设计口号。
 - Open questions: 下一节会先测试 `sprint construct` 这个假设：Opus 4.6 是否还能自己保持任务结构，从而不再需要 per-sprint decomposition。
+
+### Removing The Sprint Construct
+
+- Source span label: entire `### Removing the sprint construct` section, before `### Results from the updated harness`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^remove-sprint-construct]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^planner-prevents-under-scoping]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^evaluator-load-bearing-boundary]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^ai-feature-agent-prompting]]
+- Guiding question: 移除 `sprint construct` 之后，哪些 harness 假设被证明可以删减，哪些仍然 load-bearing？
+- User recitation: 用户理解为：作者删掉了 `sprint construct`，理由是 Claude Opus 4.6 更能完成 long-running tasks，所以不一定需要 sprint decomposition；但这一节本身没有直接展示删掉之后的实际效果，效果应该在下一节。用户还指出，作者对 `evaluator` 的定位更明确了：它应该评测 solo agent 能力边缘的事情，而不是评测 solo agent 本来就能做好的事情，这样 ROI 才高。
+- Calibrated understanding: 准确。这节主要是结构调整和 load-bearing 判断，不是结果展示；下一节 `Results from the updated harness` 才给 evidence，其中明确说 builder 在没有 sprint decomposition 的情况下 coherent 地跑了两个多小时。当前节已经给出三点判断：`sprint construct` 可能因 4.6 能力提升而不再必要；`planner` 仍然有明显价值，因为 raw prompt 会让 generator under-scope；`evaluator` 从 per-sprint grading 改为 end-of-run pass，其价值取决于任务是否在当前模型 reliable solo 能力边界之外。
+- Missing points: 这一节还补了一个非结构性的 tuning：为了让 app 里的 AI features 变成 proper agent that can drive app functionality through tools，作者额外加了 prompting，因为这类知识太新，training data 覆盖薄。
+- Open questions: 下一节要验证两个点：没有 sprint construct 后 builder 是否真的能长时间 coherent 工作；single-pass QA 是否仍能抓到 generator missed details / stub features。
 
 ## Questions And Answers
 
