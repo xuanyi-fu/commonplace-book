@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `### Iterating on the harness`, before the paragraph beginning `The first set of harness results was encouraging`
-  - next unread source span: motivation for simplifying the harness after the first results, including cost, speed, bulk, and the principle that each harness component encodes an assumption about model limitations
-  - next boundary: the paragraph beginning `In my first attempt to simplify`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis; full harness run evidence; evaluator QA tuning
+  - semantic position: under `### Removing the sprint construct`, before the paragraph beginning `I started by removing the sprint construct entirely`
+  - next unread source span: removing the sprint construct and checking which pieces remain load-bearing, including planner value and evaluator cost boundary
+  - next boundary: the paragraph beginning `Alongside the structural simplification`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis; full harness run evidence; evaluator QA tuning; harness simplification assumptions
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -221,6 +221,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Missing points: 这段最后仍然承认 QA 能力有上限：small layout issues、unintuitive interactions、deeply nested features 里的 undiscovered bugs 仍会漏掉。但和 solo run 的 central feature broken 相比，lift 仍然明显。
 - Open questions: 下一段会转向 harness simplification：如果 full harness 有用但 bulky、slow、expensive，哪些组件是真正 load-bearing 的？
 
+### Harness Simplification Assumptions
+
+- Source span label: `### Iterating on the harness` through the paragraph beginning `As I was going through these iteration cycles`, before `### Removing the sprint construct`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^harness-components-encode-model-assumptions]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^methodical-component-ablation]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^opus46-reduces-scaffolding-need]]
+- Guiding question: 为什么作者开始迭代、简化这个 `harness`？他准备用什么方法判断哪些组件是真的 load-bearing？
+- User recitation: 用户理解为：每个 `harness component` 都是在编码一个假设，也就是“模型自己做不到什么”。例如 `evaluator` 假设模型不能可靠 self-evaluation；`planner` 假设模型不能很好地 thinking 然后展开 raw prompt；`generator` 和 `evaluator` 做 `sprint plan` 假设模型不能很好地 follow 任务结构。用户把这类假设和早期 `think step by step` 类比：当年这是在补模型不能结构化思考、容易提前停的缺陷；reasoning model 把 reasoning 内化后，这个外部 scaffold 就过时了。于是问题变成：今天这些 harness 假设里，哪些未来也会过时？
+- Calibrated understanding: 准确。这段的工程原则是：`harness` 组件不是中性的，每个组件都把某一代模型的能力边界写进系统。模型能力变强后，这些边界可能移动，原来的 scaffold 就可能从 helpful structure 变成 overhead。作者因此先尝试激进简化，但发现复现不了原结果、也看不清 load-bearing 组件；随后转成更像 ablation 的方法，一次移除一个组件并观察最终结果。Opus 4.6 发布进一步强化了这个问题，因为它提升的 planning、long-running task、code review/debugging、long-context retrieval，正是原 harness 在补的能力。
+- Missing points: 这里不是说所有 harness 都应该删掉，而是说复杂度必须有当前模型能力边界上的理由；`find the simplest solution possible, and only increase complexity when needed` 是 maintenance principle，不是一次性设计口号。
+- Open questions: 下一节会先测试 `sprint construct` 这个假设：Opus 4.6 是否还能自己保持任务结构，从而不再需要 per-sprint decomposition。
+
 ## Questions And Answers
 
 No questions recorded yet.
@@ -232,6 +242,7 @@ No questions recorded yet.
 - 用户修正 reading prompt：self-evaluation bias 这一段不该追问根因，而应问作者观察到什么现象，以及 separate `evaluator` 为什么是更可调的 harness component。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^self-evaluation-bias]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^external-evaluator-skeptical-tuning]]
 - 用户把 evaluator few-shot calibration 类比到 Lynx Oncall 总结 rubrics：对着 few-shot examples 反复修改 rubric，直到输出不再总是漂移。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^few-shot-evaluator-calibration]]
 - 用户把当前 evaluator QA tuning 段和两个已有知识点连接起来：一是 `STS2` / Codex computer use 失败案例，说明视觉、连续控制和细粒度 GUI 判断不是 LLM agent 默认擅长的能力；二是 Philipp Schmid 的 `agent harness` 要求，即把多步 agent workflow 变成可 `log and grade` 的 structured data，方便后续验证和 hill-climbing。[[syntheses/codex-computer-use-implementation-and-limits|Codex Computer Use 的实现形态与当前边界]] [[sources/codex-computer-use-2026-04/source/user-test-sts2-drag-failure-2026-04-20|STS2 测试记录]] [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-log-and-grade|log and grade]]
+- 用户将当前段和 Philipp Schmid 的 `agent harness` 观点对齐：好的 harness 应该 `ready to delete for better model`，因为 new models 会替换掉一部分手写 logic；因此每个 planner/evaluator/sprint 等组件都要能被 stress test，并在模型能力边界移动后删除或收缩。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^harness-components-encode-model-assumptions]] [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-build-to-delete|build to delete]] [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-start-simple|start simple]]
 
 ## Candidate Concepts Entities
 
