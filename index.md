@@ -38,5 +38,6 @@ updated: 2026-04-22
 - [[syntheses/agent-harness-atomic-tools-over-rigid-workflows|agent-harness-atomic-tools-over-rigid-workflows]]: synthesis arguing that a better agent harness exposes atomic capabilities instead of baking task intelligence into rigid workflows
 - [[syntheses/agent-harness-philipp-schmid-overall-reading|agent-harness-philipp-schmid-overall-reading]]: synthesis summarizing one complete reading of Philipp Schmid's 2026-01 agent-harness argument
 - [[sources/claude-advisor-strategy-2026-04/summary|claude-advisor-strategy-2026-04]]: source collection for Anthropic's advisor strategy public API shape and its relation to routing, cascading, and shepherding papers
+- [[sources/anthropic-mcp-production-systems-2026-04/summary|anthropic-mcp-production-systems-2026-04]]: source collection for Anthropic's April 22, 2026 MCP blog post on production agent connectivity, remote server design, context-efficient clients, and skills
 - [[sources/obsidian-cli/summary|obsidian-cli]]: summary page for the `sources/obsidian-cli/` collection
 - [[sources/andrej-llm-wiki-git-gist/summary|andrej-llm-wiki-git-gist]]: summary page for the `sources/andrej-llm-wiki-git-gist/` collection
