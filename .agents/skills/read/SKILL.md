@@ -103,6 +103,7 @@ Recommended content for each section:
 - `## Core Question`
   - one sentence naming the main question the whole source is trying to answer
   - supporting source citation
+  - when the reading has a final synthesis, add a short `Final takeaways` block near the top of this section so future readers see the distilled conclusions before the long recall log
 - `## Reading State`
   - source slug
   - primary reading file
