@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `### The architecture`, before the paragraph beginning `Before each sprint`
-  - next unread source span: sprint contract negotiation between generator and evaluator before each sprint
-  - next boundary: the paragraph beginning `Communication was handled via files`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas
+  - semantic position: under `### The architecture`, before the paragraph beginning `Communication was handled via files`
+  - next unread source span: file-based communication and handoff between agents after contract agreement
+  - next boundary: `### Running the harness`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -170,6 +170,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 这个复述准确。三 personas 分别补三个 gap：`planner` 补 upfront spec gap，但通过限制 implementation detail 避免上游错误固化；`generator` 补 scoped implementation gap，用 sprint/feature 粒度控制复杂度；`evaluator` 补 QA/judgment gap，用 Playwright MCP 实测 UI/API/database state，并用 hard thresholds 把 vague review 变成 pass/fail 反馈。
 - Missing points: `planner` 还被要求把 AI features weave into specs；`generator` 使用具体 stack 并有 git；这些是实现细节，不改变三角色分工。
 - Open questions: 下一段 sprint contract 会说明 `generator` 与 `evaluator` 如何在写代码前先对 done / success criteria 达成一致。
+
+### Sprint Contract Negotiation
+
+- Source span label: paragraph beginning `Before each sprint`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^sprint-contract]]
+- Guiding question: `sprint contract` 是怎么工作的？输入、步骤、输出分别是什么？
+- User recitation: 用户理解为：`planner` 把大任务拆成小任务，但不要对小任务写过多 implementation details；`sprint contract` 是 `generator` 和 `evaluator` 通过多轮对话把小任务的 deliverables 和 success metrics 定下来；`evaluator` 要确保这些 deliverables / success metrics 符合 plan，避免 `generator` 因 self-evaluation bias 或自我解释而做偏。
+- Calibrated understanding: 准确，但需要小校正：当前 paragraph 的重点不是 `planner` 继续细拆小任务，而是 high-level product spec / user stories 到 testable implementation 之间的 bridge。`generator` proposes what to build and how success will be verified；`evaluator` reviews that proposal before code；双方 iterate until agreement。
+- Missing points: `sprint contract` happens before code；它同时避免 `planner` 过早 over-specify implementation，也避免 `generator` 单方面定义 done。
+- Open questions: 下一段会说明 contract 和 QA handoff 如何通过 files 在 agents 之间传递。
 
 ## Questions And Answers
 
