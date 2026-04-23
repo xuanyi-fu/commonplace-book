@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `### The architecture`, before the paragraph beginning `Communication was handled via files`
-  - next unread source span: file-based communication and handoff between agents after contract agreement
-  - next boundary: `### Running the harness`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation
+  - semantic position: under `### Running the harness`, before the paragraph beginning `For the first version of this harness`
+  - next unread source span: harness run setup for the retro game maker comparison, including model choice, prompt, duration/cost table, and headline quality difference
+  - next boundary: the paragraph beginning `I was expecting an interface`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -180,6 +180,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 准确，但需要小校正：当前 paragraph 的重点不是 `planner` 继续细拆小任务，而是 high-level product spec / user stories 到 testable implementation 之间的 bridge。`generator` proposes what to build and how success will be verified；`evaluator` reviews that proposal before code；双方 iterate until agreement。
 - Missing points: `sprint contract` happens before code；它同时避免 `planner` 过早 over-specify implementation，也避免 `generator` 单方面定义 done。
 - Open questions: 下一段会说明 contract 和 QA handoff 如何通过 files 在 agents 之间传递。
+
+### File-Based Agent Communication
+
+- Source span label: paragraph beginning `Communication was handled via files`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^file-based-agent-communication]]
+- Guiding question: file-based communication 是怎么工作的？它怎样维持 spec fidelity without over-specifying implementation？
+- User recitation: 用户理解为：这一段大致是在说 `evaluator` 和 `generator` 是通过文件系统来沟通的。
+- Calibrated understanding: 准确。源文说的是 agents 通过 files 进行 turn-by-turn communication：一个 `agent` 写文件，另一个 `agent` 读后在同一文件或新文件里回应。`generator` 随后按已协商的 contract 开发，再 hand off 给 QA。这里的重点是把 contract、reply、handoff 变成显式、可读、可复查的 artifact。
+- Missing points: 这不是让 `planner` 写更多实现细节，而是让 spec fidelity 通过 files 和 agreed contract 保持住；implementation 仍然留给 `generator` 在 sprint 内完成。
+- Open questions: 下一节 `### Running the harness` 会用 retro game maker 对比 solo run 和 full harness 的实际输出差异。
 
 ## Questions And Answers
 
