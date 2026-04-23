@@ -9,6 +9,7 @@ updated: 2026-04-22
 
 - [[sources/ai-scientist-2026-04/summary|ai-scientist-2026-04]]: source collection for AiScientist architecture, File-as-Bus coordination, and the public runtime/module layout
 - [[sources/components-of-a-coding-agent-2026-04/summary|components-of-a-coding-agent-2026-04]]: source collection for Sebastian Raschka's coding-agent article covering repo context, prompt caching, tools, memory, and subagents
+- [[sources/axi-agent-experience-interface-2026-04/summary|axi-agent-experience-interface-2026-04]]: source collection for AXI's agent-first CLI principles, TOON dependency, benchmark docs, and reference implementation readmes
 - [[sources/agent-harness-origins-2023-2026/summary|agent-harness-origins-2023-2026]]: source collection for the public emergence of `agent harness` from early naming through Manus and Philipp Schmid's explicit system-level framing
 - [[syntheses/components-of-a-coding-agent-layer-mismatch-and-state-resumption|components-of-a-coding-agent-layer-mismatch-and-state-resumption]]: synthesis arguing that Sebastian Raschka's coding-agent component split mixes harness infra with coding-specific app-layer optimizations while making a fair point about resumable state
 - [[syntheses/ai-scientist-file-as-bus-state-and-context-flow|ai-scientist-file-as-bus-state-and-context-flow]]: synthesis of how AiScientist turns research state into files and routes those artifacts back into later agent context
@@ -41,5 +42,6 @@ updated: 2026-04-22
 - [[sources/claude-managed-agents-2026-04/summary|claude-managed-agents-2026-04]]: source collection for Anthropic's managed-agent runtime objects, event protocol, permissions, MCP, skills, memory, multi-agent, and outcomes
 - [[entities/claude-managed-agents|claude-managed-agents]]: entity page for Claude Managed Agents as Anthropic's hosted agent runtime with versioned configs, stateful sessions, and preview orchestration layers
 - [[sources/anthropic-mcp-production-systems-2026-04/summary|anthropic-mcp-production-systems-2026-04]]: source collection for Anthropic's April 22, 2026 MCP blog post on production agent connectivity, remote server design, context-efficient clients, and skills
+- [[notes/anthropic-mcp-production-systems-2026-04-reading-note|anthropic-mcp-production-systems-2026-04-reading-note]]: canonical reading note for the Anthropic MCP production-systems article, initialized with Keshav-lite, reading state, and section queue
 - [[sources/obsidian-cli/summary|obsidian-cli]]: summary page for the `sources/obsidian-cli/` collection
 - [[sources/andrej-llm-wiki-git-gist/summary|andrej-llm-wiki-git-gist]]: summary page for the `sources/andrej-llm-wiki-git-gist/` collection
