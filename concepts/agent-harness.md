@@ -55,6 +55,18 @@ updated: 2026-04-22
 
 Philipp Schmid 在 2026-01 这篇里直接写的是：`The Agent harness implements Context Engineering strategies`，例如 context compaction、把 state offload 到 storage、把任务隔离到 sub-agent。[[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown|The importance of Agent Harness in 2026]]
 
+## 它还需要可记录和可优化
+
+如果继续按 Philipp Schmid 2026-01 这篇往下读，`agent harness` 还有一个很重要的要求：它不只是让 agent 能跑起来，还要把长任务中的行为变成可记录、可验证、可评分的结构化对象。文章在 `The Benchmark Problem and the need for Agent Harnesses` 这一节里强调，传统 benchmark 很难测出第 50 次、第 100 次 tool call 之后的 `reliability` 问题，因此 harness 的价值之一，就是把原本模糊的 multi-step workflow 变成可以 `log and grade` 的 structured data。[[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown|The importance of Agent Harness in 2026]]
+
+这意味着，一个好的 `agent harness` 不只是运行层，也应该提供足够的可观测性和结构化反馈面，让开发者可以：
+
+- 记录 agent 在长任务里的真实行为轨迹
+- 验证结果是否满足约束
+- 比较不同模型或不同系统配置的表现
+- 把失败轨迹反过来作为后续优化 harness 的依据  
+  [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown|The importance of Agent Harness in 2026]]
+
 ## 暂定判断
 
 如果只按这个 source 来定义，`agent harness` 最好不要被理解成“一个会调用工具的 agent”，而应该理解成“包在 model 外面的运行基础设施”。它负责把单纯会输出 token 的 model，变成能够在有限 `context window`、真实工具和长任务约束下持续工作的 agent system。[[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown|The importance of Agent Harness in 2026]]
