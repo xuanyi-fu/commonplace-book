@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `## Frontend design: making subjective quality gradable`, before the opening motivation paragraph
-  - next unread source span: frontend design as the first testbed for the self-evaluation issue, and Claude's baseline tendency toward safe but unremarkable layouts
-  - next boundary: the paragraph beginning `Two insights shaped the harness`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning
+  - semantic position: under `## Frontend design: making subjective quality gradable`, before the paragraph beginning `Two insights shaped the harness`
+  - next unread source span: two insights behind the frontend harness: criteria can make aesthetics gradable, and generation/grading separation creates a feedback loop
+  - next boundary: the paragraph beginning `With this in mind, I wrote four grading criteria`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -70,6 +70,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 这个校正准确。源文不是在解释 self-evaluation bias 的深层成因，而是在确认一个稳定工程现象：agents 自评时会 confidently praise mediocre work，主观 design 场景尤其明显；即使有可验证结果，poor judgment 也可能影响任务完成。作者的 actionable claim 是：把 generator 和 evaluator 分开，比让 generator 对自己的 work 变 skeptical 更 tractable。
 - Missing points: Separate `evaluator` 不是天然客观。源文明确说 evaluator 仍然是 LLM，仍倾向于 generous；separation 只是让 skeptical tuning 更可行，并给 generator 一个可迭代的 external feedback target。
 - Open questions: 后文会怎样把 skeptical tuning 具体化为 criteria、few-shot calibration、Playwright interaction、hard thresholds 或 QA prompt changes。
+
+### Frontend Design Motivation
+
+- Source span label: opening motivation paragraph under `## Frontend design: making subjective quality gradable`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^frontend-design-self-evaluation-testbed]]
+- Guiding question: 作者为什么先在 frontend design 上实验？它暴露了什么问题？
+- User recitation: 用户理解为：frontend design 的评分主观性很强，不像 unit tests 那样 pass/fail 清楚；主观评分任务会放大并暴露 self-evaluation 的问题。简单软件任务可能不太需要 generator/evaluator 模式，因为单个 agent 自己运行 tests 就够了；但评分主观性极强的任务，更能体现 generator/evaluator 模式的优势。
+- Calibrated understanding: 这个复述准确。这里 frontend design 的实验价值在于它把“technically functional”与“visually unremarkable”分开了：Claude baseline 不是完全不会做页面，而是容易产出 safe、predictable、能用但平庸的 layout。正因为没有简单 binary check，external evaluator 的价值更容易被看见。
+- Missing points: 这段还没进入 criteria 的具体设计；它只是在说明为什么 frontend design 是 self-evaluation issue 最明显的 testbed。
+- Open questions: 下一段会如何把 subjective taste 转成可评分 criteria，以及 generation/grading 分离如何形成反馈循环。
 
 ## Questions And Answers
 
