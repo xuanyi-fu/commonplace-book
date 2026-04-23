@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `## Frontend design: making subjective quality gradable`, before the four grading criteria list introduced by `With this in mind`
-  - next unread source span: four grading criteria: design quality, originality, craft, and functionality
-  - next boundary: the paragraph beginning `I emphasized design quality and originality`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span
+  - semantic position: under `## Frontend design: making subjective quality gradable`, before the paragraph beginning `I emphasized design quality and originality`
+  - next unread source span: author weights design quality and originality above craft and functionality because Claude already does better on the latter pair
+  - next boundary: the paragraph beginning `I calibrated the evaluator`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -90,6 +90,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 这个复述准确。第一点把 aesthetics 从不可直接评分的 “is this beautiful?” 改写成 criteria-based judgment，也就是“是否符合我们定义的 good design principles”；第二点把 generation 和 grading 分开，让 generator 接收外部 feedback，而不是依赖自己的 self-evaluation。
 - Missing points: 这里还没有说四个 criteria 分别是什么，也没有说明各项权重；它只是在给 criteria list 和 generator/evaluator loop 做概念铺垫。
 - Open questions: 下一段的四个 criteria 会怎样覆盖 subjective quality、originality、technical craft 与 usability；哪些 criteria 会被作者强调，哪些只是 baseline competence check。
+
+### Frontend Four Grading Criteria
+
+- Source span label: four grading criteria list under `## Frontend design: making subjective quality gradable`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^frontend-four-grading-criteria]]
+- Guiding question: 这四个 grading criteria 分别在评什么？它们怎样把 frontend design 的主观好坏拆成可操作维度？
+- User recitation: 用户选择不逐条复述设计细节，指出这一段的关键不是掌握设计术语，而是看到评分标准设计时应强调模型做不好的那些标准。
+- Calibrated understanding: 这个判断应和下一段合起来看。当前 list 本身把 frontend quality 拆成四类：整体设计质量、原创性、craft 基本功、功能可用性。用户指出的重点是 criteria 不只是分类清单，还会服务于后续 weighting：如果模型本来就容易做好 craft 和 functionality，那么评价系统应该更用力地压在模型容易失败的 design quality 与 originality 上。
+- Missing points: 当前 span 只列 criteria，还没明说 weighting；“强调模型做不好的标准”是对下一段的提前概括。
+- Open questions: 下一段会如何说明 design quality 和 originality 被赋予更高权重，以及这种 weighting 如何推动模型承担更多 aesthetic risk。
 
 ## Questions And Answers
 
