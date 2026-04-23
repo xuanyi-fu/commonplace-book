@@ -1,6 +1,6 @@
 ---
 name: read
-description: Use this skill when reading an already-ingested source collection in this knowledge-base repo section by section. It creates or resumes a canonical note at `notes/<collection>-reading-note.md`, starts with a Keshav-lite kickoff and brief TOB, follows SQ3R one section at a time, requires the user to recite each section in their own words before advancing, and keeps candidate concept/entity and related-page lists without auto-creating wiki pages.
+description: Use this skill when reading an already-ingested source collection in this knowledge-base repo section by section. It creates or resumes a canonical note at `notes/<collection>-reading-note.md`, starts by identifying the source's single Core Question, follows SQ3R one section at a time, requires the user to recite each section in their own words before advancing, and keeps candidate concept/entity and related-page lists without auto-creating wiki pages.
 ---
 
 # Read
@@ -52,7 +52,7 @@ If both are present, trust the explicit path.
    Prefer the user-named file if they gave one. Otherwise choose the best "start here" file from the collection summary's guidance.
 4. If the note does not exist:
    - create it with the exact section layout below
-   - initialize `## Keshav Lite`
+   - initialize `## Core Question`
    - initialize `## Reading State`
    - initialize `## Section Queue`
    - add the note to root `index.md`
@@ -77,7 +77,7 @@ updated: YYYY-MM-DD
 
 ## Source
 
-## Keshav Lite
+## Core Question
 
 ## Reading State
 
@@ -102,14 +102,9 @@ Recommended content for each section:
   - source collection link
   - primary reading file
   - discussion language
-- `## Keshav Lite`
-  - `Category`
-  - `Context`
-  - `Core Question`
-  - `Claims`
-  - `Credibility`
-  - `Clarity`
-  - a very brief TOB
+- `## Core Question`
+  - one sentence naming the main question the whole source is trying to answer
+  - supporting source citation
 - `## Reading State`
   - source slug
   - primary reading file
@@ -149,23 +144,11 @@ Recommended content for each section:
   - primary reading file
   - any cleaned markdown source notes used for precise citations
 
-## Keshav-lite Kickoff
+## Core Question Kickoff
 
-Before section-by-section reading, always give:
+Before section-by-section reading, always give exactly one `Core Question`: the main question the whole source is trying to answer.
 
-1. a very brief TOB
-2. a compact `Keshav Lite` block
-
-For this repo, `Keshav Lite` means:
-
-- `Category`: explainer, implementation note, benchmark, opinion, survey, or similar
-- `Context`: what background problem or prior work this source is sitting in
-- `Core Question`: the one main thing the whole source is trying to answer
-- `Claims`: the main takeaways the author wants the reader to retain
-- `Credibility`: what kind of support the source actually gives, and where it may be thin
-- `Clarity`: what the source explains well, and where it jumps too fast
-
-Prefer broad citations to `sources/<collection>/summary.md` for this kickoff, unless one cleaned markdown source note clearly supports a specific point more precisely.
+Keep it to one sentence. Prefer a broad citation to `sources/<collection>/summary.md`, unless one cleaned markdown source note clearly supports the question more precisely.
 
 ## SQ3R Loop
 
