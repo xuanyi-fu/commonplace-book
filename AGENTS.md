@@ -7,6 +7,7 @@ Supplementary rule documents live in `rules/`.
 These rules apply to wiki-layer pages in:
 
 - `summaries/`
+- `notes/`
 - `entities/`
 - `concepts/`
 - `syntheses/`
@@ -38,6 +39,13 @@ Raw source files under `sources/*/source/**` should remain read-only.
   - how the collection is structured
   - how the collection should be used
 
+`notes/` rules:
+
+- Canonical source reading notes live under `notes/`.
+- Canonical source reading notes use the path shape `notes/<collection>-reading-note.md`.
+- Reading notes may add minimal `^block-id` anchors to cleaned markdown source notes under `sources/*/source/*.md` when precise reusable citations are needed.
+- Reading notes must not add `^block-id` anchors to raw source artifacts such as PDF, HTML, screenshots, or exported email.
+
 ## Frontmatter
 
 Every wiki page must start with this exact four-field frontmatter, in this exact order:
@@ -64,6 +72,7 @@ Allowed `type` values:
 
 - `source`
 - `summary`
+- `note`
 - `entity`
 - `concept`
 - `synthesis`
@@ -80,6 +89,7 @@ Allowed `status` values:
 - Sources are listed in a `## Sources` section.
 - Tags are written directly in the body, not in frontmatter.
 - A source collection summary page is `sources/<collection>/summary.md`.
+- A canonical source reading note page is `notes/<collection>-reading-note.md`.
 - Use the same language as the discussion when recording wiki content, unless the user explicitly asks for a different language.
 - When discussing implementations in Chinese, keep core implementation terms like `thread`, `raw memory`, `context`, `prompt`, and `agent` in their original form when translating them would blur the structure of the system; translate the surrounding explanation instead.
 
@@ -114,6 +124,7 @@ Examples:
 - `andrej-llm-wiki-summary.md`
 - `obsidian-cli-help-overview.md`
 - `obsidian-search-cli-comparison.md`
+- `transformer-moe-2026-04-reading-note.md`
 
 ## Index
 
@@ -124,6 +135,7 @@ Examples:
 - Each entry should be a page link plus a one-line description.
 - Root `index.md` must not index raw source files under `sources/**/source/**` directly.
 - Source collections should be surfaced through `sources/<collection>/summary.md`.
+- Canonical reading notes under `notes/` should be surfaced through their note pages when they exist.
 
 ## Git History
 
@@ -154,6 +166,7 @@ Recommended `scope` values:
 - `repo`
 - `rules`
 - `index`
+- `note/<name>`
 - `source/<collection>`
 - `summary/<name>`
 - `entity/<name>`
@@ -173,4 +186,5 @@ Examples:
 - `chore(repo): initialize git repository`
 - `docs(source/obsidian-cli): add official cli snapshots`
 - `docs(summary/obsidian-cli): summarize source collection`
+- `docs(note/transformer-moe-2026-04): add canonical reading note`
 - `chore(rules): update source collection rules`

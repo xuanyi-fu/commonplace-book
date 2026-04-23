@@ -48,9 +48,9 @@ ROOT_INDEX = REPO_ROOT / "index.md"
 GITATTR_FILE = REPO_ROOT / ".gitattributes"
 EXPECTED_GITATTR_RULE = "sources/**/source/** filter=lfs diff=lfs merge=lfs -text"
 FRONTMATTER_KEYS = ["type", "status", "created", "updated"]
-ALLOWED_TYPES = {"source", "summary", "entity", "concept", "synthesis", "index"}
+ALLOWED_TYPES = {"source", "summary", "note", "entity", "concept", "synthesis", "index"}
 ALLOWED_STATUS = {"draft", "stable"}
-OPTIONAL_SCOPED_DIRS = ("summaries", "entities", "concepts", "syntheses")
+OPTIONAL_SCOPED_DIRS = ("summaries", "notes", "entities", "concepts", "syntheses")
 REQUIRED_SOURCE_SUMMARY_HEADINGS = [
     "## Structure",
     "## How To Use",
@@ -58,6 +58,7 @@ REQUIRED_SOURCE_SUMMARY_HEADINGS = [
     "## Sources",
 ]
 KEBAB_CASE_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+READING_NOTE_STEM_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*-reading-note$")
 WIKILINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
 MARKDOWN_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -232,6 +233,15 @@ RULE_SPECS = [
         default_next_step="Rename the markdown file to kebab-case or use the allowed `summary.md` exception.",
     ),
     RuleSpec(
+        rule_id="naming.canonical_reading_note_filename",
+        title="Canonical reading note filenames must end with `-reading-note.md`",
+        agents_section="notes/ rules",
+        agents_rule="Canonical source reading notes use the path shape `notes/<collection>-reading-note.md`.",
+        check_description="Markdown pages under `notes/` must use the canonical `notes/<collection>-reading-note.md` naming pattern.",
+        why_it_matters="Stable reading-note filenames make note lookup, resumption, and indexing deterministic.",
+        default_next_step="Rename the note to `notes/<collection>-reading-note.md` using the source collection slug.",
+    ),
+    RuleSpec(
         rule_id="index.no_raw_source_links",
         title="Root index cannot link to raw source files",
         agents_section="Index",
@@ -281,6 +291,14 @@ def is_source_collection_summary(path: Path) -> bool:
     except ValueError:
         return False
     return len(parts) == 3 and parts[0] == "sources" and parts[2] == "summary.md"
+
+
+def is_canonical_reading_note(path: Path) -> bool:
+    try:
+        parts = path.relative_to(REPO_ROOT).parts
+    except ValueError:
+        return False
+    return len(parts) == 2 and parts[0] == "notes" and bool(READING_NOTE_STEM_RE.fullmatch(path.stem))
 
 
 def add_finding(
@@ -720,6 +738,15 @@ def validate_scoped_markdown(findings: list[Finding]) -> None:
 
         if is_source_collection_summary(path):
             continue
+
+        if path.relative_to(REPO_ROOT).parts[0] == "notes" and not is_canonical_reading_note(path):
+            add_finding(
+                findings,
+                "naming.canonical_reading_note_filename",
+                path,
+                found=f"Filename was `{path.name}`.",
+                expected="Reading notes under `notes/` must be named `notes/<collection>-reading-note.md`.",
+            )
 
         if not is_kebab_case(path.stem):
             add_finding(

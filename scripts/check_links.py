@@ -19,6 +19,7 @@ the repository root. External markdown links (http/https/mailto) are ignored.
 Only wiki-layer markdown pages are checked:
 
 - index.md
+- notes/*.md
 - concepts/*.md
 - entities/*.md
 - summaries/*.md
@@ -35,7 +36,7 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SCOPED_DIRS = {"summaries", "entities", "concepts", "syntheses"}
+SCOPED_DIRS = {"summaries", "notes", "entities", "concepts", "syntheses"}
 WIKILINK_RE = re.compile(r"!?(\[\[([^\]]+)\]\])")
 MARKDOWN_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 BLOCK_ID_RE = re.compile(r"(?:^|\s)\^([A-Za-z0-9][A-Za-z0-9_-]*)\s*$")
