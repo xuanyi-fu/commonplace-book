@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `## Why naive implementations fall short`, before the first detailed failure mode beginning with context-window coherence and `context anxiety`
-  - next unread source span: first failure mode: context-window coherence loss, `context anxiety`, `context reset`, and the distinction from `compaction`
-  - next boundary: the second detailed failure mode beginning with self-evaluation
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span
+  - semantic position: under `## Why naive implementations fall short`, before the second detailed failure mode beginning with self-evaluation
+  - next unread source span: second failure mode: self-evaluation bias, why subjective design makes it worse, and why a separate evaluator is easier to tune
+  - next boundary: `## Frontend design: making subjective quality gradable`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -51,6 +51,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Missing points: 注意这里没有否定 decomposition 和 handoff artifacts；作者是在说它们是必要但不充分的 scaffold。
 - Open questions: 接下来两个 failure modes 是否分别对应 `context` 管理问题和 judgment/evaluation 问题；它们会怎样映射回用户标记的 C/D 与 A/B 四个锚点。
 
+### Context Anxiety, Context Reset, And Compaction
+
+- Source span label: first detailed failure mode under `## Why naive implementations fall short`, before the self-evaluation failure mode
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^context-anxiety-first-failure-mode]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^context-reset-vs-compaction]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^sonnet45-context-resets-essential]]
+- Guiding question: `context reset` 和 `compaction` 有什么关键区别？为什么这个区别对 `context anxiety` 重要？
+- User recitation: 用户理解为：表面看 `compaction` 和把当前任务总结成 handoff artifacts 差别不大，但从 KV Cache 角度看，`compaction` 仍然沿着旧历史继续，可能继承旧状态中的 `context anxiety`；而新的 `agent` 会扔掉旧 KV Cache，让 handoff artifact 在没有旧 KV Cache 影响的情况下进入新的 `context`，因此更难继承旧的 anxiety。但代价是失去大量旧 KV Cache hidden space 里的隐式信息，handoff artifact 不可能完美覆盖所有细节，所以 continuation 会弱于保留旧状态的 compacted continuation。
+- Calibrated understanding: 源文直接支持的部分是：`compaction` 保留 continuity，但没有 clean slate，所以 `context anxiety` 仍可能持续；`context reset` 清空 context window，启动 fresh agent，并通过 structured handoff 传递 previous state 和 next steps；在 Sonnet 4.5 上，作者观察到 `compaction` 不足以解决 long task performance，因此 reset 成为 harness 的 essential 组件。用户的 KV Cache 解释是一个合理的机制类比，但不是源文直接声明，也不应写成必然的 runtime 事实：具体系统是否物理复用旧 KV Cache、怎样生成 compact summary、以及 prompt cache 如何参与，取决于实现。更稳妥的说法是：`compaction` 倾向于保留旧 thread 的语义轨迹和连续性，`reset + handoff` 则用显式 artifact 换掉隐式连续性，从而降低旧状态继续支配新 agent 的风险。
+- Missing points: `context reset` 的代价不仅是信息损失，还包括 source span 明说的 orchestration complexity、token overhead、latency；而 handoff artifact 的质量变成 reset 能否成功的 load-bearing boundary。
+- Open questions: 后文的 architecture 是否把 handoff artifact 做成文件、contract 或 QA artifact，从而补偿 reset 造成的隐式状态损失。
+
 ## Questions And Answers
 
 No questions recorded yet.
@@ -58,6 +68,7 @@ No questions recorded yet.
 ## Reader Comments
 
 - 用户提出后续阅读应跟踪四个实现锚点：A 明确评分系统，B 可靠不 flaky 的 evaluator，C 大任务拆成可治理小任务，D 通过 `structured artifacts` 在 `agent` 之间交换 `context`。支撑段落见 opening framing block 中关于 generator/evaluator、criteria、decomposition、structured artifacts 和 three-agent architecture 的说明。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^gan-generator-evaluator]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^three-agent-architecture]]
+- 用户提出一个模型架构层面的解释：`compaction` 和 `context reset + handoff` 的差别可以理解为是否让旧 thread 的 KV Cache hidden state 继续影响后续生成；这个解释有助于理解 clean slate 与 continuation 的 tradeoff，但需要标注为推断，因为源文只讨论 `context window`、`compaction`、`clean slate` 与 handoff artifact，没有直接说明 KV Cache 复用机制。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^context-reset-vs-compaction]]
 
 ## Candidate Concepts Entities
 
