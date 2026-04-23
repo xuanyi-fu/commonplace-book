@@ -156,10 +156,12 @@ The `semantic cursor` is the single source of truth for reading progress.
 - Do not infer progress from headings, recall logs, or legacy queues.
 - Line numbers may be recorded as convenience hints, but they must not replace the semantic position.
 - The semantic position must say where the cursor sits in the document structure, such as `under "# H1", before "## H2"`.
-- A source span is a small contiguous unread passage from the cursor: one paragraph, a continuous list item group, a code block, or a short paragraph group.
+- A source span is a contiguous unread semantic passage from the cursor: the smallest block that completes one local argumentative or rhetorical move and can be answered by one guiding question.
+- Do not split a span mechanically by sentence or paragraph boundaries. Sentences and paragraphs are only physical boundaries; the decision boundary is the source's local argumentative function.
+- A span may be a paragraph group, continuous list item group, table, code block, or heading-intro block when that whole block performs one local function such as framing, motivation, overview, definition, or evidence.
 - Headings only describe cursor position and boundaries. They are not the reading unit.
-- Body text between a heading and its first child heading must be read as its own span. For example, text after `# H1` and before `## H2` is read at `under "# H1", before "## H2"`.
-- If a span is too long, split it into smaller contiguous spans instead of reading the whole heading scope at once.
+- Body text between a heading and its first child heading must be read as a semantic span when it jointly performs one local function. For example, an opening block after `# H1` and before `## H2` that frames the article's scope should be read as one span, not as isolated sentences.
+- If a candidate span is too long or contains multiple unrelated moves, split it into smaller contiguous semantic spans instead of reading the whole heading scope at once.
 
 ## SQ3R Loop
 
@@ -174,7 +176,9 @@ The reading loop is always:
 ### 1. Survey
 
 - Locate the next unread source span from the semantic cursor.
-- Start the user-facing reply with a `Current Source Span` block that quotes the original span before any guiding question or explanation.
+- Start the user-facing reply with a `Current Source Span` block that quotes the full original span before any guiding question or explanation.
+- The quoted text must match the semantic cursor, the guiding question, and the explanation scope. Do not quote only one sentence as a proxy for a larger span.
+- If splitting a long passage for length, state the selected span boundary and ensure the split still forms one complete local argumentative move.
 - Preserve the original language and core source terms in the quoted span.
 - Lock to the current source span only.
 - Restate the semantic position before explaining.
@@ -183,6 +187,9 @@ The reading loop is always:
 ### 2. Question
 
 Derive exactly one `guiding question` for the current source span.
+
+- The guiding question must cover the whole span, not only its first sentence.
+- If one guiding question cannot cover the candidate span without becoming vague or mixing unrelated targets, the candidate span is too broad; split it by semantic move before reading.
 
 Do not free-form brainstorm. Use rule-based rewrite:
 
@@ -245,7 +252,7 @@ Only after the note is updated and the user explicitly says `继续`, `下一段
 
 - Never proactively say "let's move to the next source span" and then move on by yourself.
 - Never treat one `继续` as permission to skip multiple spans.
-- Each continuation only unlocks the next small source span.
+- Each continuation only unlocks the next semantic source span.
 - Do not skip unheaded body text.
 - Do not cross the cursor's `next boundary` while explaining the current span.
 
