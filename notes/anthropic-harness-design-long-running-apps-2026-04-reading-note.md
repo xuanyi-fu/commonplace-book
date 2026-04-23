@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `## Why naive implementations fall short`, before the second detailed failure mode beginning with self-evaluation
-  - next unread source span: second failure mode: self-evaluation bias, why subjective design makes it worse, and why a separate evaluator is easier to tune
-  - next boundary: `## Frontend design: making subjective quality gradable`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`
+  - semantic position: under `## Frontend design: making subjective quality gradable`, before the opening motivation paragraph
+  - next unread source span: frontend design as the first testbed for the self-evaluation issue, and Claude's baseline tendency toward safe but unremarkable layouts
+  - next boundary: the paragraph beginning `Two insights shaped the harness`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -61,6 +61,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Missing points: `context reset` 的代价不仅是信息损失，还包括 source span 明说的 orchestration complexity、token overhead、latency；而 handoff artifact 的质量变成 reset 能否成功的 load-bearing boundary。
 - Open questions: 后文的 architecture 是否把 handoff artifact 做成文件、contract 或 QA artifact，从而补偿 reset 造成的隐式状态损失。
 
+### Self-Evaluation Bias And External Evaluator
+
+- Source span label: second detailed failure mode under `## Why naive implementations fall short`, before `## Frontend design: making subjective quality gradable`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^self-evaluation-bias]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^external-evaluator-skeptical-tuning]]
+- Guiding question: 作者观察到 `self-evaluation` 有什么现象，为什么 separate `evaluator` 是更可调的工程杠杆？
+- User recitation: 用户指出，不应把问题问成“为什么 self-evaluation 会失败”，因为源文没有给出根因解释，而模型自评偏宽松可能混合了训练信号、语言行为、哲学层面的自信与行动关系等问题。这里足够重要的是承认现象：做事的模型评价自己的输出时会倾向于自信和宽松。Separate `evaluator` 的优势在于可以从一开始就被调成 skeptical 的角色，并且不会被被评价模型先前的生成状态牵引，所以作为工程杠杆更好。
+- Calibrated understanding: 这个校正准确。源文不是在解释 self-evaluation bias 的深层成因，而是在确认一个稳定工程现象：agents 自评时会 confidently praise mediocre work，主观 design 场景尤其明显；即使有可验证结果，poor judgment 也可能影响任务完成。作者的 actionable claim 是：把 generator 和 evaluator 分开，比让 generator 对自己的 work 变 skeptical 更 tractable。
+- Missing points: Separate `evaluator` 不是天然客观。源文明确说 evaluator 仍然是 LLM，仍倾向于 generous；separation 只是让 skeptical tuning 更可行，并给 generator 一个可迭代的 external feedback target。
+- Open questions: 后文会怎样把 skeptical tuning 具体化为 criteria、few-shot calibration、Playwright interaction、hard thresholds 或 QA prompt changes。
+
 ## Questions And Answers
 
 No questions recorded yet.
@@ -69,6 +79,7 @@ No questions recorded yet.
 
 - 用户提出后续阅读应跟踪四个实现锚点：A 明确评分系统，B 可靠不 flaky 的 evaluator，C 大任务拆成可治理小任务，D 通过 `structured artifacts` 在 `agent` 之间交换 `context`。支撑段落见 opening framing block 中关于 generator/evaluator、criteria、decomposition、structured artifacts 和 three-agent architecture 的说明。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^gan-generator-evaluator]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^three-agent-architecture]]
 - 用户提出一个模型架构层面的解释：`compaction` 和 `context reset + handoff` 的差别可以理解为是否让旧 thread 的 KV Cache hidden state 继续影响后续生成；这个解释有助于理解 clean slate 与 continuation 的 tradeoff，但需要标注为推断，因为源文只讨论 `context window`、`compaction`、`clean slate` 与 handoff artifact，没有直接说明 KV Cache 复用机制。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^context-reset-vs-compaction]]
+- 用户修正 reading prompt：self-evaluation bias 这一段不该追问根因，而应问作者观察到什么现象，以及 separate `evaluator` 为什么是更可调的 harness component。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^self-evaluation-bias]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^external-evaluator-skeptical-tuning]]
 
 ## Candidate Concepts Entities
 
