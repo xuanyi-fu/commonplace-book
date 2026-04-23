@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `### Running the harness`, before the paragraph beginning `Getting the evaluator to perform at this level took work`
-  - next unread source span: evaluator QA tuning, including why out-of-the-box Claude was a poor QA agent and how prompt/log iteration improved it
-  - next boundary: `### Iterating on the harness`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis; full harness run evidence
+  - semantic position: under `### Iterating on the harness`, before the paragraph beginning `The first set of harness results was encouraging`
+  - next unread source span: motivation for simplifying the harness after the first results, including cost, speed, bulk, and the principle that each harness component encodes an assumption about model limitations
+  - next boundary: the paragraph beginning `In my first attempt to simplify`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis; full harness run evidence; evaluator QA tuning
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -211,6 +211,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Missing points: 这段也保留了边界：full harness 仍然 expensive，workflow 仍有 product intuition gap，AI-generated level 也有 common-sense / edge-case 问题；所以作者证明的是 clear lift，不是完美解决。
 - Open questions: 下一段会把重点从“harness 有用”转到“evaluator 不是天然有用”：Claude out of the box 作为 QA agent 会偏宽松、测试浅，需要通过日志和 prompt iteration 调。
 
+### Evaluator QA Tuning
+
+- Source span label: paragraph beginning `Getting the evaluator to perform at this level took work`, before `### Iterating on the harness`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^evaluator-qa-tuning]]
+- Guiding question: `evaluator` 为什么也需要 tuning？作者是怎么把它从 weak QA agent 调成可用的？
+- User recitation: 用户理解为：让模型当这种 app 的 QA agent 并不天然称职，很多 edge cases cover 不到，并且评价太慷慨；作者的解决方式是看 evaluator logs，找 judgment 和自己不一致的地方，然后持续改 QA prompt。用户补充认为，语言模型本身对视觉和细粒度交互不一定敏感，例如 layout、1-pixel 差异等可能在模型 hidden space 里很难被稳定注意到；这可以和此前 Codex computer use 玩 `STS2` 的失败案例互相支持。[[syntheses/codex-computer-use-implementation-and-limits|Codex Computer Use 的实现形态与当前边界]]
+- Calibrated understanding: 准确。源文直接说的失败模式有两类：第一，Claude 会发现 legitimate issues 后又说服自己问题不大，最后 approve；第二，测试太 superficial，没有充分 probe edge cases。作者的 tuning loop 是读 logs，挑出 evaluator judgment 与作者判断 diverge 的例子，再更新 QA prompt，重复几轮直到 grading reasonable。用户的视觉 hidden-space 解释是合理推断，但不是源文直接断言；更稳妥地说，视觉、布局、动态交互和细粒度 affordance 都是 LLM-based QA 的高风险区域。
+- Missing points: 这段最后仍然承认 QA 能力有上限：small layout issues、unintuitive interactions、deeply nested features 里的 undiscovered bugs 仍会漏掉。但和 solo run 的 central feature broken 相比，lift 仍然明显。
+- Open questions: 下一段会转向 harness simplification：如果 full harness 有用但 bulky、slow、expensive，哪些组件是真正 load-bearing 的？
+
 ## Questions And Answers
 
 No questions recorded yet.
@@ -221,6 +231,7 @@ No questions recorded yet.
 - 用户提出一个模型架构层面的解释：`compaction` 和 `context reset + handoff` 的差别可以理解为是否让旧 thread 的 KV Cache hidden state 继续影响后续生成；这个解释有助于理解 clean slate 与 continuation 的 tradeoff，但需要标注为推断，因为源文只讨论 `context window`、`compaction`、`clean slate` 与 handoff artifact，没有直接说明 KV Cache 复用机制。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^context-reset-vs-compaction]] ^context-anxiety-kv-cache-inference
 - 用户修正 reading prompt：self-evaluation bias 这一段不该追问根因，而应问作者观察到什么现象，以及 separate `evaluator` 为什么是更可调的 harness component。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^self-evaluation-bias]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^external-evaluator-skeptical-tuning]]
 - 用户把 evaluator few-shot calibration 类比到 Lynx Oncall 总结 rubrics：对着 few-shot examples 反复修改 rubric，直到输出不再总是漂移。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^few-shot-evaluator-calibration]]
+- 用户把当前 evaluator QA tuning 段和两个已有知识点连接起来：一是 `STS2` / Codex computer use 失败案例，说明视觉、连续控制和细粒度 GUI 判断不是 LLM agent 默认擅长的能力；二是 Philipp Schmid 的 `agent harness` 要求，即把多步 agent workflow 变成可 `log and grade` 的 structured data，方便后续验证和 hill-climbing。[[syntheses/codex-computer-use-implementation-and-limits|Codex Computer Use 的实现形态与当前边界]] [[sources/codex-computer-use-2026-04/source/user-test-sts2-drag-failure-2026-04-20|STS2 测试记录]] [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-log-and-grade|log and grade]]
 
 ## Candidate Concepts Entities
 
