@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `## Frontend design: making subjective quality gradable`, before the paragraph beginning `I built the loop on the Claude Agent SDK`
-  - next unread source span: generator/evaluator loop implementation using Claude Agent SDK, Playwright MCP, iterative critique, and strategic refine-or-pivot decisions
-  - next boundary: the paragraph beginning `Across runs`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration
+  - semantic position: under `## Frontend design: making subjective quality gradable`, before the paragraph beginning `Across runs`
+  - next unread source span: frontend loop outcomes: evaluator assessments improved before plateauing, with both incremental refinements and sharp aesthetic turns
+  - next boundary: the paragraph beginning `The wording of the criteria steered the generator`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -120,6 +120,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 这个类比准确。这里的 few-shot calibration 不是抽象地告诉 evaluator “稳定一点”，而是用具体样例和 detailed score breakdowns 调整 evaluator 的判断边界，让它的输出更贴近作者偏好，并减少跨 iteration 的 score drift。和 Oncall rubrics 类似，rubric 的可靠性来自反复用样例校准，而不是只写一条原则。
 - Missing points: 源文没有展开 few-shot examples 的具体内容；这里只能记录校准机制和目标。
 - Open questions: 下一段会说明 calibrated evaluator 如何被接入实际 loop，以及 Playwright MCP 如何让 evaluator 从静态评分变成可交互 QA。
+
+### Frontend Generator Evaluator Loop Implementation
+
+- Source span label: paragraph beginning `I built the loop on the Claude Agent SDK`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^frontend-generator-evaluator-loop]]
+- Guiding question: frontend `generator/evaluator loop` 是怎么工作的？输入、步骤、输出分别是什么？
+- User recitation: 用户理解为：作者用这一段说明 `generator-evaluator loop` 的工作方式。一开始让 `generator` 写一个实现，然后 `evaluator` 评价这个实现；评价结果回流到 `generator`，`generator` 根据之前评分的 trend 决定继续 refine 还是 pivot 到新方向，如此循环往复。
+- Calibrated understanding: 这个复述准确。完整机制是：user prompt 进入 `generator`，生成 HTML/CSS/JS frontend；`evaluator` 通过 Playwright MCP 直接操作 live page、截图、观察，再按 criteria 打分并写 critique；feedback 作为下一轮 `generator` 输入。Loop 通常跑 5 到 15 轮，并且每轮之后 `generator` 需要根据 score trend 做 refine-or-pivot 决策。
+- Missing points: 这段还说明了成本来源：evaluator 不是静态截图评分，而是 live interaction，所以每轮有真实 wall-clock time，完整 run 可达四小时。
+- Open questions: 下一段会说明这种 loop 的实际 outcome 是逐步改善、plateau，还是可能出现突然的 aesthetic turn。
 
 ## Questions And Answers
 
