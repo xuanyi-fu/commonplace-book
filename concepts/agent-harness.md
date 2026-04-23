@@ -67,6 +67,18 @@ Philipp Schmid 在 2026-01 这篇里直接写的是：`The Agent harness impleme
 - 把失败轨迹反过来作为后续优化 harness 的依据  
   [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-log-and-grade|log and grade]]
 
+## 它还应该轻量、可删，并避免僵硬 workflow
+
+Philipp Schmid 在 `The "Bitter Lesson" of building Agents` 这一节里，对 `agent harness` 又提出了另一个很关键的要求：为了适应模型快速变化，harness 本身必须保持 lightweight，并且允许开发者把昨天写进去的“smart logic”轻易拆掉。原文给出的例子是 Manus 在六个月里重构了五次 harness 去掉 rigid assumptions，LangChain 和 Vercel 也都在通过重构或删减工具来减少不必要的手工结构。[[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-bitter-lesson|bitter lesson]]
+
+这节的含义不是 “harness 里绝对不能有流程控制”，而是：
+
+- 不要把太多任务智能预先固化成僵硬的 workflow
+- 不要过度设计 control flow，把系统绑死在某一代模型的能力边界上
+- 更好的方向是提供轻量、稳健、可组合的原子能力，让 model / agent 自己承担更多 planning
+- 因为下一代模型一旦变强，很多昨天还看起来必要的手工结构，明天就应该可以删掉  
+  [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-bitter-lesson|bitter lesson]] [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-start-simple|start simple]]
+
 ## 暂定判断
 
 如果只按这个 source 来定义，`agent harness` 最好不要被理解成“一个会调用工具的 agent”，而应该理解成“包在 model 外面的运行基础设施”。它负责把单纯会输出 token 的 model，变成能够在有限 `context window`、真实工具和长任务约束下持续工作的 agent system。[[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-definition|definition]] [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-computer-analogy|computer analogy]] [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-implements-context-engineering|implements context engineering]]

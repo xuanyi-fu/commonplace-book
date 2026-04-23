@@ -34,6 +34,7 @@ updated: 2026-04-22
 - [[sources/ai-agent-weekly-2026-04-18/summary|ai-agent-weekly-2026-04-18]]: cleaned April 18, 2026 AI Agents Weekly issue covering agent models, tooling, and research updates
 - [[sources/auto-diagnose-2026-04/summary|auto-diagnose-2026-04]]: source collection for Google Auto-Diagnose covering the paper, workflow integration into Critique, and reported evaluation metrics
 - [[syntheses/auto-diagnose-simple-triage-over-full-repair|auto-diagnose-simple-triage-over-full-repair]]: synthesis arguing that Auto-Diagnose matters less as an agent novelty than as evidence that simple one-shot triage can deliver production value
+- [[syntheses/agent-harness-atomic-tools-over-rigid-workflows|agent-harness-atomic-tools-over-rigid-workflows]]: synthesis arguing that a better agent harness exposes atomic capabilities instead of baking task intelligence into rigid workflows
 - [[sources/claude-advisor-strategy-2026-04/summary|claude-advisor-strategy-2026-04]]: source collection for Anthropic's advisor strategy public API shape and its relation to routing, cascading, and shepherding papers
 - [[sources/obsidian-cli/summary|obsidian-cli]]: summary page for the `sources/obsidian-cli/` collection
 - [[sources/andrej-llm-wiki-git-gist/summary|andrej-llm-wiki-git-gist]]: summary page for the `sources/andrej-llm-wiki-git-gist/` collection
