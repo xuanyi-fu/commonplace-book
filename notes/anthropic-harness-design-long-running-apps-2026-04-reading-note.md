@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `## Frontend design: making subjective quality gradable`, before the paragraph beginning `Across runs`
-  - next unread source span: frontend loop outcomes: evaluator assessments improved before plateauing, with both incremental refinements and sharp aesthetic turns
-  - next boundary: the paragraph beginning `The wording of the criteria steered the generator`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation
+  - semantic position: under `## Scaling to full-stack coding`, before the opening paragraph beginning `With these findings in hand`
+  - next unread source span: transition from frontend generator/evaluator findings to full-stack development, where code review and QA play the evaluator role
+  - next boundary: `### The architecture`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -130,6 +130,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 这个复述准确。完整机制是：user prompt 进入 `generator`，生成 HTML/CSS/JS frontend；`evaluator` 通过 Playwright MCP 直接操作 live page、截图、观察，再按 criteria 打分并写 critique；feedback 作为下一轮 `generator` 输入。Loop 通常跑 5 到 15 轮，并且每轮之后 `generator` 需要根据 score trend 做 refine-or-pivot 决策。
 - Missing points: 这段还说明了成本来源：evaluator 不是静态截图评分，而是 live interaction，所以每轮有真实 wall-clock time，完整 run 可达四小时。
 - Open questions: 下一段会说明这种 loop 的实际 outcome 是逐步改善、plateau，还是可能出现突然的 aesthetic turn。
+
+### Frontend Loop Outcomes And Dutch Museum Example
+
+- Source span label: compressed outcome/example span from `Across runs` through the Dutch museum example, before `## Scaling to full-stack coding`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^frontend-loop-outcomes]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^criteria-wording-steers-output]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^iteration-pattern-not-linear]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^dutch-museum-creative-leap]]
+- Guiding question: frontend loop 的实际效果是什么？它在进入 full-stack coding 前证明了什么？
+- User recitation: 用户指出按目标应已读到 `## Scaling to full-stack coding`，所以这一段按低兴趣 outcome/example 压缩处理。
+- Calibrated understanding: 这几段的共同作用是收束 frontend experiment：evaluator assessments 会随 iteration 改善后 plateau；generation 可能 incremental refine，也可能 sharp aesthetic turn；criteria wording 本身会塑造输出分布；improvement 不总是线性，复杂度会随 feedback 上升，甚至第一轮 criteria prompt 就能把模型从 generic defaults 推开。Dutch art museum 例子只是把这个效果具体化：第十轮从普通 dark-themed landing page pivot 成 spatial 3D gallery experience。
+- Missing points: 这些段落主要是结果与例子，不再新增 harness 组件；对后文最重要的是 generator/evaluator loop 已经被证明能把 subjective design 从 generic baseline 推向更大胆方向。
+- Open questions: 下一节会说明同一 generator/evaluator pattern 如何迁移到 full-stack coding，以及 code review / QA 如何承担 design evaluator 的结构角色。
 
 ## Questions And Answers
 
