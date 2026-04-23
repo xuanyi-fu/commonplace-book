@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `### Results from the updated harness`, before the paragraph beginning `To put the updated harness to the test`
-  - next unread source span: updated harness DAW results, including whether the no-sprint harness remained coherent, where QA still added value, and what the final app could actually do
-  - next boundary: `## What comes next`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis; full harness run evidence; evaluator QA tuning; harness simplification assumptions; removing the sprint construct
+  - semantic position: under `## What comes next`, before the paragraph beginning `As models continue to improve`
+  - next unread source span: closing lessons about how harness importance shifts as models improve, including when scaffolds matter less and when new harness combinations become possible
+  - next boundary: end of main article before `Appendix: V1 App specification`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5; three-agent personas; sprint contract negotiation; file-based agent communication; retro game maker setup and solo run failure analysis; full harness run evidence; evaluator QA tuning; harness simplification assumptions; removing the sprint construct; updated harness results and evidence weakness
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -241,6 +241,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Missing points: 这一节还补了一个非结构性的 tuning：为了让 app 里的 AI features 变成 proper agent that can drive app functionality through tools，作者额外加了 prompting，因为这类知识太新，training data 覆盖薄。
 - Open questions: 下一节要验证两个点：没有 sprint construct 后 builder 是否真的能长时间 coherent 工作；single-pass QA 是否仍能抓到 generator missed details / stub features。
 
+### Updated Harness Results And Evidence Weakness
+
+- Source span label: entire `### Results from the updated harness` section, before `## What comes next`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^updated-harness-daw-test]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^builder-coherent-without-sprints]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^qa-caught-last-mile-gaps]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^final-daw-app-functional-core]]
+- Guiding question: 这一节是否真正证明了移除 `sprint construct` 后的 harness V2 仍然有效？
+- User recitation: 用户强烈质疑这一节虎头蛇尾：前面的 case 是 retro game maker，这里突然换成 DAW，因此无法在同一 case 上比较移除 `sprint construct` 的效果。作者 claim 是 Claude 4.6 更擅长完成长任务，并且 log 显示 builder 能连续跑两小时；但“做的时间长”不等于“做得好”。这在论证上有偷换概念，实验设计也有明显问题。如果要证明 harness V2，应在同一套 case 上比较 V1 / V2，而不是换 test case。用户认为这一节信息很少，说服力差，草草收尾。
+- Calibrated understanding: 这个 critique 成立。源文确实提供了三类信息：DAW run 仍然昂贵；builder without sprint decomposition coherent over two hours；QA 仍抓到 feature-completeness gaps，final app 有 functional core。但这些信息最多支持“V2 在一个新 DAW case 上能产出一个可用 app，且 QA 仍有价值”，不能严格支持“移除 sprint construct 不损害 performance”。因为缺少同 prompt / same task / same model 的对照，也没有给 V1 harness on DAW、V2 harness on retro game、或 solo Opus 4.6 DAW baseline。
+- Missing points: 需要区分 `coherence duration`、`output quality`、`feature completeness`、`cost/latency` 四个指标。源文把 “builder ran coherently for over two hours” 用作 no-sprint evidence，但这只证明没有明显过程崩溃，不等于最终质量足够，也不等于 sprint construct 不再有 marginal value。
+- Open questions: 结尾 `What comes next` 会不会承认这种证据边界，还是继续上升到一般 lesson。
+
 ## Questions And Answers
 
 No questions recorded yet.
@@ -253,6 +263,7 @@ No questions recorded yet.
 - 用户把 evaluator few-shot calibration 类比到 Lynx Oncall 总结 rubrics：对着 few-shot examples 反复修改 rubric，直到输出不再总是漂移。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^few-shot-evaluator-calibration]]
 - 用户把当前 evaluator QA tuning 段和两个已有知识点连接起来：一是 `STS2` / Codex computer use 失败案例，说明视觉、连续控制和细粒度 GUI 判断不是 LLM agent 默认擅长的能力；二是 Philipp Schmid 的 `agent harness` 要求，即把多步 agent workflow 变成可 `log and grade` 的 structured data，方便后续验证和 hill-climbing。[[syntheses/codex-computer-use-implementation-and-limits|Codex Computer Use 的实现形态与当前边界]] [[sources/codex-computer-use-2026-04/source/user-test-sts2-drag-failure-2026-04-20|STS2 测试记录]] [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-log-and-grade|log and grade]]
 - 用户将当前段和 Philipp Schmid 的 `agent harness` 观点对齐：好的 harness 应该 `ready to delete for better model`，因为 new models 会替换掉一部分手写 logic；因此每个 planner/evaluator/sprint 等组件都要能被 stress test，并在模型能力边界移动后删除或收缩。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^harness-components-encode-model-assumptions]] [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-build-to-delete|build to delete]] [[sources/agent-harness-origins-2023-2026/source/importance-of-agent-harness-in-2026-markdown#^agent-harness-start-simple|start simple]]
+- 用户对 `Results from the updated harness` 的最终评价是：实验设计不够有说服力，因为 V2 harness 用 DAW，而不是沿用前面的 retro game maker case；“能连续跑两小时”不能替代同任务质量对比，也不能证明移除 sprint construct 没有损害。[[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^updated-harness-daw-test]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^builder-coherent-without-sprints]]
 
 ## Candidate Concepts Entities
 
