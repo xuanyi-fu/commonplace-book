@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `### The architecture`, before the paragraph beginning `In our earlier long-running harness`
-  - next unread source span: architecture setup explaining how the earlier Sonnet 4.5 context-reset harness changed when Opus 4.5 removed context anxiety enough to use one continuous session with automatic compaction
-  - next boundary: the paragraph beginning `For this work I built on the foundation`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span
+  - semantic position: under `### The architecture`, before the three-agent personas introduction and list
+  - next unread source span: three-agent personas: planner expands prompts into specs, generator builds sprint by sprint, evaluator tests and grades with hard thresholds
+  - next boundary: the paragraph beginning `Before each sprint`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots; evaluator few-shot calibration; frontend generator/evaluator loop implementation; compressed frontend loop outcome/example span through the Dutch museum example; full-stack transition span; architecture setup showing context resets removed for Opus 4.5
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -150,6 +150,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 这个复述准确。这段只是迁移桥：frontend 里 evaluator 的结构角色是评价实现、给 feedback；full-stack development 里天然有 code review 和 QA 承担类似角色，所以 generator/evaluator loop 可以映射到软件开发生命周期。
 - Missing points: 这里还没有 architecture 细节；planner、generator、evaluator 角色会在下一段展开。
 - Open questions: 下一段会说明 context reset 是否还需要、三代理系统各自补什么 gap，以及 full-stack harness 怎样继承前面 frontend loop 的 evaluator 逻辑。
+
+### Architecture Setup: Dropping Context Resets
+
+- Source span label: first paragraph under `### The architecture`, before the three-agent personas introduction
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^architecture-drop-context-resets]]
+- Guiding question: 从 earlier harness 到这版 full-stack harness，`context reset` 发生了什么变化？为什么？
+- User recitation: 用户概括为：前文花了很大篇幅说明 `context anxiety` 和 `context reset`，到这里作者说新模型基本没这个问题了，所以可以 drop `context reset`。
+- Calibrated understanding: 这个复述准确。早期 Sonnet 4.5 harness 需要 context resets 来处理 `context anxiety`，让模型保持在 task 上；但 Opus 4.5 基本移除了这种 behavior，所以作者把 resets 从这个 harness 里删掉，改成 agents 在整个 build 里作为 one continuous session 运行，由 Claude Agent SDK automatic compaction 处理 context growth。
+- Missing points: 这段不是否定 earlier reset 机制，而是在说明 harness component 是否 load-bearing 会随模型能力变化而移动。
+- Open questions: 下一段三代理 personas 会说明作者保留了哪些组件：planner、generator、evaluator 分别补哪个 prior-run gap。
 
 ## Questions And Answers
 
