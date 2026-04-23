@@ -25,7 +25,7 @@ updated: 2026-04-23
 
 ## How To Use
 
-- 需要快速判断 GPT-5 系列与 `context anxiety` 的关系时，先读 [[entities/gpt-5-series|gpt-5-series]]。
+- 需要快速判断 GPT-5 系列与 `context anxiety` 的关系时，先读 [[concepts/context-anxiety|context-anxiety]]。
 - 需要最接近 `context anxiety` 的相邻实验证据时，优先看 `reasoning-shift-context-shortens-reasoning-text.txt` 的 `^reasoning-shift-abstract`。
 - 需要 GPT-5 相关 high-volume context 证据时，看 `gpt-5-long-short-context-performance-text.txt` 的 `^gpt-5-long-short-context-abstract`。
 - 需要 open-source / open-weight 类比时，看 `reasoning-shift` 的 GPT-OSS-120B 结果和 Qwen critical-threshold paper。
