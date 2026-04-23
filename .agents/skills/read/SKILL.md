@@ -1,11 +1,11 @@
 ---
 name: read
-description: Use this skill when reading an already-ingested source collection in this knowledge-base repo section by section. It creates or resumes a canonical note at `notes/<collection>-reading-note.md`, starts by identifying the source's single Core Question, follows SQ3R one section at a time, requires the user to recite each section in their own words before advancing, and keeps candidate concept/entity and related-page lists without auto-creating wiki pages.
+description: Use this skill when reading an already-ingested source collection in this knowledge-base repo source span by source span. It creates or resumes a canonical note at `notes/<collection>-reading-note.md`, starts by identifying the source's single Core Question, uses a semantic cursor as the reading state, quotes the current source span before explaining it, requires the user to recite each span in their own words before advancing, and keeps candidate concept/entity and related-page lists without auto-creating wiki pages.
 ---
 
 # Read
 
-Use this skill when the task is to read one already-saved source collection in this repository with the user, in source order, one section at a time.
+Use this skill when the task is to read one already-saved source collection in this repository with the user, in source order, one source span at a time.
 
 This skill is repo-specific and must follow [AGENTS.md](/Users/bytedance/Documents/knowledge-base/AGENTS.md:1).
 
@@ -53,12 +53,12 @@ If both are present, trust the explicit path.
 4. If the note does not exist:
    - create it with the exact section layout below
    - initialize `## Core Question`
-   - initialize `## Reading State`
-   - initialize `## Section Queue`
+   - initialize `## Reading State` with the semantic cursor fields below
    - add the note to root `index.md`
 5. If the note already exists:
    - read `## Reading State`
-   - resume from the current section recorded there
+   - resume from the semantic cursor recorded there
+   - if the note has no semantic cursor yet, derive one from the existing reading state and any legacy `## Section Queue`; use that legacy queue only as a recovery hint and migrate the note to the semantic cursor shape on the next note update
    - preserve the existing note content and append updates
 
 ## Canonical Note Layout
@@ -80,8 +80,6 @@ updated: YYYY-MM-DD
 ## Core Question
 
 ## Reading State
-
-## Section Queue
 
 ## Recall Log
 
@@ -108,15 +106,16 @@ Recommended content for each section:
 - `## Reading State`
   - source slug
   - primary reading file
-  - current section
-  - completed sections
-  - pending sections
-  - top-level section
+  - semantic cursor:
+    - file
+    - semantic position, such as `under "# H1", before "## H2"` or `under "## X", before "### Y"`
+    - next unread source span
+    - next boundary
+    - completed spans
   - scout status
-- `## Section Queue`
-  - normalized reading order for the active source
 - `## Recall Log`
-  - section
+  - source span label
+  - quoted original span or citation to it
   - guiding question
   - user recitation
   - calibrated understanding
@@ -146,9 +145,21 @@ Recommended content for each section:
 
 ## Core Question Kickoff
 
-Before section-by-section reading, always give exactly one `Core Question`: the main question the whole source is trying to answer.
+Before source-span reading, always give exactly one `Core Question`: the main question the whole source is trying to answer.
 
 Keep it to one sentence. Prefer a broad citation to `sources/<collection>/summary.md`, unless one cleaned markdown source note clearly supports the question more precisely.
+
+## Semantic Cursor
+
+The `semantic cursor` is the single source of truth for reading progress.
+
+- Do not infer progress from headings, recall logs, or legacy queues.
+- Line numbers may be recorded as convenience hints, but they must not replace the semantic position.
+- The semantic position must say where the cursor sits in the document structure, such as `under "# H1", before "## H2"`.
+- A source span is a small contiguous unread passage from the cursor: one paragraph, a continuous list item group, a code block, or a short paragraph group.
+- Headings only describe cursor position and boundaries. They are not the reading unit.
+- Body text between a heading and its first child heading must be read as its own span. For example, text after `# H1` and before `## H2` is read at `under "# H1", before "## H2"`.
+- If a span is too long, split it into smaller contiguous spans instead of reading the whole heading scope at once.
 
 ## SQ3R Loop
 
@@ -162,17 +173,20 @@ The reading loop is always:
 
 ### 1. Survey
 
-- Lock to the current section only.
-- Restate the active heading before explaining.
-- Do not pull in later sections early unless a tiny amount of future context is strictly required to make the current section intelligible.
+- Locate the next unread source span from the semantic cursor.
+- Start the user-facing reply with a `Current Source Span` block that quotes the original span before any guiding question or explanation.
+- Preserve the original language and core source terms in the quoted span.
+- Lock to the current source span only.
+- Restate the semantic position before explaining.
+- Do not pull in later spans early unless a tiny amount of future context is strictly required to make the current span intelligible; if used, label it as inference/context.
 
 ### 2. Question
 
-Derive exactly one `guiding question` for the current section.
+Derive exactly one `guiding question` for the current source span.
 
 Do not free-form brainstorm. Use rule-based rewrite:
 
-1. Classify the section as one of:
+1. Classify the source span as one of:
    - `definition`
    - `motivation`
    - `mechanism`
@@ -185,22 +199,22 @@ Do not free-form brainstorm. Use rule-based rewrite:
    - `motivation`: `作者为什么要引入 X？它要解决什么问题？`
    - `mechanism`: `X 是怎么工作的？输入、步骤、输出分别是什么？`
    - `comparison`: `X 和 Y 有什么关键区别？为什么这个区别重要？`
-   - `evidence/result`: `这一节给了什么证据？这些证据支持了什么结论？`
+   - `evidence/result`: `这一段给了什么证据？这些证据支持了什么结论？`
    - `limitation/tradeoff`: `X 的代价、边界或失败模式是什么？`
    - `history`: `从 A 到 B 发生了什么变化？为什么会这样变？`
 3. Keep original source terms whenever translation would blur meaning.
 
-Fallback only when the heading is too vague:
+Fallback only when the source span is too vague:
 
-- `这一节在整篇论证里起什么作用？`
-- `作者在这一节真正想让读者明白什么？`
+- `这一段在整篇论证里起什么作用？`
+- `作者在这一段真正想让读者明白什么？`
 
-The `guiding question` is the acceptance target for the section. It is not decorative.
+The `guiding question` is the acceptance target for the source span. It is not decorative.
 
 ### 3. Read
 
 - Explain only what is needed to answer the guiding question.
-- Stay anchored to the current section and the user's current confusion point.
+- Stay anchored to the current source span and the user's current confusion point.
 - Separate documented source facts from your own inference.
 - Keep the explanation compact enough that the user can realistically restate it.
 
@@ -211,7 +225,7 @@ The user must answer the guiding question in their own words before the assistan
 Rules:
 
 - Do not advance automatically after your explanation.
-- Ask the user to restate the section in their own words.
+- Ask the user to restate the source span in their own words.
 - Accept short prose or a few bullets.
 - If the user asks a clarification question instead of reciting, answer the clarification and then return to the recite gate.
 
@@ -223,14 +237,17 @@ After the user recites:
 - fix what is off
 - add any missing constraint that matters
 - write the result into `## Recall Log`
+- advance the semantic cursor to the next unread source span
 
-Only after the note is updated and the user explicitly says `继续`, `下一节`, or equivalent may you move to the next section.
+Only after the note is updated and the user explicitly says `继续`, `下一段`, `下一节`, or equivalent may you move to the next source span.
 
 ## Strict Advancement Policy
 
-- Never proactively say "let's move to the next section" and then move on by yourself.
-- Never treat one `继续` as permission to skip multiple sections.
-- Each continuation only unlocks the next small section in the `Section Queue`.
+- Never proactively say "let's move to the next source span" and then move on by yourself.
+- Never treat one `继续` as permission to skip multiple spans.
+- Each continuation only unlocks the next small source span.
+- Do not skip unheaded body text.
+- Do not cross the cursor's `next boundary` while explaining the current span.
 
 ## Background Scouts
 
@@ -252,7 +269,7 @@ If subagents are unavailable in the current turn, keep these candidate lists loc
 Refresh:
 
 - at session start
-- after every section that passes the recite gate and has its review written into the note
+- after every source span that passes the recite gate and has its review written into the note
 
 Threshold:
 
@@ -265,19 +282,19 @@ Threshold:
 Refresh:
 
 - at session start
-- after completion of a top-level section
-- after the current section review if a strong signal appeared in that section
+- after completion of a top-level heading scope
+- after the current source span review if a strong signal appeared in that span
 
-Top-level section means the first heading tier below the source title in the normalized `Section Queue`.
+Top-level heading scope means the first heading tier below the source title in the active source file.
 
 Strong signal means any of:
 
 - a new source-backed strong claim added to the note
 - a new user comment tied to a cited passage
 - a new `^block-id` added to a cleaned markdown source note
-- a novel user question that clearly generalizes beyond the current section's surface wording
+- a novel user question that clearly generalizes beyond the current span's surface wording
 
-Coalesce scout refreshes to the section `Review` boundary. Never refresh in the middle of active explanation.
+Coalesce scout refreshes to the source span `Review` boundary. Never refresh in the middle of active explanation.
 
 Relation threshold:
 
@@ -289,6 +306,7 @@ Relation threshold:
 ## Citation Policy
 
 - In reading notes, cite non-trivial factual claims.
+- Each active reading reply must quote the current original source span before explaining it.
 - Prefer `[[...#^block-id]]` when one specific passage supports a reusable claim.
 - Prefer cleaned markdown source notes under `sources/*/source/*.md` for block-id citations.
 - If a cleaned markdown note lacks a needed block id, add the minimal stable readable `^block-id` to the supporting passage.
@@ -299,7 +317,7 @@ Relation threshold:
 
 - Do not create a second reading note for the same source collection.
 - Do not place reading notes under `sources/<collection>/`.
-- Do not advance to the next section before the user recites and explicitly continues.
+- Do not advance to the next source span before the user recites and explicitly continues.
 - Do not let background scouts dominate the session.
 - Do not mutate raw source artifacts.
 - Do not auto-create downstream wiki pages from candidate lists.
