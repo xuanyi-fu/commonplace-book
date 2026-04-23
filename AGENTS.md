@@ -83,6 +83,17 @@ Allowed `status` values:
 - Use the same language as the discussion when recording wiki content, unless the user explicitly asks for a different language.
 - When discussing implementations in Chinese, keep core implementation terms like `thread`, `raw memory`, `context`, `prompt`, and `agent` in their original form when translating them would blur the structure of the system; translate the surrounding explanation instead.
 
+## Citation
+
+- In wiki-layer pages, every non-trivial factual claim derived from a local source note should cite the supporting source note.
+- `## Sources` lists which sources the page uses overall; it does not replace inline citations for specific claims.
+- Whole-document citations are acceptable when the claim is supported broadly across the cited page.
+- When a claim depends on one specific passage and that passage is likely to be reused, add a block id to the source note passage and cite it via `[[path/to/page#^block-id]]`.
+- In this repo, paragraph-level reusable citations should be implemented with block ids.
+- Do not rely on a whole-page link when the claim is only supported by one specific passage and a block-id citation is practical.
+- Do not add block ids mechanically to every paragraph.
+- `AGENTS.md` defines the repo-wide citation contract; `rules/markdown-conventions.md` remains the syntax and example reference.
+
 ## Links
 
 - Use Obsidian wikilinks for internal links: `[[target-page]]`
