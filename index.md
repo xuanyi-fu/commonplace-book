@@ -44,5 +44,7 @@ updated: 2026-04-22
 - [[sources/anthropic-mcp-production-systems-2026-04/summary|anthropic-mcp-production-systems-2026-04]]: source collection for Anthropic's April 22, 2026 MCP blog post on production agent connectivity, remote server design, context-efficient clients, and skills
 - [[notes/anthropic-mcp-production-systems-2026-04-reading-note|anthropic-mcp-production-systems-2026-04-reading-note]]: canonical reading note for the Anthropic MCP production-systems article, initialized with Keshav-lite, reading state, and section queue
 - [[sources/cloudflare-mcp-2026-04/summary|cloudflare-mcp-2026-04]]: source collection for Cloudflare's official Cloudflare API MCP server materials, including the two-tool Code Mode design and Dynamic Worker sandbox execution model
+- [[sources/mcp-apps-2026-04/summary|mcp-apps-2026-04]]: source collection for official MCP Apps docs, stable spec text, and proposal-to-launch announcement material
+- [[entities/mcp-apps|mcp-apps]]: entity page for MCP Apps as the official MCP extension for interactive UI rendered inside compliant hosts
 - [[sources/obsidian-cli/summary|obsidian-cli]]: summary page for the `sources/obsidian-cli/` collection
 - [[sources/andrej-llm-wiki-git-gist/summary|andrej-llm-wiki-git-gist]]: summary page for the `sources/andrej-llm-wiki-git-gist/` collection
