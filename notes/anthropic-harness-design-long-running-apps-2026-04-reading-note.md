@@ -23,10 +23,10 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Primary reading file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
 - Semantic cursor:
   - file: `sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown.md`
-  - semantic position: under `## Frontend design: making subjective quality gradable`, before the paragraph beginning `I emphasized design quality and originality`
-  - next unread source span: author weights design quality and originality above craft and functionality because Claude already does better on the latter pair
-  - next boundary: the paragraph beginning `I calibrated the evaluator`
-  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria
+  - semantic position: under `## Frontend design: making subjective quality gradable`, before the paragraph beginning `I calibrated the evaluator`
+  - next unread source span: evaluator calibration with few-shot examples and detailed score breakdowns
+  - next boundary: the paragraph beginning `I built the loop on the Claude Agent SDK`
+  - completed spans: opening framing block under `# Harness design for long-running application development`; `Why naive implementations fall short` setup span; first failure mode on `context anxiety`, `context reset`, and `compaction`; second failure mode on self-evaluation and external evaluator tuning; frontend design motivation span; frontend harness two-insights span; four frontend grading criteria; criteria weighting toward model weak spots
 - Scout status: concept/entity scout and related-pages scout completed after the opening span; candidate lists refreshed in this note.
 
 ## Recall Log
@@ -100,6 +100,16 @@ Anthropic 这篇文章想回答的核心问题是：在 frontier agentic coding 
 - Calibrated understanding: 这个判断应和下一段合起来看。当前 list 本身把 frontend quality 拆成四类：整体设计质量、原创性、craft 基本功、功能可用性。用户指出的重点是 criteria 不只是分类清单，还会服务于后续 weighting：如果模型本来就容易做好 craft 和 functionality，那么评价系统应该更用力地压在模型容易失败的 design quality 与 originality 上。
 - Missing points: 当前 span 只列 criteria，还没明说 weighting；“强调模型做不好的标准”是对下一段的提前概括。
 - Open questions: 下一段会如何说明 design quality 和 originality 被赋予更高权重，以及这种 weighting 如何推动模型承担更多 aesthetic risk。
+
+### Frontend Criteria Weighting Toward Model Weak Spots
+
+- Source span label: paragraph beginning `I emphasized design quality and originality`
+- Quoted original span or citation: [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^frontend-weighting-model-weaknesses]]
+- Guiding question: 作者为什么更强调 `design quality` 和 `originality`，而不是平均强调四个 criteria？
+- User recitation: 用户上一轮已经概括了这一段：设计评分标准时，要强调模型做不好的那些标准。
+- Calibrated understanding: 这个概括准确。作者把 `design quality` 和 `originality` 权重放在 `craft` 与 `functionality` 前面，因为 Claude 默认已经更容易做好技术执行和可用性；真正容易失败的是 bland、generic、AI slop 式的 design quality 和 originality。Rubric 在这里不是中立分类，而是用权重把模型推向 aesthetic risk-taking。
+- Missing points: 这段说明了 criteria weighting，但还没说明 evaluator 怎样被校准得稳定。
+- Open questions: 下一段 few-shot calibration 怎样减少 score drift，并让 evaluator judgment 对齐作者偏好。
 
 ## Questions And Answers
 
