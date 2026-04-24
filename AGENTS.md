@@ -133,6 +133,7 @@ Examples:
 - Root `index.md` is the global index.
 - Index pages only answer "what exists".
 - Each entry should be a page link plus a one-line description.
+- Agents should use root `index.md` as the first navigation surface when looking for existing wiki-layer pages, source collections, reading notes, entities, concepts, summaries, or syntheses before falling back to broad repo search.
 - Root `index.md` must not index raw source files under `sources/**/source/**` directly.
 - Source collections should be surfaced through `sources/<collection>/summary.md`.
 - Canonical reading notes under `notes/` should be surfaced through their note pages when they exist.
