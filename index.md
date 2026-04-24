@@ -37,6 +37,7 @@ updated: 2026-04-24
 - [[sources/codex-memory-implementation-2026-04/summary|codex-memory-implementation-2026-04]]: source collection，收录 Codex memory 在 app-server、core、state 三层的实现笔记与 prompt 快照
 - [[sources/codex-model-context-inputs-2026-04/summary|codex-model-context-inputs-2026-04]]: source collection for a Codex code-reading analysis of how model context inputs are assembled at `openai/codex@d62421d`
 - [[sources/codex-v1-subagents-2026-04/summary|codex-v1-subagents-2026-04]]: source collection for a Codex code-reading analysis of the V1 subagent tool interface, spawn context, and return path at `openai/codex@d62421d`
+- [[sources/codex-compaction-analysis-2026-04/summary|codex-compaction-analysis-2026-04]]: source collection for Codex compaction trigger and local implementation analyses at `openai/codex@d62421d`
 - [[sources/openai-codex-agent-loop-2026-01/summary|openai-codex-agent-loop-2026-01]]: source collection for OpenAI's Engineering blog on the Codex agent loop, Responses API prompt shape, prompt caching, and compaction
 - [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]]: synthesis arguing that Codex model context is best understood as ordered `input` stream items plus top-level `instructions` and `tools`
 - [[syntheses/codex-memory-support-and-boundaries|codex-memory-support-and-boundaries]]: synthesis of Codex memory's implementation pipeline, file layering, and control surfaces
