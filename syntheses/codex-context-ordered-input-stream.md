@@ -7,36 +7,17 @@ updated: 2026-04-23
 
 # Codex context 是有序 input stream
 
-这页记录一个关于 Codex model context 的修正：它不应该被画成“instructions / tools / developer instructions / contextual user instructions / history”几个静态层依次堆叠。更准确的模型是：`instructions` 和 `tools` 是 request 顶层字段；真正的 conversation material 进入一个有顺序的 `input` stream，developer-role items、contextual user fragments、普通 user message、assistant message、tool call/output、reasoning、compaction summary、后续 context diff 都会按 turn 生命周期追加进去。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]]
+这页记录 Codex model context 的正确模型：`instructions` 和 `tools` 是 request 顶层字段；真正的 conversation material 进入一个有顺序的 `input` stream，developer-role items、contextual user fragments、普通 user message、assistant message、tool call/output、reasoning、compaction summary、后续 context diff 都会按 turn 生命周期追加进去。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]]
 
 ## 核心判断
 
 Codex 的 top-level `instructions` 是一个被选中的 base-instruction string，不是所有 instruction 来源的总拼接。`tools` 是另一个顶层字段，承载当前模型可见的 tool schemas。`AGENTS.md`、environment context、skills、plugins、memory guidance、collaboration mode、hooks 等材料多数作为 `input` 中的 developer-role message 或 user-role contextual fragments 注入，而不是拼到 top-level `instructions` 里。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]]
 
-所以最容易错的不是“少分了一类 context”，而是把这些类别画成了固定前置分区。真实顺序更像一个 append-only stream：每一轮开始时，Codex 先按需要记录 context update，再记录当前 user prompt，再记录 hook-added developer contexts、显式 skill/plugin 注入、pending input 等，然后从更新后的 history 克隆出本轮要采样的 prompt input。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]]
+关键是保留 item 的相对顺序。真实顺序更像一个 append-only stream：每一轮开始时，Codex 先按需要记录 context update，再记录当前 user prompt，再记录 hook-added developer contexts、显式 skill/plugin 注入、pending input 等，然后从更新后的 history 克隆出本轮要采样的 prompt input。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]]
 
-## 不要这样画
+## 正确模型
 
-下面这种图会误导，因为它暗示所有 context diff 都会在 history 之前统一加载：
-
-```text
-instructions
-tools
-developer instructions
-contextual user instructions
-history
-  user
-  assistant
-  tool call
-  tool output
-  reasoning
-```
-
-它的问题是：后续 `environment_context` diff、collaboration-mode diff、model-switch instruction、hook prompt、显式 skill body 等，不是一个永远位于 history 前面的静态区块。它们会在具体 turn 的生命周期里，作为新的 `response_item` 插到已有 conversation stream 后面。
-
-## 更好的模型
-
-更好的画法是把 request 分成顶层字段和有序 `input`：
+正确画法是把 request 分成顶层字段和有序 `input`：
 
 ```text
 top-level request fields:
@@ -83,11 +64,11 @@ ordered input stream:
 19 response_item function_call_output
 ```
 
-这个例子说明，显式调用的 `ingest-source` skill body 不是在所有 history 之前作为一个全局 instruction 预加载，而是在当前真实 user prompt 之后，作为新的 user-role `response_item` 被追加进 stream。
+这个例子给出显式 skill body 的实际位置：`ingest-source` 的 full `SKILL.md` body 跟在当前真实 user prompt 之后，作为新的 user-role `response_item` 被追加进 stream。
 
 ## 本机例子二：environment diff 插在中间
 
-另一个更能说明“context diff 会穿插在 history 中间”的例子来自一个旧 thread：
+另一个展示 `context diff` 实际位置的例子来自一个旧 thread：
 
 ```text
 /Users/bytedance/.codex/sessions/2026/04/18/rollout-2026-04-18T22-51-31-019da44b-4d53-76a2-975c-c790f9d3c904.jsonl
@@ -102,7 +83,7 @@ ordered input stream:
 531 user: 把他们的小故事也记录在另一个markdown吧
 ```
 
-这里第 529 行的 `<environment_context>` 是一个日期变化后的 user-role contextual item。它出现在已经存在的 user/assistant history 后面，又出现在下一条真实 user message 前面。这就是为什么不能把 diff 画成“加载 history 之前的一整块 context”。
+这里第 529 行的 `<environment_context>` 是一个日期变化后的 user-role contextual item。它出现在已经存在的 user/assistant history 后面，又出现在下一条真实 user message 前面。因此这个 diff 的模型位置是 conversation stream 中的一个新 item。
 
 ## 代表性伪 request
 
@@ -169,7 +150,7 @@ ordered input stream:
 
 ## 一句话结论
 
-Codex 的 model context 不应该理解成“几类 instruction 先拼好，再接完整 history”。更准确的理解是：`instructions` 和 `tools` 是 request 顶层控制面；`input` 是一个按时间和 turn 生命周期维护的有序 item stream，context update 和 diff 本身也是 stream 里的 item。这个顺序很重要，因为模型看到的不只是“有哪些内容”，还包括这些内容在 conversation history 里的相对位置。
+Codex 的 model context 可以理解为：`instructions` 和 `tools` 是 request 顶层控制面；`input` 是一个按时间和 turn 生命周期维护的有序 item stream，context update 和 diff 本身也是 stream 里的 item。这个顺序很重要，因为模型看到的不只是“有哪些内容”，还包括这些内容在 conversation history 里的相对位置。
 
 ## Sources
 
