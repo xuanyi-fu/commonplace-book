@@ -28,8 +28,8 @@ server-derived prompt prefix:
   server-side system/tool/instruction framing
 
 client-provided ordered input stream:
-  developer message: initial permissions / developer context
-  user message: user instructions / AGENTS.md / skill metadata, depending on Codex version and surface
+  developer message: initial permissions / developer context / skill metadata in d62421d
+  user message: user instructions / AGENTS.md
   user message: environment context
   user message: actual user prompt
   user message: explicit <skill>...</skill> body, if invoked
@@ -47,16 +47,16 @@ client-provided ordered input stream:
 
 - `developer instructions` 不是等同于 top-level `instructions`；developer-role context bundle 是 `input` 里的 message。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]]
 - `contextual user fragments` 是 role=`user` 的 model-visible context item，但不是普通人类 user turn；普通 user-message parsing 会跳过这些 contextual user messages。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]]
-- `skills` 至少有两层：available skills metadata 是初始 prompt/context 的一部分，显式提到的 full `SKILL.md` body 作为 per-turn user-role `<skill>...</skill>` fragment 注入；metadata 的具体 role/分组会随 Codex version / surface 变化，不应该把某一个本机 rollout 的分组当成跨版本常量。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]] [[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop]]
+- `skills` 至少有两层：在 `openai/codex@d62421d` 的 `codex-core` 里，available skills metadata 进入 developer-role `<skills_instructions>` bundle；显式提到的 full `SKILL.md` body 作为 per-turn user-role `<skill>...</skill>` fragment 注入。OpenAI blog 的 2026-01 Codex CLI 描述把 skill metadata 放在 user instructions 下面，这一点对 `d62421d` 已经过时。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]] [[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop]]
 - `reasoning`、tool calls、tool outputs、compaction item 都可能成为 history / subsequent input 的一部分；history 不只是 user/assistant 两类自然语言消息。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]] [[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop]]
 
 ## Blog 校准
 
 OpenAI 的 `Unrolling the Codex agent loop` blog 支持这页的主结论：`instructions`、`tools`、`input` 是 Responses API request 的不同字段，`input` 是 item list；模型返回的 reasoning / function_call item 和 tool output 会进入后续请求的 `input`，旧 prompt 成为新 prompt 的 exact prefix；mid-conversation configuration changes 会优先通过追加新 message 来表达，而不是回改旧 message。[[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop]]
 
-这篇 blog 也指出了这页原先需要校准的地方：不能把本机 Codex desktop rollout 里的 developer bundle 形状，直接写成 Codex harness 永远不变的初始 input 形状。blog 描述的 2026-01 Codex CLI 初始 `input` 是：role=`developer` permissions message、可选 role=`developer` `developer_instructions`、可选 role=`user` user instructions / skill metadata、role=`user` environment context，然后才追加真实 user message。[[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop]]
+这篇 blog 不能覆盖 `openai/codex@d62421d` 的细节。它描述的 2026-01 Codex CLI 初始 `input` 是：role=`developer` permissions message、可选 role=`developer` `developer_instructions`、可选 role=`user` user instructions / skill metadata、role=`user` environment context，然后才追加真实 user message。到 `d62421d`，代码阅读证据显示 skills guidance 已经进入 developer bundle；因此 blog 在 `skills metadata` 的 role/分组上应视为历史描述。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]] [[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop]]
 
-因此这页的稳定结论应该是 ordered `input` stream 和 append-on-change 策略，而不是某个具体版本里“skills metadata 一定在 developer message 里”或“AGENTS.md 和 environment context 一定同属一个 user message”这种更细的分组。
+因此这页的稳定结论是 ordered `input` stream 和 append-on-change 策略；对当前收录的 `d62421d` 代码阅读来说，`skills metadata` 的具体位置也可以更精确地写成 developer-role bundle。
 
 ## 本机例子一：skill body 的位置
 
@@ -114,12 +114,13 @@ OpenAI 的 `Unrolling the Codex agent loop` blog 支持这页的主结论：`ins
       "role": "developer",
       "content": [
         "<permissions instructions>...</permissions instructions>",
-        "optional developer_instructions..."
+        "optional developer_instructions...",
+        "<skills_instructions>available skill metadata...</skills_instructions>"
       ]
     },
     {
       "role": "user",
-      "content": "# AGENTS.md instructions for /repo\n<INSTRUCTIONS>...</INSTRUCTIONS>\n<skills_instructions>available skill metadata...</skills_instructions>"
+      "content": "# AGENTS.md instructions for /repo\n<INSTRUCTIONS>...</INSTRUCTIONS>"
     },
     {
       "role": "user",
@@ -164,7 +165,7 @@ OpenAI 的 `Unrolling the Codex agent loop` blog 支持这页的主结论：`ins
 
 ## 一句话结论
 
-Codex 的 model context 可以理解为：`instructions` 和 `tools` 是 request 顶层控制面；`input` 是一个按时间和 turn 生命周期维护的有序 item stream，context update 和 diff 本身也是 stream 里的 item。具体 role 分组会随 Codex version / product surface 变化，但顺序和 append-on-change 策略是更稳定的理解重点。[[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop]]
+Codex 的 model context 可以理解为：`instructions` 和 `tools` 是 request 顶层控制面；`input` 是一个按时间和 turn 生命周期维护的有序 item stream，context update 和 diff 本身也是 stream 里的 item。OpenAI blog 提供了 agent-loop 和 Responses API 层面的背景；`openai/codex@d62421d` 的具体 role 分组则以本地代码阅读为准。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]] [[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop]]
 
 ## Sources
 
