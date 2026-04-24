@@ -2,10 +2,12 @@
 type: summary
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-04-24
 ---
 
 # openai-codex-agent-loop-2026-01
+
+> Use with caution, outdated information included. This collection is a supporting source for Codex model context / prompt assembly research, not the primary current-code evidence; prefer `codex-model-context-inputs-2026-04` for `openai/codex@d62421d` implementation details.
 
 这个 source collection 收录 OpenAI Engineering blog `Unrolling the Codex agent loop`，发布于 2026-01-23，作者是 Michael Bolin。文章解释 Codex harness / Codex CLI 的 agent loop、Responses API 请求形态、`instructions` / `tools` / `input` 的分工、多轮 tool-call 循环、prompt caching、mid-conversation configuration changes，以及 compaction。[[source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop-markdown]]
 
