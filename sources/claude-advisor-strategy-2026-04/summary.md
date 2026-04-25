@@ -2,7 +2,7 @@
 type: summary
 status: draft
 created: 2026-04-22
-updated: 2026-04-22
+updated: 2026-04-25
 ---
 
 # claude-advisor-strategy-2026-04
@@ -37,6 +37,7 @@ updated: 2026-04-22
   - `source/routing-and-cascading-2410.10347-text.txt`：看 `routing` 和 `cascading` 的统一定义。
   - `source/llm-shepherding-2601.22132-text.txt`：看 “Pay for hints, not answers” 这种更像 advisor 的提示式协作。
   - `source/multi-llm-routing-hierarchical-survey-2506.06579-text.txt`：看更大的多模型推理分类框架。
+- 如果问题转向 Claude Code 里 `advisor strategy` 如何进入 request/context surface，接着读 [[sources/claude-code-advisor-strategy-context-2026-04/summary|claude-code-advisor-strategy-context-2026-04]]；这个公开材料 collection 负责 API / 论文定位，Claude Code collection 负责本地实现路径。
 - 讨论细节时，PDF 仍然是论文权威版本。文本抽取版适合扫标题、摘要、术语和关键段落，但公式、表格、图示和版面仍以原始 PDF 为准。
 
 ## Summary

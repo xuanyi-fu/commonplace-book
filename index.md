@@ -2,7 +2,7 @@
 type: index
 status: draft
 created: 2026-04-20
-updated: 2026-04-24
+updated: 2026-04-25
 ---
 
 # index
@@ -52,6 +52,7 @@ updated: 2026-04-24
 - [[syntheses/agent-harness-atomic-tools-over-rigid-workflows|agent-harness-atomic-tools-over-rigid-workflows]]: synthesis arguing that a better agent harness exposes atomic capabilities instead of baking task intelligence into rigid workflows
 - [[syntheses/agent-harness-philipp-schmid-overall-reading|agent-harness-philipp-schmid-overall-reading]]: synthesis summarizing one complete reading of Philipp Schmid's 2026-01 agent-harness argument
 - [[sources/claude-advisor-strategy-2026-04/summary|claude-advisor-strategy-2026-04]]: source collection for Anthropic's advisor strategy public API shape and its relation to routing, cascading, and shepherding papers
+- [[sources/claude-code-advisor-strategy-context-2026-04/summary|claude-code-advisor-strategy-context-2026-04]]: source collection for how Claude Code integrates advisor strategy into Messages API system, tools, beta, and message-history context
 - [[sources/claude-managed-agents-2026-04/summary|claude-managed-agents-2026-04]]: source collection for Anthropic's managed-agent runtime objects, event protocol, permissions, MCP, skills, memory, multi-agent, and outcomes
 - [[entities/claude-managed-agents|claude-managed-agents]]: entity page for Claude Managed Agents as Anthropic's hosted agent runtime with versioned configs, stateful sessions, and preview orchestration layers
 - [[sources/anthropic-mcp-production-systems-2026-04/summary|anthropic-mcp-production-systems-2026-04]]: source collection for Anthropic's April 22, 2026 MCP blog post on production agent connectivity, remote server design, context-efficient clients, and skills
