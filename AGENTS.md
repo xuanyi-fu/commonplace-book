@@ -134,6 +134,9 @@ Examples:
 - Index pages only answer "what exists".
 - Each entry should be a page link plus a one-line description.
 - Agents should use root `index.md` as the first navigation surface when looking for existing wiki-layer pages, source collections, reading notes, entities, concepts, summaries, or syntheses before falling back to broad repo search.
+- For bare topic lookups in this repo, do a quick local preflight before treating the task as external research: check root `index.md`, then use narrow `rg` only if useful.
+- If the user clearly asks for current/latest/live public information, web search can follow that cheap preflight.
+- If preflight finds a relevant local entry, mention it first and state what external search adds or why it is still needed.
 - Root `index.md` must not index raw source files under `sources/**/source/**` directly.
 - Source collections should be surfaced through `sources/<collection>/summary.md`.
 - Canonical reading notes under `notes/` should be surfaced through their note pages when they exist.
