@@ -23,10 +23,10 @@ updated: 2026-04-27
 - Primary reading file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
 - Semantic cursor:
   - file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
-  - semantic position: under `## Does Prompting Help?`, before `## Does Reasoning Mean Overthinking and Over-Editing?`
-  - next unread source span: explicit minimal-edit prompt experiment under `## Does Prompting Help?`
-  - next boundary: `## Does Reasoning Mean Overthinking and Over-Editing?`
-  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results
+  - semantic position: under `## Does Reasoning Mean Overthinking and Over-Editing?`, before `## Training`
+  - next unread source span: reasoning vs non-reasoning comparison under generic and explicit settings
+  - next boundary: `## Training`
+  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results; `## Does Prompting Help?` explicit prompt experiment
 - Scout status: deferred; candidate concept/entity and related-page lists are kept locally in this note.
 
 ## Recall Log
@@ -80,6 +80,16 @@ updated: 2026-04-27
 - Calibrated understanding: 这个总结抓住了这一节的核心对比。作者的直接结论是 GPT-5.4 在 frontier models 中 `over-edits the most`，同时 `Pass@1` 也偏低；Claude Opus 4.6 则同时拿到最高 `Pass@1` 和最小 `Levenshtein` diff。小校正是：Claude Opus 在 `Added Cognitive Complexity` 上也很低，但表中该列的 best 并不总是 Claude；reasoning 表里 Qwen 3.6 Plus 更低，non-reasoning 表里 GLM 5 更低。
 - Missing points: 这一节只说明默认表现差异；还没有说明 prompt 能否改变这种行为，也没有解释 reasoning model 为什么会更容易或更不容易 over-edit。
 - Open questions: 下一节需要看 explicit minimal-edit prompt 是否能降低 Levenshtein，并是否同时影响 correctness。
+
+### Does Prompting Help
+
+- Source span label: `## Does Prompting Help?`, before `## Does Reasoning Mean Overthinking and Over-Editing?`
+- Quoted original span or citation: [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^explicit-minimal-edit-prompt]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^explicit-prompt-results]]
+- Guiding question: 这一段给了什么证据？这些证据支持了什么结论？
+- User recitation: 用户理解为：explicit prompt 有效是因为缩小了解的搜索空间，相当于告诉模型“这个题的解决方法其实很简单，改动很少的，不要瞎想”。
+- Calibrated understanding: 这个复述准确。作者的解释是，minimal-edit constraint 把 possible fixes 的空间缩窄，模型更容易走向 precise targeted fix；所以它不仅能降低 `Levenshtein Distance`，还可能提高 `Pass@1`。这里的提示不是提供 bug 的具体答案，而是提供 search prior：优先找小而精确的改动，不要把问题当成需要重新设计的任务。
+- Missing points: 结果中 DeepSeek R1/v3 是 `Pass@1` 的例外；另外作者观察到 reasoning models 在 `Levenshtein Distance` 上受 prompt 影响更明显，推测和 stronger instruction following 有关。
+- Open questions: 下一节需要区分 reasoning mode 的默认行为和 explicit prompt 后的行为：reasoning 是天然 overthink，还是更会遵守 minimal-edit 约束。
 
 ## Questions And Answers
 
