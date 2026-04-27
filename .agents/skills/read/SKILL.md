@@ -1,6 +1,6 @@
 ---
 name: read
-description: Use this skill when reading an already-ingested source collection in this knowledge-base repo source span by source span. It creates or resumes a canonical note at `notes/<collection>-reading-note.md`, starts by identifying the source's single Core Question, uses a semantic cursor as the reading state, quotes the current source span before explaining it, requires the user to recite each span in their own words before advancing, and keeps candidate concept/entity and related-page lists without auto-creating wiki pages.
+description: Use this skill when reading an already-ingested source collection in this knowledge-base repo source span by source span. It creates or resumes a canonical note at `notes/<collection>-reading-note.md`, starts by identifying the source's single Core Question, uses a semantic cursor as the reading state, avoids reproducing the current source span in chat unless the user explicitly asks for it, requires the user to recite each span in their own words before advancing, and keeps candidate concept/entity and related-page lists without auto-creating wiki pages.
 ---
 
 # Read
@@ -34,6 +34,25 @@ notes/<collection>-reading-note.md
 - Cleaned markdown source notes under `sources/*/source/*.md` may receive minimal `^block-id` anchors when precise reusable citations are needed.
 - Raw source artifacts must remain read-only. Do not add block ids to PDF, HTML, screenshots, exported mail, or other non-markdown raw artifacts.
 - Do not create `concept`, `entity`, or `synthesis` pages from this skill. This skill only produces or updates the canonical reading note.
+
+## Note Persistence
+
+Every successful mutation to a canonical reading note is a logical update and must be committed and pushed before the turn ends.
+
+This includes:
+
+- creating or editing `notes/<collection>-reading-note.md`
+- adding the reading note entry to root `index.md`
+- adding minimal block ids to cleaned markdown source notes in support of that reading note
+- updating candidate concept/entity or related-page lists from this skill
+
+After any such file edit:
+
+1. run `uv run python scripts/lint.py`
+2. commit only the relevant files with the repo's required commit format
+3. push the current branch to `origin`
+
+Do not batch reading-note changes across multiple user-visible reading turns unless the user explicitly asks not to commit or push. If the skill only talks with the user and does not edit files, do not create an empty commit.
 
 ## Accepted Inputs
 
@@ -116,7 +135,7 @@ Recommended content for each section:
   - scout status
 - `## Recall Log`
   - source span label
-  - quoted original span or citation to it
+  - source citation, with a short quote only when it materially improves precision
   - guiding question
   - user recitation
   - calibrated understanding
@@ -164,7 +183,7 @@ The `semantic cursor` is the single source of truth for reading progress.
 - Body text between a heading and its first child heading must be read as a semantic span when it jointly performs one local function. For example, an opening block after `# H1` and before `## H2` that frames the article's scope should be read as one span, not as isolated sentences.
 - If a candidate span is too long or contains multiple unrelated moves, split it into smaller contiguous semantic spans instead of reading the whole heading scope at once.
 
-## SQ3R Loop
+## Reading Loop
 
 The reading loop is always:
 
@@ -177,12 +196,11 @@ The reading loop is always:
 ### 1. Survey
 
 - Locate the next unread source span from the semantic cursor.
-- Start the user-facing reply with a `Current Source Span` block that quotes the full original span before any guiding question or explanation.
-- The quoted text must match the semantic cursor, the guiding question, and the explanation scope. Do not quote only one sentence as a proxy for a larger span.
-- If splitting a long passage for length, state the selected span boundary and ensure the split still forms one complete local argumentative move.
-- Preserve the original language and core source terms in the quoted span.
+- Do not paste or paraphrase the full current source span into chat by default. Assume the user is reading the source through their own reading surface.
+- Give only a compact cursor pointer: source file, semantic position, and the selected span boundary.
+- If splitting a long passage, state the selected span boundary and ensure the split still forms one complete local argumentative move.
+- Preserve original source terms in the cursor pointer and explanation when translation would blur meaning.
 - Lock to the current source span only.
-- Restate the semantic position before explaining.
 - Do not pull in later spans early unless a tiny amount of future context is strictly required to make the current span intelligible; if used, label it as inference/context.
 
 ### 2. Question
@@ -224,6 +242,7 @@ The `guiding question` is the acceptance target for the source span. It is not d
 - Explain only what is needed to answer the guiding question.
 - Stay anchored to the current source span and the user's current confusion point.
 - Separate documented source facts from your own inference.
+- Quote only the short phrase or sentence needed to disambiguate a term, support a precise citation, or answer an explicit user request for source wording.
 - Keep the explanation compact enough that the user can realistically restate it.
 
 ### 4. Recite
@@ -246,6 +265,7 @@ After the user recites:
 - add any missing constraint that matters
 - write the result into `## Recall Log`
 - advance the semantic cursor to the next unread source span
+- complete `Note Persistence` after any file edit
 
 Only after the note is updated and the user explicitly says `继续`, `下一段`, `下一节`, or equivalent may you move to the next source span.
 
@@ -314,7 +334,8 @@ Relation threshold:
 ## Citation Policy
 
 - In reading notes, cite non-trivial factual claims.
-- Each active reading reply must quote the current original source span before explaining it.
+- Active reading replies must not reproduce the current original source span by default.
+- Use short direct quotes only when they are needed for disambiguation, precise citation, or because the user asks to see the original wording.
 - Prefer `[[...#^block-id]]` when one specific passage supports a reusable claim.
 - Prefer cleaned markdown source notes under `sources/*/source/*.md` for block-id citations.
 - If a cleaned markdown note lacks a needed block id, add the minimal stable readable `^block-id` to the supporting passage.
