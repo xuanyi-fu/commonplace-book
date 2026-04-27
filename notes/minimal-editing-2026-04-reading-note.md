@@ -23,10 +23,10 @@ updated: 2026-04-27
 - Primary reading file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
 - Semantic cursor:
   - file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
-  - semantic position: under `## Measuring Over-Editing`, before `### Metrics`
-  - next unread source span: dataset construction paragraph beginning `To study over-editing`
-  - next boundary: `### Metrics`
-  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument
+  - semantic position: under `## Do Models Over-Edit?`, before `## Does Prompting Help?`
+  - next unread source span: model comparison table and immediate interpretation under `## Do Models Over-Edit?`
+  - next boundary: `## Does Prompting Help?`
+  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter
 - Scout status: deferred; candidate concept/entity and related-page lists are kept locally in this note.
 
 ## Recall Log
@@ -61,9 +61,25 @@ updated: 2026-04-27
 - Missing points: 下一节会把这个直觉落到 dataset 和 metrics 上，而不是只停留在工程原则。
 - Open questions: 作者会选择哪些指标来近似“结构偏离”，以及这些指标是否真的对应 reviewer 感受到的 review burden。
 
+### Measuring Over-Editing
+
+- Source span label: compressed `## Measuring Over-Editing` chapter through the end of `### Metrics`
+- Quoted original span or citation: [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^measurement-dataset-construction]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^pass1-not-sufficient]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^token-levenshtein-relative-patch]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^added-cognitive-complexity-metric]]
+- Guiding question: 作者是怎么把 `over-editing` 变成可测问题的？
+- User recitation: 用户理解为：作者直接构建了一个数据集，把已有 benchmark 里的运算符、boolean 等弄坏；除了 `Pass@1` 之外，还增加两个新的 metrics，一个是 Python token edit distance，一个是 `Cognitive Complexity`，后者是 `Cyclomatic Complexity` 的改进版本。
+- Calibrated understanding: 这个复述准确。更完整地说，作者通过 programmatic corruption 让每个样本的 ground truth minimal edit 变得明确：把 corruption 反转即可。`Pass@1` 只检查模型是否修对 bug；`Token-level Levenshtein Distance` 近似衡量模型相对 minimal patch 多改了多少 token；`Added Cognitive Complexity` 近似衡量模型是否引入了额外理解负担。因为 corruptions 只改 value 而不改 structure，faithful fix 理论上不应增加 complexity。
+- Missing points: 这些 metrics 是 proxy，不是 review burden 本身；它们会偏向“局部、小改动”的定义。
+- Open questions: 这个 synthetic simple-bugfix benchmark 能否代表更一般的 coding-agent 工作，仍然需要后续证据支持。
+
 ## Questions And Answers
 
 ## Reader Comments
+
+### Measuring Over-Editing External Validity
+
+- User comment: 这种构造的数据集确实能说明问题，但可能有偏差：作者想说明 LLMs generally 在任何 coding 任务上都有 `over-editing` 倾向，而这个实验更直接证明的是 LLM 在这种简单 bugfix 上有 `over-editing` 倾向。
+- Cited supporting passage: [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^measurement-dataset-construction]]
+- Note: 这个 critique 成立。该实验的内部有效性较强，因为 minimal fix 被构造得很清楚；但外部有效性有边界，因为它覆盖的是 programmatically corrupted、ground-truth 明确的 simple bugfix，而不是 feature work、large refactor、multi-file repo task 或 ambiguous product change。
 
 ## Candidate Concepts Entities
 
