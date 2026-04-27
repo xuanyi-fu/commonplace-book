@@ -23,10 +23,10 @@ updated: 2026-04-27
 - Primary reading file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
 - Semantic cursor:
   - file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
-  - semantic position: under `## Do Models Over-Edit?`, before `## Does Prompting Help?`
-  - next unread source span: model comparison table and immediate interpretation under `## Do Models Over-Edit?`
-  - next boundary: `## Does Prompting Help?`
-  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter
+  - semantic position: under `## Does Prompting Help?`, before `## Does Reasoning Mean Overthinking and Over-Editing?`
+  - next unread source span: explicit minimal-edit prompt experiment under `## Does Prompting Help?`
+  - next boundary: `## Does Reasoning Mean Overthinking and Over-Editing?`
+  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results
 - Scout status: deferred; candidate concept/entity and related-page lists are kept locally in this note.
 
 ## Recall Log
@@ -70,6 +70,16 @@ updated: 2026-04-27
 - Calibrated understanding: 这个复述准确。更完整地说，作者通过 programmatic corruption 让每个样本的 ground truth minimal edit 变得明确：把 corruption 反转即可。`Pass@1` 只检查模型是否修对 bug；`Token-level Levenshtein Distance` 近似衡量模型相对 minimal patch 多改了多少 token；`Added Cognitive Complexity` 近似衡量模型是否引入了额外理解负担。因为 corruptions 只改 value 而不改 structure，faithful fix 理论上不应增加 complexity。
 - Missing points: 这些 metrics 是 proxy，不是 review burden 本身；它们会偏向“局部、小改动”的定义。
 - Open questions: 这个 synthetic simple-bugfix benchmark 能否代表更一般的 coding-agent 工作，仍然需要后续证据支持。
+
+### Do Models Over-Edit
+
+- Source span label: `## Do Models Over-Edit?` table and immediate interpretation, before `## Does Prompting Help?`
+- Quoted original span or citation: [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^model-overedit-comparison-table]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^gpt54-claude-opus-result]]
+- Guiding question: 这一组实验结果说明哪些模型在 correctness 和 edit minimality 上同时表现好或差？
+- User recitation: 用户提前总结为：观察到的现象是 GPT 不但做得差，还喜欢 `over-editing`；Claude Opus 不但做得好，还能在 `over-editing` 维度表现一枝独秀。
+- Calibrated understanding: 这个总结抓住了这一节的核心对比。作者的直接结论是 GPT-5.4 在 frontier models 中 `over-edits the most`，同时 `Pass@1` 也偏低；Claude Opus 4.6 则同时拿到最高 `Pass@1` 和最小 `Levenshtein` diff。小校正是：Claude Opus 在 `Added Cognitive Complexity` 上也很低，但表中该列的 best 并不总是 Claude；reasoning 表里 Qwen 3.6 Plus 更低，non-reasoning 表里 GLM 5 更低。
+- Missing points: 这一节只说明默认表现差异；还没有说明 prompt 能否改变这种行为，也没有解释 reasoning model 为什么会更容易或更不容易 over-edit。
+- Open questions: 下一节需要看 explicit minimal-edit prompt 是否能降低 Levenshtein，并是否同时影响 correctness。
 
 ## Questions And Answers
 
