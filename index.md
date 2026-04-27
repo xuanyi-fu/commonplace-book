@@ -2,7 +2,7 @@
 type: index
 status: draft
 created: 2026-04-20
-updated: 2026-04-25
+updated: 2026-04-27
 ---
 
 # index
@@ -48,6 +48,7 @@ updated: 2026-04-25
 - [[sources/codex-computer-use-2026-04/summary|codex-computer-use-2026-04]]: source collection for official docs, local interface notes, and one failure case around Codex computer use
 - [[syntheses/codex-computer-use-implementation-and-limits|codex-computer-use-implementation-and-limits]]: synthesis of how Codex computer use appears to work and where it currently breaks down
 - [[sources/ai-agent-weekly-2026-04-18/summary|ai-agent-weekly-2026-04-18]]: cleaned April 18, 2026 AI Agents Weekly issue covering agent models, tooling, and research updates
+- [[sources/ai-agent-weekly-2026-04-25/summary|ai-agent-weekly-2026-04-25]]: source collection for the April 25, 2026 AI Agents Weekly issue covering GPT-5.5, DeepSeek-V4 Preview, Kimi K2.6 Agent Swarm, diversity collapse, and agent tooling updates
 - [[sources/auto-diagnose-2026-04/summary|auto-diagnose-2026-04]]: source collection for Google Auto-Diagnose covering the paper, workflow integration into Critique, and reported evaluation metrics
 - [[syntheses/auto-diagnose-simple-triage-over-full-repair|auto-diagnose-simple-triage-over-full-repair]]: synthesis arguing that Auto-Diagnose matters less as an agent novelty than as evidence that simple one-shot triage can deliver production value
 - [[syntheses/agent-harness-atomic-tools-over-rigid-workflows|agent-harness-atomic-tools-over-rigid-workflows]]: synthesis arguing that a better agent harness exposes atomic capabilities instead of baking task intelligence into rigid workflows
