@@ -23,10 +23,10 @@ updated: 2026-04-27
 - Primary reading file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
 - Semantic cursor:
   - file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
-  - semantic position: under `## Does Reasoning Mean Overthinking and Over-Editing?`, before `## Training`
-  - next unread source span: reasoning vs non-reasoning comparison under generic and explicit settings
-  - next boundary: `## Training`
-  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results; `## Does Prompting Help?` explicit prompt experiment
+  - semantic position: under `## Training`, before `### Setup`
+  - next unread source span: training question and baseline/evaluation setup paragraph
+  - next boundary: `### Setup`
+  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results; `## Does Prompting Help?` explicit prompt experiment; `## Does Reasoning Mean Overthinking and Over-Editing?` reasoning comparison
 - Scout status: deferred; candidate concept/entity and related-page lists are kept locally in this note.
 
 ## Recall Log
@@ -90,6 +90,16 @@ updated: 2026-04-27
 - Calibrated understanding: 这个复述准确。作者的解释是，minimal-edit constraint 把 possible fixes 的空间缩窄，模型更容易走向 precise targeted fix；所以它不仅能降低 `Levenshtein Distance`，还可能提高 `Pass@1`。这里的提示不是提供 bug 的具体答案，而是提供 search prior：优先找小而精确的改动，不要把问题当成需要重新设计的任务。
 - Missing points: 结果中 DeepSeek R1/v3 是 `Pass@1` 的例外；另外作者观察到 reasoning models 在 `Levenshtein Distance` 上受 prompt 影响更明显，推测和 stronger instruction following 有关。
 - Open questions: 下一节需要区分 reasoning mode 的默认行为和 explicit prompt 后的行为：reasoning 是天然 overthink，还是更会遵守 minimal-edit 约束。
+
+### Reasoning Means Overthinking And Constraint Following
+
+- Source span label: `## Does Reasoning Mean Overthinking and Over-Editing?`, before `## Training`
+- Quoted original span or citation: [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^reasoning-comparison-correct-only]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^generic-reasoning-overedit]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^reasoning-overedit-overridable]]
+- Guiding question: reasoning model 默认更容易 `over-edit` 吗？explicit prompt 后为什么结果又反过来？
+- User recitation: 用户理解为：所有 model 都有 `over-editing` 的倾向，加了 reasoning 就放大了这样的倾向，因为 reasoning 给了输出更多 token 的空间，模型更可能顺手“优化”一些东西；但是如果加了 explicit instruction prompt，reasoning 就会转而放大这个 explicit instruction，从而限制住 `over-editing`。
+- Calibrated understanding: 这个复述抓住了反转逻辑。更精确地说，作者没有严格把原因归结为“输出 token 空间更多”，而是说 unconstrained extended reasoning 给模型更多机会把任务解释成“做一个更好的 implementation”，于是偏离 minimal fix；当 explicit minimal-edit constraint 出现时，同一 reasoning capacity 又会帮助模型更好地 follow constraint。作者因此把 `over-editing` 解释成 overridable default behavior，而不是 reasoning model 的 fundamental limitation。
+- Missing points: 这一节的比较只看两种模型都答对的样本，用来 isolate edit minimality from correctness，避免 correctness 差异污染 `Levenshtein` 对比。
+- Open questions: 既然 prompt 可以 override default behavior，下一节的 training 问题是能否把这种 minimal-edit behavior 内化到模型里，而不是每次依赖 explicit instruction。
 
 ## Questions And Answers
 
