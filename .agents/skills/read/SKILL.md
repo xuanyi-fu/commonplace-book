@@ -37,22 +37,23 @@ notes/<collection>-reading-note.md
 
 ## Note Persistence
 
-Every successful mutation to a canonical reading note is a logical update and must be committed and pushed before the turn ends.
+During a live reading session, canonical reading note edits are in-progress working state. Do not run lint, commit, or push after every source-span review.
 
-This includes:
+The reading workflow may update:
 
 - creating or editing `notes/<collection>-reading-note.md`
 - adding the reading note entry to root `index.md`
 - adding minimal block ids to cleaned markdown source notes in support of that reading note
 - updating candidate concept/entity or related-page lists from this skill
 
-After any such file edit:
+These incremental edits should stay local until one of these closeout boundaries:
 
-1. run `uv run python scripts/lint.py`
-2. commit only the relevant files with the repo's required commit format
-3. push the current branch to `origin`
+- the user explicitly asks to save, commit, push, close out, or finish the reading
+- the reading reaches a final synthesis or `Final takeaways`
+- the assistant is about to end the task with durable note changes still present
+- the user changes tasks and leaving the note dirty would make the reading state ambiguous
 
-Do not batch reading-note changes across multiple user-visible reading turns unless the user explicitly asks not to commit or push. If the skill only talks with the user and does not edit files, do not create an empty commit.
+At a closeout boundary, follow the repo rules: run `uv run python scripts/lint.py`, commit only the relevant files with the repo's required commit format, and push the current branch to `origin` unless the user explicitly asks not to push. If the skill only talks with the user and does not edit files, do not create an empty commit.
 
 ## Accepted Inputs
 
@@ -265,7 +266,6 @@ After the user recites:
 - add any missing constraint that matters
 - write the result into `## Recall Log`
 - advance the semantic cursor to the next unread source span
-- complete `Note Persistence` after any file edit
 
 Only after the note is updated and the user explicitly says `继续`, `下一段`, `下一节`, or equivalent may you move to the next source span.
 
