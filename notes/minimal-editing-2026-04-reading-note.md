@@ -23,10 +23,10 @@ updated: 2026-04-27
 - Primary reading file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
 - Semantic cursor:
   - file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
-  - semantic position: under `## Over-Editing`, before the brown-field framing paragraph
-  - next unread source span: figure, caption, definition, and concrete GPT-5.4 example under `## Over-Editing`
-  - next boundary: paragraph beginning `It helps to think about this in terms of the kind of work being done.`
-  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`
+  - semantic position: under `## Over-Editing`, before `## Measuring Over-Editing`
+  - next unread source span: brown-field framing and tests-do-not-catch-it argument under `## Over-Editing`
+  - next boundary: `## Measuring Over-Editing`
+  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example
 - Scout status: deferred; candidate concept/entity and related-page lists are kept locally in this note.
 
 ## Recall Log
@@ -40,6 +40,16 @@ updated: 2026-04-27
 - Calibrated understanding: 这个复述准确。需要补一层边界：作者不是在说模型没有修好 bug，而是在说模型即使功能正确，也可能把不相关代码一起 rewrite，导致 reviewer 需要重新理解更多变化并判断这些变化是否安全。这里的伤害主要落在 brown-field code review 和 change safety 上，而不是测试正确性本身。
 - Missing points: 后文会把这个现象形式化为 `functionally correct but structurally diverges from the original code more than the minimal fix requires`。
 - Open questions: 作者会如何把“改太多”变成可测指标，以及 prompt 或 training 是否能稳定减少这种行为。
+
+### Over-Editing Definition And Example
+
+- Source span label: `## Over-Editing` figure, caption, definition, and GPT-5.4 example, before the brown-field framing paragraph
+- Quoted original span or citation: [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^over-editing-definition]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^gpt54-over-editing-example]]
+- Guiding question: `Over-editing` 在这里具体指什么？
+- User recitation: 用户理解为：作者在这里明确定义了 `over-editing`，也就是功能正确但是结构性偏离太大的改动。例子中本来只改一行就能完成的事，GPT 却做了一些看起来能让代码更 reliable、但和这次 bug fix 不相干的事情；这些事情会成为 brown-field 的风险。
+- Calibrated understanding: 这个复述准确。这里的判定标准是双重的：输出必须先是 functionally correct，然后才讨论它是否比 minimal fix 更大幅度地偏离原代码。GPT-5.4 的例子典型，是因为它把一个 off-by-one 单行修复扩展成整段函数 rewrite；这些新增检查和转换即使看似更稳健，也不是当前 bug fix 的必要条件。
+- Missing points: 后文会进一步说明为什么这种风险在 brown-field codebase 中更严重，以及为什么 tests pass 不足以发现它。
+- Open questions: 接下来需要看作者如何把 brown-field 的 review 风险和测试不可见性连接起来。
 
 ## Questions And Answers
 
