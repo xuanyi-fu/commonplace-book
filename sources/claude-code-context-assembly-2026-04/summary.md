@@ -2,7 +2,7 @@
 type: summary
 status: draft
 created: 2026-04-24
-updated: 2026-04-24
+updated: 2026-04-28
 ---
 
 # claude-code-context-assembly-2026-04
@@ -18,6 +18,7 @@ This source collection records implementation-level evidence for how the local C
 
 - Use `source/source-code-evidence.md` first when checking a claim about request assembly, context bucket ordering, or state-change delta behavior.
 - Re-check the local checkout before turning this into current-product claims, because the source snapshot is pinned to `0a0498cf6a04d144aba289366a55b1edf328a797`.
+- Use [[sources/claude-code-frc-2026-04/summary|claude-code-frc-2026-04]] as the focused supplement when the question is how `microcompact` relates to old `tool_result` clearing, `cache_reference`, `cache_edits`, and public Anthropic context editing.
 - Use this alongside [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]] only as a comparison frame; the Claude Code evidence does not use Codex's Responses `input` stream terminology.
 
 ## Summary
@@ -30,7 +31,7 @@ At the Anthropic API boundary, Claude Code normalizes messages through `normaliz
 
 The major context buckets are separate until late assembly: `systemPrompt` comes from `getSystemPrompt()` and registry-managed prompt sections; `systemContext` is memoized separately and appended into the system prompt; `userContext` is memoized separately and prepended as an `isMeta` user message wrapped in `<system-reminder>`; user input and attachments are collected through `processUserInput()` and normalized later; tool schemas are generated separately by `toolToAPISchema()`. `/Users/bytedance/claude-code/claude-code/src/constants/prompts.ts:444-577` `/Users/bytedance/claude-code/claude-code/src/context.ts:113-189` `/Users/bytedance/claude-code/claude-code/src/utils/api.ts:437-474` `/Users/bytedance/claude-code/claude-code/src/utils/processUserInput/processUserInput.ts:495-514` `/Users/bytedance/claude-code/claude-code/src/utils/api.ts:119-266`
 
-The code-backed ordering model is: final `system` blocks are built from attribution, CLI prefix, `systemPrompt`, appended `systemContext`, and prompt-cache splitting; `messages` starts from the conversation after compaction/collapse/microcompact transforms, with `userContext` prepended as a meta user reminder, then normalized before API send. `/Users/bytedance/claude-code/claude-code/src/query.ts:449-451` `/Users/bytedance/claude-code/claude-code/src/query.ts:659-661` `/Users/bytedance/claude-code/claude-code/src/utils/api.ts:321-435` `/Users/bytedance/claude-code/claude-code/src/services/api/claude.ts:1265-1379`
+The code-backed ordering model is: final `system` blocks are built from attribution, CLI prefix, `systemPrompt`, appended `systemContext`, and prompt-cache splitting; `messages` starts from the conversation after compaction/collapse/microcompact transforms, with `userContext` prepended as a meta user reminder, then normalized before API send. For the old `tool_result` clearing branch inside this area, use the focused FRC collection. `/Users/bytedance/claude-code/claude-code/src/query.ts:449-451` `/Users/bytedance/claude-code/claude-code/src/query.ts:659-661` `/Users/bytedance/claude-code/claude-code/src/utils/api.ts:321-435` `/Users/bytedance/claude-code/claude-code/src/services/api/claude.ts:1265-1379` [[sources/claude-code-frc-2026-04/summary|claude-code-frc-2026-04]]
 
 State-change handling is domain-specific rather than one proved generic state-diff pass in the inspected path. The confirmed date path memoizes the date for prompt-cache stability, intentionally leaves the original prefix stale after midnight, emits a `date_change` tail attachment, and renders it as a meta user `<system-reminder>`. `/Users/bytedance/claude-code/claude-code/src/constants/common.ts:17-24` `/Users/bytedance/claude-code/claude-code/src/utils/attachments.ts:1402-1444` `/Users/bytedance/claude-code/claude-code/src/utils/messages.ts:4162-4169`
 
@@ -45,6 +46,7 @@ The `/context` and prompt-dump code are validation surfaces, not primary behavio
 ## Sources
 
 - [[source/source-code-evidence|source-code-evidence.md]]
+- Related focused supplement: [[sources/claude-code-frc-2026-04/summary|claude-code-frc-2026-04]]
 - Local checkout: `/Users/bytedance/claude-code/claude-code@0a0498cf6a04d144aba289366a55b1edf328a797`
 - Supporting comparison: [[sources/codex-model-context-inputs-2026-04/summary|codex-model-context-inputs-2026-04]]
 - Supporting comparison: [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]]

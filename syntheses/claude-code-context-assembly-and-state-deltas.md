@@ -2,7 +2,7 @@
 type: synthesis
 status: draft
 created: 2026-04-24
-updated: 2026-04-24
+updated: 2026-04-28
 ---
 
 # Claude Code context assembly and state deltas
@@ -13,7 +13,7 @@ Claude Code 的 model-visible context 不应该被理解成 Codex 那种 Respons
 
 ## 核心判断
 
-Claude Code 的普通 turn 从 `QueryEngine.submitMessage()` 进入，先拿到 `systemPrompt` / `userContext` / `systemContext`，再处理 user input 和 attachments，随后 `query()` 对 messages 做 compact / collapse / microcompact 一类 pre-API transform，最后在 `claude.ts` 里 normalize messages、build `system` blocks、build tool schemas，并调用 `anthropic.beta.messages.create()`。这是一条 Anthropic Messages request assembly path，不是一个把所有材料拼成单一 prompt string 的路径。[[sources/claude-code-context-assembly-2026-04/source/source-code-evidence|source-code-evidence]]
+Claude Code 的普通 turn 从 `QueryEngine.submitMessage()` 进入，先拿到 `systemPrompt` / `userContext` / `systemContext`，再处理 user input 和 attachments，随后 `query()` 对 messages 做 compact / collapse / microcompact 一类 pre-API transform，最后在 `claude.ts` 里 normalize messages、build `system` blocks、build tool schemas，并调用 `anthropic.beta.messages.create()`。其中 `microcompact` 里的旧 `tool_result` clearing / cache-editing branch 另见 [[sources/claude-code-frc-2026-04/summary|claude-code-frc-2026-04]]。这是一条 Anthropic Messages request assembly path，不是一个把所有材料拼成单一 prompt string 的路径。[[sources/claude-code-context-assembly-2026-04/source/source-code-evidence|source-code-evidence]]
 
 关键位置关系是：
 
@@ -81,5 +81,6 @@ Cache reset boundaries: the evidence path covers `clearSystemPromptSections()`, 
 
 - [[sources/claude-code-context-assembly-2026-04/summary|claude-code-context-assembly-2026-04]]
 - [[sources/claude-code-context-assembly-2026-04/source/source-code-evidence|source-code-evidence]]
+- [[sources/claude-code-frc-2026-04/summary|claude-code-frc-2026-04]]
 - [[sources/codex-model-context-inputs-2026-04/summary|codex-model-context-inputs-2026-04]]
 - [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]]
