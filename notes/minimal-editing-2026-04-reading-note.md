@@ -17,16 +17,23 @@ updated: 2026-04-27
 
 这篇文章想回答的核心问题是：coding models 为什么会在 brown-field bug fix 中做出超过必要范围的 rewrite，以及能否通过 prompt 或 training 让模型学会更 faithful 的 minimal editing？[[sources/minimal-editing-2026-04/summary]]
 
+**Final takeaways:**
+
+- `Over-Editing` 是可以度量的：作者用 `Token-level Levenshtein Distance` 和 `Added Cognitive Complexity` 作为结构偏离与理解负担的 proxy。[[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^token-levenshtein-relative-patch]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^added-cognitive-complexity-metric]]
+- `Over-Editing` 不是纯 capability limitation，而是可被 steer 的 default behavior；explicit minimal-edit prompt 能显著减少 diff，尤其影响 reasoning models。[[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^explicit-prompt-results]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^reasoning-overedit-overridable]]
+- RL 可以把 minimal-edit behavior 内化为更 faithful editing policy，且在 Qwen3 4B 与 14B 实验里没有损害 general coding ability。[[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^rl-no-lcb-degradation]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^rl-improves-without-degradation]]
+- 这篇文章的外部有效性边界是：它主要证明 isolated function bugfix 场景中的 `over-editing`，还不能直接代表更 agentic 的 repo-level coding tasks。[[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^isolated-function-benchmark-boundary]]
+
 ## Reading State
 
 - Source slug: `minimal-editing-2026-04`
 - Primary reading file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
 - Semantic cursor:
   - file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
-  - semantic position: under `#### Does It Scale?`, before `## Final Thoughts`
-  - next unread source span: Qwen3 14B scale experiment
-  - next boundary: `## Final Thoughts`
-  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results; `## Does Prompting Help?` explicit prompt experiment; `## Does Reasoning Mean Overthinking and Over-Editing?` reasoning comparison; compressed training setup through out-of-domain generalization and catastrophic forgetting; LoRA rank experiment; reward-hacking note
+  - semantic position: after source body and footnote, end of file
+  - next unread source span: none
+  - next boundary: end of file
+  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results; `## Does Prompting Help?` explicit prompt experiment; `## Does Reasoning Mean Overthinking and Over-Editing?` reasoning comparison; compressed training setup through out-of-domain generalization and catastrophic forgetting; LoRA rank experiment; reward-hacking note; Qwen3 14B scale experiment and final thoughts
 - Scout status: deferred; candidate concept/entity and related-page lists are kept locally in this note.
 
 ## Recall Log
@@ -130,6 +137,16 @@ updated: 2026-04-27
 - Calibrated understanding: 这个复述准确。bug 的本质是 reward ranking 反了：no successful execution 被硬编码成 0，而某些成功执行但编辑距离不够好的 rollout 因为 Levenshtein reward 被取反后反而低于 0。模型因此可以通过“不输出 functionally correct code”拿到更高 reward。LoRA 更容易暴露这个问题，说明受限参数更新可能更容易抓住 reward 中最便宜的捷径，而不是同时学稳 correctness 和 minimality；full RL 在 buggy reward 下仍能学到任务，fixed reward 后也只是小幅提升。
 - Missing points: 这个事故是 reward design 的警告，不是 LoRA 本身必然不可靠。
 - Open questions: 下一节要看同一 RL recipe 扩到 Qwen3 14B 是否仍改善 minimal editing 且不引起 forgetting。
+
+### Scale Check And Final Thoughts
+
+- Source span label: `#### Does It Scale?` through `## Final Thoughts`
+- Quoted original span or citation: [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^qwen14b-scale-result]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^gpt54-steerable-opus-baseline]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^overediting-measurable-steerable]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^rl-improves-without-degradation]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^isolated-function-benchmark-boundary]]
+- Guiding question: 作者最后怎样收束这篇文章的结论和边界？
+- User recitation: 用户理解为：`over-editing` 的现象是可以度量的，文章用了两个新的 metrics，分别是 Python token edit distance 和 `Cognitive Complexity`。这个 `over-editing` 不是能力缺陷，而是可以通过 prompt 影响的风格问题，也能通过 RL 以不牺牲 general coding 能力的方式改进。
+- Calibrated understanding: 这个复述准确。最后的完整收束是四点：第一，Qwen3 14B scale check 显示同一 RL recipe 仍提高 `Pass@1`、降低 `Levenshtein` 与 `Added CC`，且没有 forgetting 信号；第二，GPT 5.4 默认 verbose/slop，但 prompt gain 大，说明可 steer，Opus 4.6 prompt gain 小可能只是 baseline 已经强；第三，`Over-Editing` 是 widespread and measurable，不是纯 capability limitation；第四，作者承认 isolated function bugfix 仍是 contained task，相比 SWE-Bench Pro 这类 agentic evaluation 外部有效性有限。
+- Missing points: none for the source-order pass.
+- Open questions: 未来如果要扩展这篇文章的结论，需要在 repo-level、多文件、feature work 和 ambiguous product-change tasks 上重新验证 metrics 与 RL recipe。
 
 ## Questions And Answers
 
