@@ -45,6 +45,7 @@ updated: 2026-04-28
 - [[sources/claude-code-frc-2026-04/summary|claude-code-frc-2026-04]]: source collection for a Claude Code code-reading analysis of Function Result Clearing, cached microcompact, cache edits, and public context editing at `0a0498c`
 - [[sources/codex-v1-subagents-2026-04/summary|codex-v1-subagents-2026-04]]: source collection for a Codex code-reading analysis of the V1 subagent tool interface, spawn context, and return path at `openai/codex@d62421d`
 - [[sources/codex-compaction-analysis-2026-04/summary|codex-compaction-analysis-2026-04]]: source collection for Codex compaction trigger and local implementation analyses at `openai/codex@d62421d`
+- [[sources/openai-codex-symphony-2026-04/summary|openai-codex-symphony-2026-04]]: source collection for OpenAI's Symphony post and linked spec on using Codex App Server to orchestrate issue-tracker-driven coding agents
 - [[sources/openai-codex-agent-loop-2026-01/summary|openai-codex-agent-loop-2026-01]]: supporting source for Codex model context / prompt assembly; use with caution, outdated information included
 - [[syntheses/codex-research-topic-hub|codex-research-topic-hub]]: hub synthesis listing the main Codex research topics covered in this wiki and their starting points
 - [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]]: synthesis arguing that Codex model context is best understood as ordered `input` stream items plus top-level `instructions` and `tools`
