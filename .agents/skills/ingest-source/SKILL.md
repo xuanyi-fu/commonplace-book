@@ -1,6 +1,6 @@
 ---
 name: ingest-source
-description: Use this skill when adding a new source collection to this knowledge-base wiki. It explains the shared ingest contract, how to route different source types to type-specific guidance, how to write sources/<collection>/summary.md, how to update index.md, how to run the post-ingest local scan, and how to validate and commit the ingest in the repository's required format.
+description: Use this skill when adding a new source collection to this knowledge-base wiki. It explains the shared ingest contract, how to route different source types to type-specific guidance, how to write sources/<collection>/summary.md, how to update index.md, how to run the human-reviewed post-ingest local scan, and how to validate and commit the ingest in the repository's required format.
 ---
 
 # Ingest Source
@@ -48,13 +48,16 @@ Rules:
 5. Update root `index.md`.
    Add one entry that links to `[[sources/<collection>/summary|<collection>]]` and briefly explains what the collection is.
 
-6. Run the post-ingest local scan.
-   Check the new collection against nearby wiki material and make only tightly scoped follow-up edits.
+6. Run the post-ingest local scan and present it for human review.
+   Check the new collection against nearby wiki material, then show the user a concise review packet before making scan-driven follow-up edits.
 
-7. Run lint.
+7. Apply only human-approved scan edits.
+   Do not edit topic hubs, syntheses, entities, concepts, or reciprocal links from the scan until the user approves them, or explicitly says to skip follow-up edits.
+
+8. Run lint.
    Always run `uv run python scripts/lint.py` before commit.
 
-8. Commit the ingest.
+9. Commit the ingest.
    The repo requires a Conventional Commit after each logical update.
 
 ## Type Routing
@@ -135,7 +138,7 @@ Do not link `sources/<collection>/source/...` from root `index.md`.
 
 ## Post-Ingest Local Scan
 
-After introducing a source collection, do a small semantic health check before validation.
+After introducing a source collection, do a small semantic health check before validation. This scan is human-in-the-loop: its first output is a review packet, not file edits.
 
 Default scan scope:
 
@@ -152,7 +155,21 @@ Questions to answer:
 - Is an important existing entity or concept mentioned without a useful cross-link?
 - Did the ingest reveal a concrete data gap or follow-up source worth recording in `summary.md` or a directly related page?
 
-Allowed outputs:
+Review packet:
+
+- List each proposed wiki connection or follow-up edit in one line.
+- For each item, name the target page, the proposed action, and the evidence from the new source or existing page.
+- Group items as `recommended`, `optional`, or `skip`.
+- Ask the user to approve, reject, or modify the proposed items.
+
+Review gate:
+
+- Do not make scan-driven edits before the user reviews the packet.
+- If the user approves only some items, edit only that approved subset.
+- If the user rejects the scan results or says to skip follow-up edits, proceed with only the base source ingest files.
+- If the user is unavailable, stop after presenting the review packet instead of guessing.
+
+Allowed approved outputs:
 
 - Add reciprocal links between the new source summary and directly related wiki pages.
 - Update a directly related topic hub when the new collection clearly belongs there.
