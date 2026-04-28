@@ -2,7 +2,7 @@
 type: index
 status: draft
 created: 2026-04-20
-updated: 2026-04-27
+updated: 2026-04-28
 ---
 
 # index
@@ -14,6 +14,7 @@ updated: 2026-04-27
 - [[sources/components-of-a-coding-agent-2026-04/summary|components-of-a-coding-agent-2026-04]]: source collection for Sebastian Raschka's coding-agent article covering repo context, prompt caching, tools, memory, and subagents
 - [[sources/minimal-editing-2026-04/summary|minimal-editing-2026-04]]: source collection for Nrehiew's coding-model over-editing article covering minimal code edits, prompt steering, and RL training results
 - [[notes/minimal-editing-2026-04-reading-note|minimal-editing-2026-04-reading-note]]: canonical reading note for Nrehiew's minimal-editing article, initialized with a semantic cursor and source-order recall loop
+- [[concepts/over-editting|over-editting]]: concept page defining over-editting as functionally correct but unnecessarily broad code edits, with observations from the minimal-editing reading
 - [[sources/axi-agent-experience-interface-2026-04/summary|axi-agent-experience-interface-2026-04]]: source collection for AXI's agent-first CLI principles, TOON dependency, benchmark docs, and reference implementation readmes
 - [[sources/agent-harness-origins-2023-2026/summary|agent-harness-origins-2023-2026]]: source collection for the public emergence of `agent harness` from early naming through Manus and Philipp Schmid's explicit system-level framing
 - [[syntheses/components-of-a-coding-agent-layer-mismatch-and-state-resumption|components-of-a-coding-agent-layer-mismatch-and-state-resumption]]: synthesis arguing that Sebastian Raschka's coding-agent component split mixes harness infra with coding-specific app-layer optimizations while making a fair point about resumable state
