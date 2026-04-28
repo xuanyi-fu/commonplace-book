@@ -91,6 +91,9 @@ An item can have multiple matched relations. Do not force a single global relati
 - Do not verify newsletter claims against primary sources.
 - Do not add a value judgment such as "high value" or "low value"; just report the relation.
 - Keep each `why` sentence short and concrete.
+- Pick one `Most Relevant Entry` from the matched relations for the main agent's final comment.
+- For `Original Paragraph`, copy the most relevant original paragraph or shortest faithful excerpt from the assigned item text; do not paraphrase it.
+- For `Comment`, write one concise sentence that explains why the original paragraph may interest the user through the `Most Relevant Entry`.
 
 ## Output Structure
 
@@ -114,8 +117,14 @@ Possibly Interesting: yes|no
 Matched Relations:
 - <wiki entry> | <repeat|support|extend|challenge> | <one sentence why>
 
-One Sentence Reason:
-<one sentence reason, or "No clear connection to the current index.">
+Most Relevant Entry:
+<single wiki entry, or "none">
+
+Original Paragraph:
+<one relevant original paragraph or short excerpt from the newsletter item, or "none">
+
+Comment:
+<one concise sentence, or "No clear connection to the current index.">
 ```
 
 Constraints:
@@ -125,6 +134,8 @@ Constraints:
 - `Index Connection` must equal the count of distinct eligible matched wiki entries, capped at 3.
 - `Relation Coverage` must equal the count of distinct eligible matched entries with an explainable relation, capped at 3.
 - If there are no matched relations, write exactly `- none`.
-- `One Sentence Reason` must be exactly one sentence.
+- `Most Relevant Entry` must name only one wiki entry, even when multiple entries matched.
+- `Original Paragraph` must come from the item text and should be the shortest relevant original paragraph or excerpt that supports the comment.
+- `Comment` must be exactly one sentence and should mention only the `Most Relevant Entry`.
 - Do not output a global ranking.
 - Do not output final `可能关注` / `暂不关注` groups.

@@ -15,7 +15,8 @@ This skill is repo-specific and must follow [AGENTS.md](/Users/bytedance/Documen
   - `可能关注`
   - `暂不关注`
 - Keep both groups in the newsletter's original order.
-- Give the user one concise sentence per `可能关注` item explaining why it connects to the current knowledge base.
+- For each `可能关注` item, show the relevant original newsletter paragraph or a short original excerpt, then add a concise comment explaining why it may interest the user.
+- In the comment, mention only the single most relevant existing wiki entry; do not list every matched page.
 - Do not create reading notes, update wiki pages, verify the newsletter's claims, or chase primary sources unless the user separately asks.
 
 ## Accepted Inputs
@@ -69,7 +70,9 @@ Current Source Exclusion:
    - Merge by item id and original newsletter order.
    - `possibly_interesting = yes` only when both rubric scores meet their minimums.
 6. Present the result.
-   - `可能关注`: one bullet per item, one sentence each, naming the knowledge-base relation.
+   - `可能关注`: one entry per item using `原文` plus `评论`.
+   - For `原文`, use the most relevant original paragraph from the newsletter item, or the shortest faithful excerpt if the paragraph is long.
+   - For `评论`, write one concise sentence and mention only the single most relevant wiki entry.
    - `暂不关注`: list item titles only unless a short note is needed to explain no clear index connection.
    - Do not rank items inside either group.
 
@@ -132,6 +135,8 @@ Before analyzing items, read .agents/skills/read-newsletter/references/worker-ta
 
 Workers must not edit files and must not decide the final user-facing grouping.
 
+Workers may report multiple matched relations for scoring, but they must also identify one `Most Relevant Entry` for the final user-facing comment.
+
 ## Final User Output
 
 Use this shape:
@@ -139,11 +144,15 @@ Use this shape:
 ```md
 ## 可能关注
 
-- <Item title>: <one sentence explaining why this item connects to the user's current knowledge base>.
+### <Item title>
+
+原文：<one relevant original paragraph or short excerpt from the newsletter item>
+
+评论：<one concise sentence explaining the relation to the single most relevant wiki entry>.
 
 ## 暂不关注
 
 - <Item title>
 ```
 
-Keep the result concise. If the user wants to discuss, start from the first `可能关注` item in newsletter order and wait for `下一话题` before advancing.
+Keep the result concise. Do not list all matched documents in the final checklist. If the user wants to discuss, start from the first `可能关注` item in newsletter order and wait for `下一话题` before advancing.
