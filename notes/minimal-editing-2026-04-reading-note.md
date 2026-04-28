@@ -23,10 +23,10 @@ updated: 2026-04-27
 - Primary reading file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
 - Semantic cursor:
   - file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
-  - semantic position: under `## Training`, before `### Setup`
-  - next unread source span: training question and baseline/evaluation setup paragraph
-  - next boundary: `### Setup`
-  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results; `## Does Prompting Help?` explicit prompt experiment; `## Does Reasoning Mean Overthinking and Over-Editing?` reasoning comparison
+  - semantic position: under `### Additional Experiments`, before `#### RL with LoRA: Do We Need Full Fine-Tuning?`
+  - next unread source span: RL with LoRA experiment
+  - next boundary: `#### Does It Scale?`
+  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results; `## Does Prompting Help?` explicit prompt experiment; `## Does Reasoning Mean Overthinking and Over-Editing?` reasoning comparison; compressed training setup through out-of-domain generalization and catastrophic forgetting
 - Scout status: deferred; candidate concept/entity and related-page lists are kept locally in this note.
 
 ## Recall Log
@@ -100,6 +100,16 @@ updated: 2026-04-27
 - Calibrated understanding: 这个复述抓住了反转逻辑。更精确地说，作者没有严格把原因归结为“输出 token 空间更多”，而是说 unconstrained extended reasoning 给模型更多机会把任务解释成“做一个更好的 implementation”，于是偏离 minimal fix；当 explicit minimal-edit constraint 出现时，同一 reasoning capacity 又会帮助模型更好地 follow constraint。作者因此把 `over-editing` 解释成 overridable default behavior，而不是 reasoning model 的 fundamental limitation。
 - Missing points: 这一节的比较只看两种模型都答对的样本，用来 isolate edit minimality from correctness，避免 correctness 差异污染 `Levenshtein` 对比。
 - Open questions: 既然 prompt 可以 override default behavior，下一节的 training 问题是能否把这种 minimal-edit behavior 内化到模型里，而不是每次依赖 explicit instruction。
+
+### Training Setup And Generalization
+
+- Source span label: compressed `## Training` through `### Does It Generalize?`, before `### Additional Experiments`
+- Quoted original span or citation: [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^training-question-qwen3-4b]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^self-distillation-dataset]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^four-training-methods]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^sft-in-domain-suspicious]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^out-of-domain-table]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^sft-collapse-rl-generalizes]] [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^rl-no-lcb-degradation]]
+- Guiding question: post-training 能否把 minimal-edit behavior 内化到模型里，而且不损害 general coding ability？
+- User recitation: 用户理解为：training 环节想验证通过 post-training 是否能够矫正 `over-editing` 倾向；作者在 Qwen3 4B 上实验，自蒸馏了一个数据集，用了 SFT、rSFT、DPO、RL 四种方法。结果发现 SFT 根本没法 generalize，只是学会了去改那几种被改坏代码的模式，导致 general 任务能力大幅下降；RL generalizes 最好，general 任务上的性能也没问题。
+- Calibrated understanding: 这个复述准确。细节上，作者先用 in-domain data 看到 SFT 几乎完美，随后怀疑它只是 memorizing corruption reversals；换成 train/test corruption types 不同的 out-of-domain setup 后，SFT `Pass@1` 掉到 0.458，并且 LiveCodeBench 有 43% degradation。RL 则在 out-of-domain 上同时改善 `Pass@1`、`Levenshtein`、`Added Cognitive Complexity`，LiveCodeBench 还略为正向，因此作者认为它学到的是更 general 的 minimal editing behavior，而不是特定 corruption pattern。
+- Missing points: rSFT 和 DPO 比 SFT 稳，但相比 8-shot baseline 改善有限，并且仍有 slight degradation；作者后面还给了 distributional interpretation：训练数据分布离原模型越远，catastrophic forgetting 风险越高。
+- Open questions: 还需要看后面的 LoRA 和 14B 实验，判断是否必须 full fine-tuning，以及这个 RL recipe 是否随模型规模扩展。
 
 ## Questions And Answers
 
