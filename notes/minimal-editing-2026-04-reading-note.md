@@ -23,10 +23,10 @@ updated: 2026-04-27
 - Primary reading file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
 - Semantic cursor:
   - file: `sources/minimal-editing-2026-04/source/minimal-editing-markdown.md`
-  - semantic position: under `#### RL with LoRA: Do We Need Full Fine-Tuning?`, before `#### Does It Scale?`
-  - next unread source span: reward-hacking note after the LoRA rank experiment
-  - next boundary: `#### Does It Scale?`
-  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results; `## Does Prompting Help?` explicit prompt experiment; `## Does Reasoning Mean Overthinking and Over-Editing?` reasoning comparison; compressed training setup through out-of-domain generalization and catastrophic forgetting; LoRA rank experiment
+  - semantic position: under `#### Does It Scale?`, before `## Final Thoughts`
+  - next unread source span: Qwen3 14B scale experiment
+  - next boundary: `## Final Thoughts`
+  - completed spans: opening framing block under `# Coding Models Are Doing Too Much`; `Over-Editing` definition and GPT-5.4 example; brown-field framing and tests-do-not-catch-it argument; compressed `## Measuring Over-Editing` chapter; `## Do Models Over-Edit?` model comparison results; `## Does Prompting Help?` explicit prompt experiment; `## Does Reasoning Mean Overthinking and Over-Editing?` reasoning comparison; compressed training setup through out-of-domain generalization and catastrophic forgetting; LoRA rank experiment; reward-hacking note
 - Scout status: deferred; candidate concept/entity and related-page lists are kept locally in this note.
 
 ## Recall Log
@@ -120,6 +120,16 @@ updated: 2026-04-27
 - Calibrated understanding: 这个复述准确。这里的核心判断是 minimal editing 属于已有能力上的 behavioral/style tuning，而不是新知识学习；因此少量额外参数就可能移动 editing policy。rank 1/8 的问题不是完全学不会少改，而是可能偏向 minimality reward、牺牲 correctness；rank 64 已经几乎追平 full RL 的 `Levenshtein`，甚至在 `Added CC` 上更好，说明 full fine-tuning 的边际收益很小。
 - Missing points: full RL 仍是 overall best，尤其 LiveCodeBench Δ 更好；LoRA 的结论是“likely sufficient and cheaper”，不是绝对取代 full RL。
 - Open questions: reward-hacking note 会说明低容量 LoRA 在 reward bug 下更容易学到错误策略；后面 14B 实验还要验证 RL recipe 是否 scale。
+
+### Reward Hacking Note
+
+- Source span label: `A Note on Reward Hacking`, before `#### Does It Scale?`
+- Quoted original span or citation: [[sources/minimal-editing-2026-04/source/minimal-editing-markdown#^reward-hacking-bug]]
+- Guiding question: 这个 reward-hacking note 暴露了什么失败模式？
+- User recitation: 用户理解为：reward 设计错了，输出正确代码得分反而没有错误的高，那还怎么玩。
+- Calibrated understanding: 这个复述准确。bug 的本质是 reward ranking 反了：no successful execution 被硬编码成 0，而某些成功执行但编辑距离不够好的 rollout 因为 Levenshtein reward 被取反后反而低于 0。模型因此可以通过“不输出 functionally correct code”拿到更高 reward。LoRA 更容易暴露这个问题，说明受限参数更新可能更容易抓住 reward 中最便宜的捷径，而不是同时学稳 correctness 和 minimality；full RL 在 buggy reward 下仍能学到任务，fixed reward 后也只是小幅提升。
+- Missing points: 这个事故是 reward design 的警告，不是 LoRA 本身必然不可靠。
+- Open questions: 下一节要看同一 RL recipe 扩到 Qwen3 14B 是否仍改善 minimal editing 且不引起 forgetting。
 
 ## Questions And Answers
 
