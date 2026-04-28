@@ -38,6 +38,15 @@ If multiple inputs are present, prefer the explicit file path.
      - for `sources/<collection>/...`, exclude `sources/<collection>/summary.md` and every `sources/<collection>/source/**` entry from rubric matches
      - for a standalone markdown file outside `sources/`, exclude that exact file
      - this prevents the current newsletter from making its own items look connected
+   - Materialize that exclusion as a concrete prompt block before spawning workers:
+
+```text
+Current Source Exclusion:
+- sources/<collection>/summary.md
+- sources/<collection>/source/**
+```
+
+   - For a standalone markdown file outside `sources/`, the block must contain that exact path instead.
 2. Extract newsletter items in source order.
    - Under `## Top Stories`, each `###` heading is one item.
    - Under `## Top Picks`, each `####` heading is one item when the issue uses heading-form items.
@@ -52,6 +61,8 @@ If multiple inputs are present, prefer the explicit file path.
    - Start 6 worker subagents for normal newsletter issues.
    - If there are fewer than 6 items, start only non-empty worker batches.
    - Assign every item to exactly one worker.
+   - Include the concrete `Current Source Exclusion` block in every worker prompt.
+   - Do not ask workers to infer the current source exclusion.
    - Give every worker the path `.agents/skills/read-newsletter/references/worker-task.md` and require it to read that file before scoring items.
 5. Merge worker outputs.
    - Worker output is fixed-structure Markdown, not JSON.
@@ -99,11 +110,23 @@ For each worker, include:
 
 - the worker id
 - the assigned item ids, titles, section paths, and full item text
-- the current source exclusion entries that must not count as matches
+- a concrete `Current Source Exclusion` block naming the exact collection or file to ignore
 - the relevant `index.md` entries or a clear instruction to read `index.md`
 - this required instruction:
 
 ```text
+Before analyzing items, read .agents/skills/read-newsletter/references/worker-task.md and follow its output structure exactly.
+```
+
+Example worker prompt header:
+
+```text
+worker_id: worker-1
+
+Current Source Exclusion:
+- sources/ai-agent-weekly-2026-04-25/summary.md
+- sources/ai-agent-weekly-2026-04-25/source/**
+
 Before analyzing items, read .agents/skills/read-newsletter/references/worker-task.md and follow its output structure exactly.
 ```
 

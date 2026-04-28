@@ -10,7 +10,7 @@ You will receive:
 
 - `worker_id`
 - one or more newsletter items
-- current source exclusion entries that must not count as matches
+- a concrete `Current Source Exclusion` block naming entries that must not count as matches
 - for each item:
   - `item_id`
   - title
@@ -20,7 +20,23 @@ You will receive:
 
 Use root `index.md` as the primary map of existing knowledge entries. If a match is ambiguous, use narrow search over wiki-layer pages to confirm it. Do not edit files.
 
-The current newsletter source is never an eligible match. If the item comes from `sources/<collection>/...`, do not count `sources/<collection>/summary.md` or any `sources/<collection>/source/**` page as a matched entry. If the item comes from a standalone markdown file outside `sources/`, do not count that exact file.
+The current newsletter source is never an eligible match. The main agent must pass a concrete block like:
+
+```text
+Current Source Exclusion:
+- sources/<collection>/summary.md
+- sources/<collection>/source/**
+```
+
+For a standalone markdown file outside `sources/`, the block contains that exact file path.
+
+If the assignment does not include a concrete `Current Source Exclusion` block, do not score items. Return only:
+
+```md
+## Worker Result: <worker-id>
+
+Missing Current Source Exclusion. Cannot score assigned items.
+```
 
 ## Rubrics
 
@@ -69,7 +85,7 @@ An item can have multiple matched relations. Do not force a single global relati
 ## Matching Rules
 
 - Prefer existing entries from root `index.md`.
-- Ignore every current source exclusion entry, even if it appears in `index.md` or is an obvious keyword match.
+- Ignore every entry in the `Current Source Exclusion` block, even if it appears in `index.md` or is an obvious keyword match.
 - A weak keyword overlap is not enough; there must be an explainable relation.
 - If a page exists but the item only shares a generic term with it, do not count it.
 - Do not verify newsletter claims against primary sources.
@@ -84,6 +100,9 @@ Use exactly this structure:
 
 ```md
 ## Worker Result: <worker-id>
+
+Current Source Exclusion:
+- <excluded path or glob>
 
 ### Item: <item-id>
 Title: <title>
@@ -101,9 +120,10 @@ One Sentence Reason:
 
 Constraints:
 
+- Copy the received `Current Source Exclusion` block exactly once under `## Worker Result`.
 - Emit one `### Item:` block for every assigned item.
-- `Index Connection` must equal the count of distinct matched wiki entries, capped at 3.
-- `Relation Coverage` must equal the count of distinct matched entries with an explainable relation, capped at 3.
+- `Index Connection` must equal the count of distinct eligible matched wiki entries, capped at 3.
+- `Relation Coverage` must equal the count of distinct eligible matched entries with an explainable relation, capped at 3.
 - If there are no matched relations, write exactly `- none`.
 - `One Sentence Reason` must be exactly one sentence.
 - Do not output a global ranking.
