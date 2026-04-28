@@ -1,6 +1,6 @@
 ---
 name: ingest-source
-description: Use this skill when adding a new source collection to this knowledge-base wiki. It explains the shared ingest contract, how to route different source types to type-specific guidance, how to write sources/<collection>/summary.md, how to update index.md, and how to validate and commit the ingest in the repository's required format.
+description: Use this skill when adding a new source collection to this knowledge-base wiki. It explains the shared ingest contract, how to route different source types to type-specific guidance, how to write sources/<collection>/summary.md, how to update index.md, how to run the post-ingest local scan, and how to validate and commit the ingest in the repository's required format.
 ---
 
 # Ingest Source
@@ -48,10 +48,13 @@ Rules:
 5. Update root `index.md`.
    Add one entry that links to `[[sources/<collection>/summary|<collection>]]` and briefly explains what the collection is.
 
-6. Run lint.
+6. Run the post-ingest local scan.
+   Check the new collection against nearby wiki material and make only tightly scoped follow-up edits.
+
+7. Run lint.
    Always run `uv run python scripts/lint.py` before commit.
 
-7. Commit the ingest.
+8. Commit the ingest.
    The repo requires a Conventional Commit after each logical update.
 
 ## Type Routing
@@ -129,6 +132,39 @@ In root `index.md`, only link the collection summary page, for example:
 ```
 
 Do not link `sources/<collection>/source/...` from root `index.md`.
+
+## Post-Ingest Local Scan
+
+After introducing a source collection, do a small semantic health check before validation.
+
+Default scan scope:
+
+- Start from root `index.md`.
+- Search narrowly with source-specific keywords: title words, author or organization, core entities, core concepts, model/tool names, and adjacent collection names.
+- Review only directly related wiki-layer pages, such as related `sources/*/summary.md`, topic hubs under `syntheses/`, and existing entity/concept/synthesis pages.
+- Do not scan or rewrite the whole wiki unless the user explicitly asks for that.
+
+Questions to answer:
+
+- Does a directly related topic hub or synthesis need a link to this new collection?
+- Should the new `summary.md` link to existing related sources, entities, concepts, notes, or syntheses?
+- Does the new source supersede, contradict, or materially qualify a claim in a directly related wiki page?
+- Is an important existing entity or concept mentioned without a useful cross-link?
+- Did the ingest reveal a concrete data gap or follow-up source worth recording in `summary.md` or a directly related page?
+
+Allowed outputs:
+
+- Add reciprocal links between the new source summary and directly related wiki pages.
+- Update a directly related topic hub when the new collection clearly belongs there.
+- Update a directly related synthesis/entity/concept only when the new source changes a claim or fills an obvious gap, and cite the new source inline.
+- Record a concise follow-up note only if it is actionable and tied to this source collection.
+
+Non-goals:
+
+- Do not treat this as deterministic lint; `scripts/lint.py` remains the contract checker.
+- Do not create broad topic hubs from memory-only knowledge.
+- Do not create new concept/entity/synthesis pages just because a source mentions a term.
+- Do not add speculative links whose relationship is not clear from the source or the existing page.
 
 ## Validation
 
