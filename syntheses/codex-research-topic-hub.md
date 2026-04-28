@@ -2,7 +2,7 @@
 type: synthesis
 status: draft
 created: 2026-04-24
-updated: 2026-04-24
+updated: 2026-04-28
 ---
 
 # Codex Research Topic Hub
@@ -16,6 +16,8 @@ This page is a hub for Codex-related material currently covered in this wiki. It
 This topic has both product-level and implementation-level material. The product source covers current official docs, app UI, Chronicle, and local observations around whether memory is enabled or present. The implementation source covers the code-level pipeline across `app-server`, `core`, and `state`, including stage-one extraction, phase-two consolidation, prompt templates, `MEMORY.md`, and `memory_summary.md`. [[sources/codex-memory-2026-04/summary|codex-memory-2026-04]] [[sources/codex-memory-implementation-2026-04/summary|codex-memory-implementation-2026-04]]
 
 Start from [[syntheses/codex-memory-support-and-boundaries|codex-memory-support-and-boundaries]] when the question is "how does Codex memory actually work?" Use the two source collections when checking product claims versus implementation details.
+
+For a cross-agent implementation comparison, use [[sources/claude-code-auto-memory-2026-04/summary|claude-code-auto-memory-2026-04]] as the Claude Code side: it covers filesystem-based topic memory files, the `MEMORY.md` index, main-agent writes, `extractMemories`, `autoDream`, and relevant-memory recall in the local Claude Code snapshot. [[sources/claude-code-auto-memory-2026-04/summary|claude-code-auto-memory-2026-04]]
 
 ### Codex model context and prompt assembly
 
@@ -64,6 +66,7 @@ For code-level questions, prefer source collections pinned to `openai/codex@d624
 
 - [[sources/codex-memory-2026-04/summary|codex-memory-2026-04]]
 - [[sources/codex-memory-implementation-2026-04/summary|codex-memory-implementation-2026-04]]
+- [[sources/claude-code-auto-memory-2026-04/summary|claude-code-auto-memory-2026-04]]
 - [[syntheses/codex-memory-support-and-boundaries|codex-memory-support-and-boundaries]]
 - [[sources/codex-model-context-inputs-2026-04/summary|codex-model-context-inputs-2026-04]]
 - [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]]
