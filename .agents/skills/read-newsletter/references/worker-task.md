@@ -10,6 +10,7 @@ You will receive:
 
 - `worker_id`
 - one or more newsletter items
+- current source exclusion entries that must not count as matches
 - for each item:
   - `item_id`
   - title
@@ -19,11 +20,13 @@ You will receive:
 
 Use root `index.md` as the primary map of existing knowledge entries. If a match is ambiguous, use narrow search over wiki-layer pages to confirm it. Do not edit files.
 
+The current newsletter source is never an eligible match. If the item comes from `sources/<collection>/...`, do not count `sources/<collection>/summary.md` or any `sources/<collection>/source/**` page as a matched entry. If the item comes from a standalone markdown file outside `sources/`, do not count that exact file.
+
 ## Rubrics
 
 ### Index Connection
 
-Score the number of distinct existing wiki entries matched by the item.
+Score the number of distinct eligible existing wiki entries matched by the item.
 
 ```text
 0 = no existing wiki entry matched
@@ -35,7 +38,7 @@ min = 1
 
 ### Relation Coverage
 
-Score the number of distinct matched entries for which you can explain one allowed relation.
+Score the number of distinct eligible matched entries for which you can explain one allowed relation.
 
 ```text
 0 = no matched entry has an explainable relation
@@ -66,6 +69,7 @@ An item can have multiple matched relations. Do not force a single global relati
 ## Matching Rules
 
 - Prefer existing entries from root `index.md`.
+- Ignore every current source exclusion entry, even if it appears in `index.md` or is an obvious keyword match.
 - A weak keyword overlap is not enough; there must be an explainable relation.
 - If a page exists but the item only shares a generic term with it, do not count it.
 - Do not verify newsletter claims against primary sources.

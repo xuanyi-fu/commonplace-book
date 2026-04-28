@@ -34,6 +34,10 @@ If multiple inputs are present, prefer the explicit file path.
    - If given a collection slug or summary page, read `sources/<collection>/summary.md`.
    - Choose the cleaned markdown issue snapshot named or implied by the summary.
    - Do not use `In today's issue` as item content; it is a table of contents.
+   - Record the current source exclusion:
+     - for `sources/<collection>/...`, exclude `sources/<collection>/summary.md` and every `sources/<collection>/source/**` entry from rubric matches
+     - for a standalone markdown file outside `sources/`, exclude that exact file
+     - this prevents the current newsletter from making its own items look connected
 2. Extract newsletter items in source order.
    - Under `## Top Stories`, each `###` heading is one item.
    - Under `## Top Picks`, each `####` heading is one item when the issue uses heading-form items.
@@ -41,6 +45,7 @@ If multiple inputs are present, prefer the explicit file path.
    - Preserve each item's title, section path, full item text, links, and local image references if present.
 3. Read root `index.md` as the primary map of existing knowledge entries.
    - Use index entries as the main matching surface.
+   - Remove the current source exclusion from eligible matches before worker scoring.
    - If a possible match is unclear, use narrow search over wiki-layer markdown pages to confirm the relationship.
    - Do not treat raw newsletter source text as a stable wiki judgment.
 4. Split items into worker batches.
@@ -94,6 +99,7 @@ For each worker, include:
 
 - the worker id
 - the assigned item ids, titles, section paths, and full item text
+- the current source exclusion entries that must not count as matches
 - the relevant `index.md` entries or a clear instruction to read `index.md`
 - this required instruction:
 
