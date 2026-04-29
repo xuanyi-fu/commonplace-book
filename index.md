@@ -2,7 +2,7 @@
 type: index
 status: draft
 created: 2026-04-20
-updated: 2026-04-28
+updated: 2026-04-29
 ---
 
 # index
@@ -48,6 +48,7 @@ updated: 2026-04-28
 - [[sources/codex-compaction-analysis-2026-04/summary|codex-compaction-analysis-2026-04]]: source collection for Codex compaction trigger and local implementation analyses at `openai/codex@d62421d`
 - [[sources/openai-codex-symphony-2026-04/summary|openai-codex-symphony-2026-04]]: source collection for OpenAI's Symphony post and linked spec on using Codex App Server to orchestrate issue-tracker-driven coding agents
 - [[notes/openai-codex-symphony-2026-04-reading-note|openai-codex-symphony-2026-04-reading-note]]: canonical reading note for OpenAI's Symphony article, initialized with a semantic cursor and source-order recall loop
+- [[syntheses/issue-tracker-control-plane-for-coding-agents|issue-tracker-control-plane-for-coding-agents]]: synthesis separating issue trackers, code workspaces, and agent run control planes for Symphony-style coding-agent orchestration
 - [[sources/openai-codex-agent-loop-2026-01/summary|openai-codex-agent-loop-2026-01]]: supporting source for Codex model context / prompt assembly; use with caution, outdated information included
 - [[syntheses/codex-research-topic-hub|codex-research-topic-hub]]: hub synthesis listing the main Codex research topics covered in this wiki and their starting points
 - [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]]: synthesis arguing that Codex model context is best understood as ordered `input` stream items plus top-level `instructions` and `tools`
