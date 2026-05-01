@@ -40,6 +40,7 @@ updated: 2026-05-01
 - [[sources/codex-memory-2026-04/summary|codex-memory-2026-04]]: source collection for current official docs and observed UI around Codex memory support
 - [[sources/codex-memory-implementation-2026-04/summary|codex-memory-implementation-2026-04]]: source collection，收录 Codex memory 在 app-server、core、state 三层的实现笔记与 prompt 快照
 - [[sources/codex-model-context-inputs-2026-04/summary|codex-model-context-inputs-2026-04]]: source collection for a Codex code-reading analysis of how model context inputs are assembled at `openai/codex@d62421d`
+- [[sources/codex-goals-2026-05/summary|codex-goals-2026-05]]: source collection for Codex persisted `/goal` workflows, model tools, runtime continuation, and Responses API placement
 - [[sources/claude-code-context-assembly-2026-04/summary|claude-code-context-assembly-2026-04]]: source collection for a Claude Code code-reading analysis of context assembly, cache-preserving state deltas, and Anthropic Messages request shape at `0a0498c`
 - [[sources/claude-code-scratchpad-2026-04/summary|claude-code-scratchpad-2026-04]]: source collection for a Claude Code code-reading analysis of the session-local `scratchpad` workspace, prompt exposure, permissions, and worker context at `0a0498c`
 - [[sources/claude-code-auto-memory-2026-04/summary|claude-code-auto-memory-2026-04]]: source collection for a Claude Code code-reading analysis of filesystem-based `AutoMem`, topic memory files, `MEMORY.md`, `extractMemories`, `autoDream`, and relevant-memory recall at `0a0498c`
@@ -54,6 +55,7 @@ updated: 2026-05-01
 - [[sources/openai-codex-agent-loop-2026-01/summary|openai-codex-agent-loop-2026-01]]: supporting source for Codex model context / prompt assembly; use with caution, outdated information included
 - [[syntheses/codex-research-topic-hub|codex-research-topic-hub]]: hub synthesis listing the main Codex research topics covered in this wiki and their starting points
 - [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]]: synthesis arguing that Codex model context is best understood as ordered `input` stream items plus top-level `instructions` and `tools`
+- [[syntheses/codex-goal-system|codex-goal-system]]: synthesis of Codex goals as thread-scoped persistent objectives driven by model tools and developer-role continuation turns
 - [[syntheses/claude-code-context-assembly-and-state-deltas|claude-code-context-assembly-and-state-deltas]]: synthesis comparing Claude Code's Anthropic Messages request assembly and cache-preserving tail deltas with Codex's ordered input-stream model
 - [[syntheses/codex-memory-support-and-boundaries|codex-memory-support-and-boundaries]]: synthesis of Codex memory's implementation pipeline, file layering, and control surfaces
 - [[sources/codex-computer-use-2026-04/summary|codex-computer-use-2026-04]]: source collection for official docs, local interface notes, and one failure case around Codex computer use

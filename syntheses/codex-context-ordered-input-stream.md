@@ -2,7 +2,7 @@
 type: synthesis
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-01
 ---
 
 # Codex context 是有序 input stream
@@ -49,6 +49,12 @@ client-provided ordered input stream:
 - `contextual user fragments` 是 role=`user` 的 model-visible context item，但不是普通人类 user turn；普通 user-message parsing 会跳过这些 contextual user messages。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]]
 - `skills` 至少有两层：在 `openai/codex@d62421d` 的 `codex-core` 里，available skills metadata 进入 developer-role `<skills_instructions>` bundle；显式提到的 full `SKILL.md` body 作为 per-turn user-role `<skill>...</skill>` fragment 注入。OpenAI blog 的 2026-01 Codex CLI 描述把 skill metadata 放在 user instructions 下面，这一点对 `d62421d` 已经过时。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]] [[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop]]
 - `reasoning`、tool calls、tool outputs、compaction item 都可能成为 history / subsequent input 的一部分；history 不只是 user/assistant 两类自然语言消息。[[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]] [[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop]]
+
+## 新例子：goal continuation
+
+Codex `goal` system 给这个模型提供了一个很清楚的新例子：goal objective 不进入 top-level `instructions`；goal tools 进入顶层 `tools`；自动续跑时 runtime 会追加一条 `role: "developer"` 的 continuation message 到 Responses `input`。这个 developer-role item 是 runtime 在 thread 空闲且 goal 仍为 `active` 时创建的 continuation turn 输入，不是用户手动发的新消息。[[sources/codex-goals-2026-05/source/codex-goals-code-reading#^goal-responses-placement]] [[sources/codex-goals-2026-05/source/codex-goals-code-reading#^goal-continuation-input]]
+
+goal 的正确位置是：`tools` 里多了 goal control surface，`input` stream 里在特定时机多了一条 developer-role continuation item，system prompt 不承担 goal objective。这个例子和本页的核心模型一致：Codex 用顶层 request controls 加 ordered `input` stream 表达不同来源和不同优先级的上下文。[[sources/codex-goals-2026-05/source/codex-goals-code-reading#^goal-tool-schemas]] [[sources/codex-goals-2026-05/source/codex-goals-code-reading#^goal-continuation-input]]
 
 ## Blog 校准
 
@@ -171,6 +177,7 @@ Codex 的 model context 可以理解为：`instructions` 和 `tools` 是 request
 
 - [[sources/codex-model-context-inputs-2026-04/summary|codex-model-context-inputs-2026-04]]
 - [[sources/codex-model-context-inputs-2026-04/source/model-context-inputs-github-links|model-context-inputs-github-links]]
+- [[sources/codex-goals-2026-05/summary|codex-goals-2026-05]]
 - [[sources/openai-codex-agent-loop-2026-01/summary|openai-codex-agent-loop-2026-01]]
 - [[sources/openai-codex-agent-loop-2026-01/source/unrolling-the-codex-agent-loop-markdown|unrolling-the-codex-agent-loop-markdown]]
 - Local rollout observation: `/Users/bytedance/.codex/sessions/2026/04/23/rollout-2026-04-23T21-51-57-019dbdd4-8e9c-7a13-a721-47a8afb7849c.jsonl`

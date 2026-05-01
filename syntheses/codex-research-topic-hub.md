@@ -2,7 +2,7 @@
 type: synthesis
 status: draft
 created: 2026-04-24
-updated: 2026-04-28
+updated: 2026-05-01
 ---
 
 # Codex Research Topic Hub
@@ -24,6 +24,12 @@ For a cross-agent implementation comparison, use [[sources/claude-code-auto-memo
 This topic is about what becomes model-visible context in a Codex turn. The primary implementation source is [[sources/codex-model-context-inputs-2026-04/summary|codex-model-context-inputs-2026-04]], which analyzes how `openai/codex@d62421d` assembles model context inputs, including top-level `instructions`, `tools`, ordered `input`, developer-role context, contextual user fragments, skill injection, memory guidance, and later context diffs. [[sources/codex-model-context-inputs-2026-04/summary|codex-model-context-inputs-2026-04]]
 
 Start from [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]] for the current working model: Codex context is best understood as top-level request controls plus an ordered `input` stream, not one flat prompt string. [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]]
+
+### Codex goals
+
+This topic covers persisted `/goal` workflows: thread-scoped objective state, the `get_goal` / `create_goal` / `update_goal` model tools, TUI controls, and runtime continuation turns that inject developer-role messages into Responses `input`. [[sources/codex-goals-2026-05/summary|codex-goals-2026-05]]
+
+Start from [[syntheses/codex-goal-system|codex-goal-system]] when the question is "how does Codex keep working toward a thread goal after the current turn ends?" Use [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]] for the broader `instructions` / `input` / `tools` framing.
 
 ### Codex compaction
 
@@ -55,12 +61,13 @@ If the question is broad, read in this order:
 
 1. [[syntheses/codex-research-topic-hub|codex-research-topic-hub]]
 2. [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]]
-3. [[syntheses/codex-memory-support-and-boundaries|codex-memory-support-and-boundaries]]
-4. [[sources/codex-compaction-analysis-2026-04/summary|codex-compaction-analysis-2026-04]]
-5. [[sources/codex-v1-subagents-2026-04/summary|codex-v1-subagents-2026-04]]
-6. [[syntheses/codex-computer-use-implementation-and-limits|codex-computer-use-implementation-and-limits]]
+3. [[syntheses/codex-goal-system|codex-goal-system]]
+4. [[syntheses/codex-memory-support-and-boundaries|codex-memory-support-and-boundaries]]
+5. [[sources/codex-compaction-analysis-2026-04/summary|codex-compaction-analysis-2026-04]]
+6. [[sources/codex-v1-subagents-2026-04/summary|codex-v1-subagents-2026-04]]
+7. [[syntheses/codex-computer-use-implementation-and-limits|codex-computer-use-implementation-and-limits]]
 
-For code-level questions, prefer source collections pinned to `openai/codex@d62421d`. For product-surface questions, use the official-doc and local-observation collections. For older explanatory material, keep the "supporting background" boundary visible.
+For code-level questions, prefer source collections pinned to a concrete `openai/codex` commit. Several older collections use `openai/codex@d62421d`; the goals collection uses the later `fe05acad` snapshot because `/goal` landed afterward. For product-surface questions, use the official-doc and local-observation collections. For older explanatory material, keep the "supporting background" boundary visible.
 
 ## Sources
 
@@ -70,6 +77,8 @@ For code-level questions, prefer source collections pinned to `openai/codex@d624
 - [[syntheses/codex-memory-support-and-boundaries|codex-memory-support-and-boundaries]]
 - [[sources/codex-model-context-inputs-2026-04/summary|codex-model-context-inputs-2026-04]]
 - [[syntheses/codex-context-ordered-input-stream|codex-context-ordered-input-stream]]
+- [[sources/codex-goals-2026-05/summary|codex-goals-2026-05]]
+- [[syntheses/codex-goal-system|codex-goal-system]]
 - [[sources/codex-compaction-analysis-2026-04/summary|codex-compaction-analysis-2026-04]]
 - [[sources/codex-v1-subagents-2026-04/summary|codex-v1-subagents-2026-04]]
 - [[sources/codex-computer-use-2026-04/summary|codex-computer-use-2026-04]]
