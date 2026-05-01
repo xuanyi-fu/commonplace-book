@@ -69,6 +69,7 @@ Rules:
 - `pdf`: other PDF-first source material such as reports, manuals, or slide decks. Read `types/pdf.md`.
 - `ai-daily-news`: one issue from the Daily AI Newsletter mail workflow. Read `types/ai-daily-news.md`.
 - `ai-weekly-news`: one issue from the AI Agents Weekly mail workflow. Read `types/ai-weekly-news.md`.
+- `latent-space-ainews`: one Latent.Space / AINews issue page. Read `types/latent-space-ainews.md`.
 
 If the material is only an excerpt from a known webpage, PDF, or email, do not use `short-text`. Route it to the underlying source type instead.
 
