@@ -10,6 +10,7 @@ updated: 2026-05-14
 - [[sources/ralph-wiggum-method/summary|ralph-wiggum-method]]: source collection for Geoffrey Huntley's Ralph Wiggum method article and its repeated AI-coding loop pattern
 - [[entities/ralph-wiggum-method|ralph-wiggum-method]]: entity page for Ralph Wiggum as a greenfield AI-coding loop method
 - [[syntheses/ralph-wiggum-loop-vs-planner-generator-evaluator|ralph-wiggum-loop-vs-planner-generator-evaluator]]: synthesis comparing RW's one-agent file-backed backpressure loop with Anthropic's planner-generator-evaluator harness pattern
+- [[syntheses/outcomes-api-vs-generator-evaluator-pattern|outcomes-api-vs-generator-evaluator-pattern]]: synthesis treating Claude Managed Agents outcomes as a productized generator-evaluator preset, while preserving the boundary between the pattern and the API shape
 - [[sources/ai-scientist-2026-04/summary|ai-scientist-2026-04]]: source collection for AiScientist architecture, File-as-Bus coordination, and the public runtime/module layout
 - [[sources/components-of-a-coding-agent-2026-04/summary|components-of-a-coding-agent-2026-04]]: source collection for Sebastian Raschka's coding-agent article covering repo context, prompt caching, tools, memory, and subagents
 - [[sources/minimal-editing-2026-04/summary|minimal-editing-2026-04]]: source collection for Nrehiew's coding-model over-editing article covering minimal code edits, prompt steering, and RL training results

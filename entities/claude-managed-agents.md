@@ -2,7 +2,7 @@
 type: entity
 status: draft
 created: 2026-04-22
-updated: 2026-04-22
+updated: 2026-05-14
 ---
 
 # Claude Managed Agents
@@ -28,6 +28,8 @@ updated: 2026-04-22
 第四组能力是外部能力和知识层接入。对外部系统，Claude Managed Agents 原生支持 remote MCP：在 agent 创建时声明 `mcp_servers`，在 session 创建时通过 `vault_ids` 提供鉴权材料，MCP auth 失败不会直接炸掉整个 session，而是以 `session.error` 暴露出来。对 procedural knowledge，它还支持 filesystem-based `skills`，分 Anthropic 预置 skills 和组织自定义 skills 两类，并且会在相关任务上按需自动调用。[[sources/claude-managed-agents-2026-04/source/managed-agents-mcp-connector-markdown|managed-agents-mcp-connector-markdown.md]] [[sources/claude-managed-agents-2026-04/source/managed-agents-skills-markdown|managed-agents-skills-markdown.md]]
 
 第五组能力是长期状态和高级编排。`memory stores` 把跨 session learnings 做成 workspace-scoped 文本记忆集合，挂到 session 后 agent 会自动在任务开始前检查、在任务结束后写回，并获得 `memory_list`、`memory_search`、`memory_read`、`memory_write`、`memory_edit`、`memory_delete` 这组 memory tools。再往上，research preview 里的 multi-agent 允许多个 agent 共享同一 container / filesystem，但各自运行在独立 session thread 和独立上下文里；`outcomes` 则把 session 从“对话”进一步提升成“朝 rubric-defined result 迭代的工作单元”，由单独的 grader 在独立上下文窗口里评估成果并驱动 revision loop。[[sources/claude-managed-agents-2026-04/source/managed-agents-memory-markdown|managed-agents-memory-markdown.md]] [[sources/claude-managed-agents-2026-04/source/managed-agents-multi-agent-markdown|managed-agents-multi-agent-markdown.md]] [[sources/claude-managed-agents-2026-04/source/managed-agents-define-outcomes-markdown|managed-agents-define-outcomes-markdown.md]]
+
+更具体地说，`outcomes` 可以看成 Anthropic 把 `generator-evaluator loop` 做成 Managed Agents 内置协议的一种 preset：它保留了独立 judgment 和 revision feedback 的结构优势，但也把任务成功标准压进了 `description + rubric` 这套接口形状；这个边界单独整理在 [[syntheses/outcomes-api-vs-generator-evaluator-pattern|outcomes-api-vs-generator-evaluator-pattern]]。[[sources/claude-managed-agents-2026-04/source/managed-agents-define-outcomes-markdown|managed-agents-define-outcomes-markdown.md]] [[sources/anthropic-harness-design-long-running-apps-2026-04/source/harness-design-long-running-apps-markdown#^external-evaluator-skeptical-tuning]]
 
 ## 暂定判断
 
