@@ -2,7 +2,7 @@
 type: index
 status: draft
 created: 2026-04-20
-updated: 2026-05-06
+updated: 2026-05-13
 ---
 
 # index
@@ -63,6 +63,7 @@ updated: 2026-05-06
 - [[syntheses/codex-computer-use-implementation-and-limits|codex-computer-use-implementation-and-limits]]: synthesis of how Codex computer use appears to work and where it currently breaks down
 - [[sources/ai-agent-weekly-2026-04-18/summary|ai-agent-weekly-2026-04-18]]: cleaned April 18, 2026 AI Agents Weekly issue covering agent models, tooling, and research updates
 - [[sources/ai-agent-weekly-2026-04-25/summary|ai-agent-weekly-2026-04-25]]: source collection for the April 25, 2026 AI Agents Weekly issue covering GPT-5.5, DeepSeek-V4 Preview, Kimi K2.6 Agent Swarm, diversity collapse, and agent tooling updates
+- [[sources/ai-agent-weekly-2026-05-09/summary|ai-agent-weekly-2026-05-09]]: source collection for the May 9, 2026 AI Agents Weekly paid-preview page covering Meta FAIR Autodata and related agent-model, agent-runtime, and AI dev updates
 - [[sources/daily-ai-newsletter-2026-04-30/summary|daily-ai-newsletter-2026-04-30]]: source collection for the April 30, 2026 Rohan's Bytes / Daily AI Newsletter issue covering GPT-5.5 cyber evals, World2Agent, AI co-clinician, account security, Claude Security, and Mythos access
 - [[sources/latent-space-daily-ai-news-2026-04-29/summary|latent-space-daily-ai-news-2026-04-29]]: source collection for the April 29, 2026 Latent.Space / AINews paid subscriber issue covering inference compute, CPU demand, coding-agent platforms, agent harnesses, model releases, and serving systems
 - [[sources/latent-space-daily-ai-news-2026-05-01/summary|latent-space-daily-ai-news-2026-05-01]]: source collection for the May 1, 2026 Latent.Space / AINews paid preview issue covering Codex for knowledge work, Claude creative/security tools, GPT-5.5 cyber evals, open model updates, agent harnesses, and security tooling
