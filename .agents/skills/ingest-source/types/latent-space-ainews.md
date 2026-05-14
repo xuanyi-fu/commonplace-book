@@ -26,6 +26,10 @@ Do not merge multiple AINews issue dates into one collection.
   - full-page screenshot
   - localized body images or diagrams
 - When raw `html` is not available, state the capture limitation clearly in `summary.md` and identify which fallback artifacts should be used for audit.
+- If the issue itself is a paywalled or subscriber-only Substack page, try `browser-use` with the current browser session before falling back to weaker artifacts.
+- If `browser-use` renders a login or paywall gate instead of the issue body, stop the ingest attempt and ask the user to log in through that same browser session. Do not ask for credentials, bypass access control, or ingest a teaser as if it were the full issue.
+- After the user logs in, continue capture in the same browser session. Preserve raw `html` when practical; if raw `html` is not practical, preserve the strongest rendered evidence available and state the limitation in `summary.md`.
+- This paywall rule applies only when the issue itself is paywalled, not when outbound links inside the issue point to paywalled articles.
 
 Treat AINews as a curated secondary source. Important claims should still be verified against primary sources before promoting them into stable wiki pages.
 

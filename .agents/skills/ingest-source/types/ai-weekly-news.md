@@ -17,6 +17,10 @@ Do not use this flow for general weekly roundup webpages unless they are actuall
 - The raw email artifact is the authoritative source.
 - The cleaned Markdown issue snapshot is a convenience derivative and does not replace the original email artifact.
 - If live mailbox access is unavailable but a saved local HTML archive exists, that archive is an acceptable original artifact.
+- If the newsletter issue itself is a paywalled or subscriber-only Substack page, try `browser-use` with the current browser session before falling back to weaker artifacts.
+- If `browser-use` renders a login or paywall gate instead of the issue body, stop the ingest attempt and ask the user to log in through that same browser session. Do not ask for credentials, bypass access control, or ingest a teaser as if it were the full issue.
+- After the user logs in, continue capture in the same browser session. Preserve raw `html` when practical; if raw `html` is not practical, preserve the strongest rendered evidence available and state the limitation in `summary.md`.
+- This paywall rule applies only when the newsletter issue itself is paywalled, not when outbound links inside the newsletter point to paywalled articles.
 
 ## Allowed Normalization
 
@@ -51,6 +55,7 @@ In `summary.md`:
 - identify the sender or newsletter identity
 - identify the raw email artifact and the cleaned issue snapshot
 - state whether the raw artifact is an email export, saved HTML archive, or another preserved mail artifact
+- state whether `browser-use`, login state, or subscriber access was needed before capture
 - remind the reader that this is a curated secondary source and not a primary source bundle
 
 ## Example
